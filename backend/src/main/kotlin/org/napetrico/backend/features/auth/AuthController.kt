@@ -23,7 +23,7 @@ class AuthController(
         try {
             authService.register(request)
         } catch (e: RuntimeException) {
-            return ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
+            return ResponseEntity(e.message, HttpStatus.CONFLICT)
         }
 
         return ResponseEntity.ok().build()
@@ -34,7 +34,7 @@ class AuthController(
         return try {
             ResponseEntity.ok(authService.login(request))
         } catch (e: BadCredentialsException) {
-            ResponseEntity.status(HttpStatus.CONFLICT).build()
+            ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
         }
     }
 
