@@ -7,4 +7,6 @@ value class Email(val value: String) {
             "Invalid email format"
         }
     }
+
+    override fun toString(): String = value
 }

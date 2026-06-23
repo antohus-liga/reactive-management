@@ -1,7 +1,5 @@
 package org.napetrico.backend.features.users
 
-import org.napetrico.backend.common.values.Email
-import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -17,7 +15,7 @@ class CustomUserDetailsService(
         val user = userRepository.findByEmail(email)
             ?: throw UsernameNotFoundException("This email is not registered: $email")
         return User(
-            user.email.value,
+            user.email.toString(),
             user.password,
             emptyList()
         )

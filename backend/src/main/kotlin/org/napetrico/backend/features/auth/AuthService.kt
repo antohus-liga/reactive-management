@@ -5,7 +5,6 @@ import org.napetrico.backend.features.auth.dto.LoginRequest
 import org.napetrico.backend.features.auth.dto.RefreshRequest
 import org.napetrico.backend.features.auth.dto.RegisterRequest
 import org.napetrico.backend.features.auth.dto.TokenResponse
-import org.napetrico.backend.features.users.User
 import org.napetrico.backend.features.users.UserService
 import org.napetrico.backend.features.users.dto.CreateUserRequest
 import org.napetrico.backend.features.users.dto.UserResponse
@@ -13,7 +12,6 @@ import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
 
 @Service
 class AuthService(
@@ -44,7 +42,7 @@ class AuthService(
 
     fun login(request: LoginRequest): TokenResponse {
         authenticationManager.authenticate(
-            UsernamePasswordAuthenticationToken(request.email.value, request.password),
+            UsernamePasswordAuthenticationToken(request.email.toString(), request.password),
         )
 
         val user = userService.getUserByEmail(request.email)!!

@@ -1,7 +1,6 @@
 package org.napetrico.backend.features.users
 
 import org.napetrico.backend.common.values.Email
-import org.napetrico.backend.features.auth.dto.RegisterRequest
 import org.napetrico.backend.features.users.UserMapper.toEntity
 import org.napetrico.backend.features.users.UserMapper.toResponse
 import org.napetrico.backend.features.users.dto.CreateUserRequest
@@ -14,7 +13,7 @@ class UserService(
     private val userRepository: UserRepository,
 ) {
     fun getUserByEmail(email: Email): UserResponse? =
-        userRepository.findByEmail(email.value)?.toResponse()
+        userRepository.findByEmail(email.toString())?.toResponse()
 
     fun createUser(createUserRequest: CreateUserRequest): UserResponse =
         userRepository.save(createUserRequest.toEntity()).toResponse()
