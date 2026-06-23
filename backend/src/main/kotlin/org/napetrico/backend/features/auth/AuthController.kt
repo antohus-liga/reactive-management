@@ -34,7 +34,7 @@ class AuthController(
         return try {
             ResponseEntity.ok(authService.login(request))
         } catch (e: BadCredentialsException) {
-            ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
+            ResponseEntity.status(HttpStatus.CONFLICT).build()
         }
     }
 
