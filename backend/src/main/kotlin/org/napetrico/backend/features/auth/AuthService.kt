@@ -67,5 +67,5 @@ class AuthService(
         )
     }
 
-    fun getCurrentUser(): UserResponse = userService.getCurrentUser()
+    fun getCurrentUser(): UserResponse = userService.getCurrentUserResponse()
 }
