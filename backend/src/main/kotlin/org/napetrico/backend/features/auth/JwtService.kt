@@ -30,7 +30,7 @@ class JwtService {
         email: Email,
         expiry: Duration
     ): String = Jwts.builder()
-        .subject(email.toString())
+        .subject(email.value)
         .issuedAt(Date())
         .expiration(Date(System.currentTimeMillis() + expiry.toMillis()))
         .signWith(secretKey)
