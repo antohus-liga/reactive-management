@@ -18,7 +18,14 @@ class UserService(
     fun createUser(createUserRequest: CreateUserRequest): UserResponse =
         userRepository.save(createUserRequest.toEntity()).toResponse()
 
-    fun getCurrentUser(): UserResponse {
+    fun getCurrentUser(): User {
+        val email = SecurityContextHolder.getContext().authentication?.name
+            ?: throw RuntimeException("User not found")
+        return userRepository.findByEmail(email)
+            ?: throw RuntimeException("Email $email doesn't exist")
+    }
+
+    fun getCurrentUserResponse(): UserResponse {
         val email = SecurityContextHolder.getContext().authentication?.name
             ?: throw RuntimeException("User not found")
         return userRepository.findByEmail(email)?.toResponse()
