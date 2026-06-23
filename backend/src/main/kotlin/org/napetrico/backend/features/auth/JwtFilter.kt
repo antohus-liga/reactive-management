@@ -21,16 +21,9 @@ class JwtFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        val authHeader = request.getHeader("Authorization")
+        val token = resolveToken(request)
 
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response)
-            return
-        }
-
-        val token = authHeader.removePrefix("Bearer ")
-
-        if (jwtService.isValid(token) && SecurityContextHolder.getContext().authentication == null) {
+        if (token != null && jwtService.isValid(token) && SecurityContextHolder.getContext().authentication == null) {
             val email = jwtService.extractEmail(token)
             val userDetails = userDetailsService.loadUserByUsername(email)
 
@@ -42,8 +35,16 @@ class JwtFilter(
                 ).apply {
                     details = WebAuthenticationDetailsSource().buildDetails(request)
                 }
-
-            filterChain.doFilter(request, response)
         }
+        filterChain.doFilter(request, response)
+    }
+
+    private fun resolveToken(request: HttpServletRequest): String? {
+        val header = request.getHeader("Authorization")
+        if (header != null && header.startsWith("Bearer ")) {
+            return header.removePrefix("Bearer ")
+        }
+
+        return request.cookies?.find { it.name == "accessToken" }?.value
     }
 }

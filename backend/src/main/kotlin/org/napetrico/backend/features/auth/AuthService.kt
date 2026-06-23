@@ -44,7 +44,7 @@ class AuthService(
 
     fun login(request: LoginRequest): TokenResponse {
         authenticationManager.authenticate(
-            UsernamePasswordAuthenticationToken(request.email, request.password),
+            UsernamePasswordAuthenticationToken(request.email.value, request.password),
         )
 
         val user = userService.getUserByEmail(request.email)!!
@@ -68,4 +68,6 @@ class AuthService(
             refreshToken = jwtService.generateRefreshToken(user.email)
         )
     }
+
+    fun getCurrentUser(): UserResponse = userService.getCurrentUser()
 }

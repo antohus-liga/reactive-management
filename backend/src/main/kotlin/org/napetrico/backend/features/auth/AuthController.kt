@@ -1,16 +1,22 @@
 package org.napetrico.backend.features.auth
 
+import jakarta.servlet.http.Cookie
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 import org.napetrico.backend.features.auth.dto.LoginRequest
 import org.napetrico.backend.features.auth.dto.RefreshRequest
 import org.napetrico.backend.features.auth.dto.RegisterRequest
 import org.napetrico.backend.features.auth.dto.TokenResponse
+import org.napetrico.backend.features.users.dto.UserResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.BadCredentialsException
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -30,20 +36,62 @@ class AuthController(
     }
 
     @PostMapping("/login")
-    fun login(@RequestBody request: LoginRequest): ResponseEntity<TokenResponse> {
-        return try {
-            ResponseEntity.ok(authService.login(request))
-        } catch (e: BadCredentialsException) {
-            ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
+    fun login(
+        @RequestBody request: LoginRequest,
+        response: HttpServletResponse,
+    ): ResponseEntity<Unit> {
+        try {
+            val tokens = authService.login(request)
+            response.addAuthCookies(tokens)
+        } catch (_: RuntimeException) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
         }
+
+        return ResponseEntity.ok().build()
     }
 
     @PostMapping("/refresh")
-    fun refresh(@RequestBody request: RefreshRequest): ResponseEntity<TokenResponse> {
+    fun refresh(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+    ): ResponseEntity<TokenResponse> {
+        val refreshToken = request.cookies
+            ?.find { it.name == "refreshToken" }?.value
+            ?: return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
+
+        val tokens = authService.refresh(RefreshRequest(refreshToken))
+        response.addAuthCookies(tokens)
+        return ResponseEntity.ok().build()
+    }
+
+    @PostMapping("/logout")
+    fun logout(response: HttpServletResponse): ResponseEntity<Unit> {
+        response.addCookie(createCookie("accessToken", "", 0))
+        response.addCookie(createCookie("refreshToken", "", 0))
+        return ResponseEntity.ok().build()
+    }
+
+    @GetMapping("/me")
+    fun me(): ResponseEntity<UserResponse> {
+        val auth = SecurityContextHolder.getContext().authentication
         return try {
-            ResponseEntity.ok(authService.refresh(request))
-        } catch (e: RuntimeException) {
-            ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
+            ResponseEntity.ok(authService.getCurrentUser())
+        } catch (_: RuntimeException) {
+            ResponseEntity.notFound().build()
         }
     }
+
+    fun HttpServletResponse.addAuthCookies(tokens: TokenResponse) {
+        addCookie(createCookie("accessToken", tokens.accessToken, 15 * 60))          // 15 min
+        addCookie(createCookie("refreshToken", tokens.refreshToken, 7 * 24 * 60 * 60)) // 7 days
+    }
+
+    fun createCookie(name: String, value: String, maxAgeSeconds: Int): Cookie =
+        Cookie(name, value).apply {
+            isHttpOnly = false
+            secure = false       // HTTPS only — set to false for local dev
+            path = "/"
+            maxAge = maxAgeSeconds
+            setAttribute("SameSite", "Lax")
+        }
 }
