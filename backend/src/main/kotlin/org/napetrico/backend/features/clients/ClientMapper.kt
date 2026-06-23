@@ -3,6 +3,7 @@ package org.napetrico.backend.features.clients
 import org.napetrico.backend.features.clients.dto.ClientResponse
 import org.napetrico.backend.features.clients.dto.CreateClientRequest
 import org.napetrico.backend.features.clients.dto.UpdateClientRequest
+import org.napetrico.backend.features.users.User
 import java.time.LocalDateTime
 
 object ClientMapper {
@@ -18,7 +19,7 @@ object ClientMapper {
         updatedAt = updatedAt,
     )
 
-    fun CreateClientRequest.toEntity(): Client = Client(
+    fun CreateClientRequest.toEntity(user: User): Client = Client(
         companyName = companyName,
         companyType = companyType,
         taxId = taxId,
@@ -28,9 +29,10 @@ object ClientMapper {
         address = address,
         createdAt = LocalDateTime.now(),
         updatedAt = LocalDateTime.now(),
+        user = user,
     )
 
-    fun Client.applyUpdate(update: UpdateClientRequest) {
+    fun Client.applyUpdate(update: UpdateClientRequest): Client {
         update.companyName?.let { companyName = it }
         update.companyType?.let { companyType = it }
         update.taxId?.let { taxId = it }
@@ -39,5 +41,7 @@ object ClientMapper {
         update.country?.let { country = it }
         update.address?.let { address = it }
         updatedAt = LocalDateTime.now()
+
+        return this
     }
 }

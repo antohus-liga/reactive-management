@@ -1,5 +1,8 @@
 package org.napetrico.backend.features.clients
 
-import org.springframework.data.repository.Repository
+import org.napetrico.backend.features.users.User
+import org.springframework.data.jpa.repository.JpaRepository
 
-interface ClientRepository : Repository<Client, Long>
+interface ClientRepository : JpaRepository<Client, Long> {
+    fun findAllByUser(user: User): List<Client>
+}
