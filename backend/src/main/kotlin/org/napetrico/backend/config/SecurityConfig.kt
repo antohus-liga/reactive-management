@@ -16,6 +16,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.CorsConfigurationSource
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 @Configuration
 @EnableWebSecurity
@@ -29,7 +32,7 @@ class SecurityConfig(
     fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
 
     @Bean
-    fun authenticationProvider(): DaoAuthenticationProvider =
+    fun daoAuthenticationProvider(): DaoAuthenticationProvider =
         DaoAuthenticationProvider(userDetailsService).apply {
             setPasswordEncoder(passwordEncoder())
         }
@@ -40,18 +43,38 @@ class SecurityConfig(
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
-        http {
-            csrf { disable() }
-            sessionManagement {
-                sessionCreationPolicy = SessionCreationPolicy.STATELESS
+        http
+            .csrf { it.disable() }
+            .cors { it.configurationSource(corsConfigurationSource()) }
+            .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
+            .authenticationProvider(daoAuthenticationProvider())
+            .authorizeHttpRequests {
+                it.requestMatchers(
+                    "/api/auth/login",
+                    "/api/auth/register",
+                    "/api/auth/refresh",
+                    "/v3/api-docs/**",
+                    "/swagger-ui/**",
+                    "/swagger-ui.html"
+                ).permitAll()
+                it.anyRequest().authenticated()
             }
-            authorizeHttpRequests {
-                authorize("/api/auth", permitAll)
-                authorize(anyRequest, authenticated)
-            }
-            authenticationProvider()
-            addFilterBefore<UsernamePasswordAuthenticationFilter>(jwtAuthFilter)
-        }
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter::class.java)
+
         return http.build()
+    }
+
+    @Bean
+    fun corsConfigurationSource(): CorsConfigurationSource {
+        val config = CorsConfiguration().apply {
+            allowedOrigins = listOf("http://localhost:5173", "http://localhost:8080")
+            allowedMethods = listOf("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
+            allowedHeaders = listOf("*")
+            allowCredentials = true
+            maxAge = 3600L
+        }
+        return UrlBasedCorsConfigurationSource().apply {
+            registerCorsConfiguration("/**", config)
+        }
     }
 }
