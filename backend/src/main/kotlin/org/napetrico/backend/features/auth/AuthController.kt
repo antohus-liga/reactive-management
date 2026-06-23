@@ -6,6 +6,7 @@ import org.napetrico.backend.features.auth.dto.RegisterRequest
 import org.napetrico.backend.features.auth.dto.TokenResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -30,7 +31,11 @@ class AuthController(
 
     @PostMapping("/login")
     fun login(@RequestBody request: LoginRequest): ResponseEntity<TokenResponse> {
-        return ResponseEntity.ok(authService.login(request))
+        return try {
+            ResponseEntity.ok(authService.login(request))
+        } catch (e: BadCredentialsException) {
+            ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
+        }
     }
 
     @PostMapping("/refresh")
