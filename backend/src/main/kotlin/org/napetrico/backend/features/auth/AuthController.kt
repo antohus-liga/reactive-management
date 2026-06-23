@@ -22,7 +22,7 @@ class AuthController(
         try {
             authService.register(request)
         } catch (e: RuntimeException) {
-            return ResponseEntity(e.message, HttpStatus.UNAUTHORIZED)
+            return ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
         }
 
         return ResponseEntity.ok().build()
