@@ -13,6 +13,6 @@ class ClientController(
     private val clientService: ClientService,
 ) {
 
-    @GetMapping
-    fun get(): List<ClientResponse> {}
+//    @GetMapping
+//    fun get(): List<ClientResponse>
 }
