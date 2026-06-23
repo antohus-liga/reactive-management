@@ -30,6 +30,7 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.3")
 	implementation("io.jsonwebtoken:jjwt-jackson:0.13.0")
+	implementation("tools.jackson.module:jackson-module-kotlin")
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.13.0")
 	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.13.0")
 	runtimeOnly("org.postgresql:postgresql")
