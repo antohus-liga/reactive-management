@@ -2,7 +2,10 @@
 
 A full-stack inventory and stock management application built for learning purposes.
 
-> 🚧 Currently in planning stage — not yet in development.
+Already in development.
+Working APIs: 
+- api/auth/**
+- api/clients/**
 
 ---
 
