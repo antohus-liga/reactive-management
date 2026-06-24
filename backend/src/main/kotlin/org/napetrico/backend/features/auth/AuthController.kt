@@ -24,11 +24,7 @@ class AuthController(
 ) {
     @PostMapping("/register")
     fun register(@RequestBody request: RegisterRequest): ResponseEntity<String> {
-        try {
-            authService.register(request)
-        } catch (e: RuntimeException) {
-            return ResponseEntity(e.message, HttpStatus.CONFLICT)
-        }
+        authService.register(request)
 
         return ResponseEntity.ok().build()
     }
@@ -38,12 +34,8 @@ class AuthController(
         @RequestBody request: LoginRequest,
         response: HttpServletResponse,
     ): ResponseEntity<Unit> {
-        try {
-            val tokens = authService.login(request)
-            response.addAuthCookies(tokens)
-        } catch (_: RuntimeException) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
-        }
+        val tokens = authService.login(request)
+        response.addAuthCookies(tokens)
 
         return ResponseEntity.ok().build()
     }
@@ -55,7 +47,6 @@ class AuthController(
     ): ResponseEntity<TokenResponse> {
         val refreshToken = request.cookies
             ?.find { it.name == "refreshToken" }?.value
-            ?: return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
 
         val tokens = authService.refresh(RefreshRequest(refreshToken))
         response.addAuthCookies(tokens)
@@ -71,12 +62,7 @@ class AuthController(
 
     @GetMapping("/me")
     fun me(): ResponseEntity<UserResponse> {
-        val auth = SecurityContextHolder.getContext().authentication
-        return try {
-            ResponseEntity.ok(authService.getCurrentUser())
-        } catch (_: RuntimeException) {
-            ResponseEntity.notFound().build()
-        }
+        return ResponseEntity.ok(authService.getCurrentUser())
     }
 
     fun HttpServletResponse.addAuthCookies(tokens: TokenResponse) {

@@ -1,5 +1,6 @@
 package org.napetrico.backend.features.users
 
+import org.napetrico.backend.common.exceptions.NotFoundException
 import org.napetrico.backend.common.values.Email
 import org.napetrico.backend.features.users.UserMapper.toEntity
 import org.napetrico.backend.features.users.UserMapper.toResponse
@@ -20,15 +21,15 @@ class UserService(
 
     fun getCurrentUser(): User {
         val email = SecurityContextHolder.getContext().authentication?.name
-            ?: throw RuntimeException("User not found")
+            ?: throw NotFoundException("User")
         return userRepository.findByEmail(email)
-            ?: throw RuntimeException("Email $email doesn't exist")
+            ?: throw NotFoundException("Email $email")
     }
 
     fun getCurrentUserResponse(): UserResponse {
         val email = SecurityContextHolder.getContext().authentication?.name
-            ?: throw RuntimeException("User not found")
+            ?: throw NotFoundException("User")
         return userRepository.findByEmail(email)?.toResponse()
-            ?: throw RuntimeException("Email $email doesn't exist")
+            ?: throw NotFoundException("Email $email")
     }
 }
