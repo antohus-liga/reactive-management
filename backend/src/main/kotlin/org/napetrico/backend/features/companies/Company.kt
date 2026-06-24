@@ -20,6 +20,7 @@ import org.napetrico.backend.common.enums.CompanyType
 import org.napetrico.backend.common.values.Email
 import org.napetrico.backend.features.users.User
 import java.time.LocalDateTime
+import java.util.UUID
 
 @Entity
 @Table(name = "companies")
@@ -28,6 +29,8 @@ class Company (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long = 0,
+
+    var publicId: UUID = UUID.randomUUID(),
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

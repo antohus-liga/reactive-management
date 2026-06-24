@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import java.util.UUID
 
 @RestController
 @RequestMapping("/api/companies")
@@ -29,17 +30,17 @@ class CompanyController(
         return ResponseEntity.ok(companyService.createCompany(request))
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{publicId}")
     fun update(
-        @PathVariable id: Long,
+        @PathVariable publicId: UUID,
         @RequestBody request: UpdateCompanyRequest
     ): ResponseEntity<CompanyResponse> {
-        return ResponseEntity.ok(companyService.updateCompany(id, request))
+        return ResponseEntity.ok(companyService.updateCompany(publicId, request))
     }
 
-    @DeleteMapping("/{id}")
-    fun delete(@PathVariable id: Long): ResponseEntity<Unit> {
-        companyService.deleteCompany(id)
+    @DeleteMapping("/{publicId}")
+    fun delete(@PathVariable publicId: UUID): ResponseEntity<Unit> {
+        companyService.deleteCompany(publicId)
         return ResponseEntity.ok().build()
     }
 }

@@ -9,8 +9,8 @@ import org.napetrico.backend.features.companies.dto.CompanyResponse
 import org.napetrico.backend.features.companies.dto.CreateCompanyRequest
 import org.napetrico.backend.features.companies.dto.UpdateCompanyRequest
 import org.napetrico.backend.features.users.UserService
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import java.util.UUID
 
 @Service
 class CompanyService(
@@ -32,9 +32,9 @@ class CompanyService(
         ).toResponse()
     }
 
-    fun updateCompany(id: Long, request: UpdateCompanyRequest): CompanyResponse {
-        val company = companyRepository.findByIdAndUser(id, userService.getCurrentUser())
-            ?: throw NotFoundException("Company with tax id '${request.taxId}'")
+    fun updateCompany(publicId: UUID, request: UpdateCompanyRequest): CompanyResponse {
+        val company = companyRepository.findByPublicIdAndUser(publicId, userService.getCurrentUser())
+            ?: throw NotFoundException("Company with public id '${publicId}'")
 
         val conflict = companyRepository.findByTaxId(request.taxId)
 
@@ -44,6 +44,6 @@ class CompanyService(
         return companyRepository.save(company.applyUpdate(request)).toResponse()
     }
 
-    fun deleteCompany(id: Long) =
-        companyRepository.deleteByIdAndUser(id, userService.getCurrentUser())
+    fun deleteCompany(publicId: UUID) =
+        companyRepository.deleteByPublicIdAndUser(publicId, userService.getCurrentUser())
 }

@@ -13,5 +13,4 @@ data class UpdateCompanyRequest(
     val email: String,
     val country: String,
     val address: String,
-    val createdAt: LocalDateTime,
 )

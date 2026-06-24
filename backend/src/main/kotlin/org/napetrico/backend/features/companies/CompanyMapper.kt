@@ -9,6 +9,7 @@ import java.time.LocalDateTime
 
 object CompanyMapper {
     fun Company.toResponse(): CompanyResponse = CompanyResponse(
+        publicId = publicId,
         companyName = companyName,
         companyType = companyType,
         roles = roles,
