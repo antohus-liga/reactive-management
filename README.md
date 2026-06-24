@@ -5,7 +5,7 @@ A full-stack inventory and stock management application built for learning purpo
 Already in development.
 Working APIs: 
 - api/auth/**
-- api/clients/**
+- api/companies/**
 
 ---
 
