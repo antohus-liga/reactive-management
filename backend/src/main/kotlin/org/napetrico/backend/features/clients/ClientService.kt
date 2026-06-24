@@ -1,5 +1,6 @@
 package org.napetrico.backend.features.clients
 
+import org.napetrico.backend.common.exceptions.AlreadyExistsException
 import org.napetrico.backend.common.exceptions.NotFoundException
 import org.napetrico.backend.features.clients.ClientMapper.applyUpdate
 import org.napetrico.backend.features.clients.ClientMapper.toEntity
@@ -22,12 +23,18 @@ class ClientService(
         ).map { it.toResponse() }
 
     fun createClient(request: CreateClientRequest): ClientResponse {
+        if (clientRepository.findByEmail(request.email.toString()) != null)
+            throw AlreadyExistsException("Client with email ${request.email}")
+
         return clientRepository.save(
             request.toEntity(userService.getCurrentUser())
         ).toResponse()
     }
 
     fun updateClient(id: Long, request: UpdateClientRequest): ClientResponse {
+        if (clientRepository.findByEmail(request.email.toString()) != null)
+            throw AlreadyExistsException("Client with email ${request.email}")
+
         return clientRepository.save(
             clientRepository.findByIdOrNull(id)?.applyUpdate(request)
                 ?: throw NotFoundException("Client")
