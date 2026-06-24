@@ -1,5 +1,9 @@
 package org.napetrico.backend.features.auth
 
+import org.napetrico.backend.common.exceptions.AlreadyExistsException
+import org.napetrico.backend.common.exceptions.InvalidCredentialsException
+import org.napetrico.backend.common.exceptions.InvalidTokenException
+import org.napetrico.backend.common.exceptions.NotFoundException
 import org.napetrico.backend.common.values.Email
 import org.napetrico.backend.features.auth.dto.LoginRequest
 import org.napetrico.backend.features.auth.dto.RefreshRequest
@@ -10,6 +14,7 @@ import org.napetrico.backend.features.users.dto.CreateUserRequest
 import org.napetrico.backend.features.users.dto.UserResponse
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.AuthenticationException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -22,7 +27,7 @@ class AuthService(
 ) {
     fun register(request: RegisterRequest) {
         userService.getUserByEmail(request.email)?.let {
-            throw RuntimeException("Email ${it.email} already exists.")
+            throw AlreadyExistsException("Email ${it.email}")
         }
 
         val createUserRequest = CreateUserRequest(
@@ -41,9 +46,15 @@ class AuthService(
     }
 
     fun login(request: LoginRequest): TokenResponse {
-        authenticationManager.authenticate(
-            UsernamePasswordAuthenticationToken(request.email.toString(), request.password),
-        )
+        try {
+            authenticationManager.authenticate(
+                UsernamePasswordAuthenticationToken(
+                    request.email.toString(), request.password
+                )
+            )
+        } catch (_: AuthenticationException) {
+            throw InvalidCredentialsException()
+        }
 
         val user = userService.getUserByEmail(request.email)!!
         return TokenResponse(
@@ -53,13 +64,13 @@ class AuthService(
     }
 
     fun refresh(request: RefreshRequest): TokenResponse {
-        if (!jwtService.isValid(request.refreshToken)) {
-            throw RuntimeException("Refresh token is invalid.")
+        if (request.refreshToken == null || !jwtService.isValid(request.refreshToken)) {
+            throw InvalidTokenException("Refresh")
         }
 
         val email = jwtService.extractEmail(request.refreshToken)
         val user = userService.getUserByEmail(Email(email))
-            ?: throw RuntimeException("User with email $email not found.")
+            ?: throw NotFoundException("User with email $email")
 
         return TokenResponse(
             accessToken = jwtService.generateAccessToken(user.email),

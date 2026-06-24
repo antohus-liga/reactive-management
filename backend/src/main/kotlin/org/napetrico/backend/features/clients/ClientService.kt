@@ -1,5 +1,6 @@
 package org.napetrico.backend.features.clients
 
+import org.napetrico.backend.common.exceptions.NotFoundException
 import org.napetrico.backend.features.clients.ClientMapper.applyUpdate
 import org.napetrico.backend.features.clients.ClientMapper.toEntity
 import org.napetrico.backend.features.clients.ClientMapper.toResponse
@@ -29,7 +30,7 @@ class ClientService(
     fun updateClient(id: Long, request: UpdateClientRequest): ClientResponse {
         return clientRepository.save(
             clientRepository.findByIdOrNull(id)?.applyUpdate(request)
-                ?: throw RuntimeException("Client not found")
+                ?: throw NotFoundException("Client")
         ).toResponse()
     }
 
