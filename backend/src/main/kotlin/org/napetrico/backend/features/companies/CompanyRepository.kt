@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface CompanyRepository : JpaRepository<Company, Long> {
     fun findAllByUser(user: User): List<Company>
-    fun findByTaxIdAndCompanyRole(taxId: String, companyRole: CompanyRole): Company?
+    fun findByTaxId(taxId: String): Company?
 }

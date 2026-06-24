@@ -6,7 +6,7 @@ import org.napetrico.backend.common.enums.CompanyType
 data class CreateCompanyRequest(
     val companyName: String,
     val companyType: CompanyType,
-    val companyRole: CompanyRole,
+    val roles: Set<CompanyRole>,
     val taxId: String,
     val phoneNumber: String,
     val email: String,

@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 data class CompanyResponse(
     val companyName: String,
     val companyType: CompanyType,
-    val companyRole: CompanyRole,
+    val roles: Set<CompanyRole>,
     val taxId: String,
     val phoneNumber: String,
     val email: String,

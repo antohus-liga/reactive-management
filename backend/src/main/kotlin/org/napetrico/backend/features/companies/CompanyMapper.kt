@@ -11,7 +11,7 @@ object CompanyMapper {
     fun Company.toResponse(): CompanyResponse = CompanyResponse(
         companyName = companyName,
         companyType = companyType,
-        companyRole = companyRole,
+        roles = roles,
         taxId = taxId,
         phoneNumber = phoneNumber,
         email = email.toString(),
@@ -24,7 +24,7 @@ object CompanyMapper {
     fun CreateCompanyRequest.toEntity(user: User): Company = Company(
         companyName = companyName,
         companyType = companyType,
-        companyRole = companyRole,
+        roles = roles.toMutableSet(),
         taxId = taxId,
         phoneNumber = phoneNumber,
         email = Email(email),
@@ -38,7 +38,7 @@ object CompanyMapper {
     fun Company.applyUpdate(update: UpdateCompanyRequest): Company {
         companyName = update.companyName
         companyType = update.companyType
-        companyRole = update.companyRole
+        roles = update.roles.toMutableSet()
         taxId = update.taxId
         phoneNumber = update.phoneNumber
         email = Email(update.email)

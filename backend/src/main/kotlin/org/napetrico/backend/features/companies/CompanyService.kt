@@ -23,9 +23,9 @@ class CompanyService(
         ).map { it.toResponse() }
 
     fun createCompany(request: CreateCompanyRequest): CompanyResponse {
-        val company = companyRepository.findByTaxIdAndCompanyRole(request.taxId, request.companyRole)
+        val company = companyRepository.findByTaxId(request.taxId)
         if (company != null)
-            throw AlreadyExistsException("${request.companyRole.value} company with tax id '${request.taxId}'")
+            throw AlreadyExistsException("Company with tax id '${request.taxId}'")
 
         return companyRepository.save(
             request.toEntity(userService.getCurrentUser())
@@ -33,14 +33,10 @@ class CompanyService(
     }
 
     fun updateCompany(id: Long, request: UpdateCompanyRequest): CompanyResponse {
-        val company = companyRepository.findByTaxIdAndCompanyRole(request.taxId, request.companyRole)
-        val updatingCompany = companyRepository.findByIdOrNull(id)?.applyUpdate(request)
-            ?: throw NotFoundException("Company")
+        val company = companyRepository.findByTaxId(request.taxId)
+            ?: throw NotFoundException("Company with tax id '${request.taxId}'")
 
-        if (company != null && updatingCompany.id != company.id)
-            throw AlreadyExistsException("${request.companyRole.value} company with tax id '${request.taxId}'")
-
-        return companyRepository.save(updatingCompany.applyUpdate(request)).toResponse()
+        return companyRepository.save(company.applyUpdate(request)).toResponse()
     }
 
     fun deleteCompany(id: Long) = companyRepository.deleteById(id)
