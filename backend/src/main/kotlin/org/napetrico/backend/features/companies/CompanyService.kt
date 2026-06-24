@@ -1,5 +1,6 @@
 package org.napetrico.backend.features.companies
 
+import jakarta.transaction.Transactional
 import org.napetrico.backend.common.exceptions.AlreadyExistsException
 import org.napetrico.backend.common.exceptions.NotFoundException
 import org.napetrico.backend.features.companies.CompanyMapper.applyUpdate
