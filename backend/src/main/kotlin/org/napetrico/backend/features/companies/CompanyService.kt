@@ -44,6 +44,7 @@ class CompanyService(
         return companyRepository.save(company.applyUpdate(request)).toResponse()
     }
 
+    @Transactional
     fun deleteCompany(publicId: UUID) =
         companyRepository.deleteByPublicIdAndUser(publicId, userService.getCurrentUser())
 }
