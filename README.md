@@ -6,6 +6,7 @@ Already in development.
 Working APIs: 
 - api/auth/**
 - api/companies/**
+- api/categories/**
 
 ---
 
