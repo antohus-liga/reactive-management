@@ -33,7 +33,7 @@ class CompanyService(
     }
 
     fun updateCompany(id: Long, request: UpdateCompanyRequest): CompanyResponse {
-        val company = companyRepository.findByIdOrNull(id)
+        val company = companyRepository.findByIdAndUser(id, userService.getCurrentUser())
             ?: throw NotFoundException("Company with tax id '${request.taxId}'")
 
         val conflict = companyRepository.findByTaxId(request.taxId)
@@ -44,5 +44,6 @@ class CompanyService(
         return companyRepository.save(company.applyUpdate(request)).toResponse()
     }
 
-    fun deleteCompany(id: Long) = companyRepository.deleteById(id)
+    fun deleteCompany(id: Long) =
+        companyRepository.deleteByIdAndUser(id, userService.getCurrentUser())
 }
