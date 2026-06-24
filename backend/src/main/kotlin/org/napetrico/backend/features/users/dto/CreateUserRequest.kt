@@ -8,7 +8,7 @@ data class CreateUserRequest(
     val companyType: CompanyType,
     val taxId: String,
     val phoneNumber: String,
-    val email: Email,
+    val email: String,
     val country: String,
     val address: String,
     val password: String,

@@ -1,5 +1,6 @@
 package org.napetrico.backend.features.users
 
+import org.napetrico.backend.common.values.Email
 import org.napetrico.backend.features.users.dto.CreateUserRequest
 import org.napetrico.backend.features.users.dto.UpdateUserRequest
 import org.napetrico.backend.features.users.dto.UserResponse
@@ -13,7 +14,7 @@ object UserMapper {
         companyType = companyType,
         taxId = taxId,
         phoneNumber = phoneNumber,
-        email = email,
+        email = email.toString(),
         country = country,
         address = address,
         createdAt = createdAt,
@@ -27,7 +28,7 @@ object UserMapper {
         companyType = companyType,
         taxId = taxId,
         phoneNumber = phoneNumber,
-        email = email,
+        email = Email(email),
         country = country,
         address = address,
         createdAt = LocalDateTime.now(),
@@ -35,13 +36,13 @@ object UserMapper {
     )
 
     fun User.applyUpdate(update: UpdateUserRequest) {
-        update.companyName?.let { companyName = it }
-        update.companyType?.let { companyType = it }
-        update.taxId?.let { taxId = it }
-        update.phoneNumber?.let { phoneNumber = it }
-        update.email?.let { email = it }
-        update.country?.let { country = it }
-        update.address?.let { address = it }
+        companyName = update.companyName
+        companyType = update.companyType
+        taxId = update.taxId
+        phoneNumber = update.phoneNumber
+        email = Email(update.email)
+        country = update.country
+        address = update.address
         updatedAt = LocalDateTime.now()
     }
 }
