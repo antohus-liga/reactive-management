@@ -33,8 +33,13 @@ class CompanyService(
     }
 
     fun updateCompany(id: Long, request: UpdateCompanyRequest): CompanyResponse {
-        val company = companyRepository.findByTaxId(request.taxId)
+        val company = companyRepository.findByIdOrNull(id)
             ?: throw NotFoundException("Company with tax id '${request.taxId}'")
+
+        val conflict = companyRepository.findByTaxId(request.taxId)
+
+        if (conflict != null && company.id != conflict.id)
+            throw AlreadyExistsException("Company with tax id '${request.taxId}'")
 
         return companyRepository.save(company.applyUpdate(request)).toResponse()
     }
