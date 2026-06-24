@@ -1,4 +1,4 @@
-package org.napetrico.backend.features.suppliers
+package org.napetrico.backend.features.companies
 
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
@@ -12,14 +12,15 @@ import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes
+import org.napetrico.backend.common.enums.CompanyRole
 import org.napetrico.backend.common.enums.CompanyType
 import org.napetrico.backend.common.values.Email
 import org.napetrico.backend.features.users.User
 import java.time.LocalDateTime
 
 @Entity
-@Table(name = "suppliers")
-class Supplier (
+@Table(name = "companies")
+class Company (
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +35,10 @@ class Supplier (
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     var companyType: CompanyType,
+
+    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    var companyRole: CompanyRole,
 
     var taxId: String = "",
 
