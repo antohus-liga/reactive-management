@@ -1,14 +1,40 @@
 package org.napetrico.backend.config
 
-import org.springframework.http.ResponseEntity
+import org.napetrico.backend.common.exceptions.AlreadyExistsException
+import org.napetrico.backend.common.exceptions.InvalidCredentialsException
+import org.napetrico.backend.common.exceptions.InvalidEmailException
+import org.napetrico.backend.common.exceptions.InvalidTokenException
+import org.napetrico.backend.common.exceptions.NotFoundException
+import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestControllerAdvice
 class GlobalExceptionHandler{
 
-    @ExceptionHandler(Exception::class)
-    fun exceptionHandler(ex: Exception): Map<String, String> {
-        return mapOf("error" to (ex.message ?: "Unexpected error"))
-    }
+    @ExceptionHandler(AlreadyExistsException::class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    fun handleAlreadyExistsException(ex: AlreadyExistsException): Map<String, String> =
+        mapOf("error" to ex.message!!)
+
+    @ExceptionHandler(InvalidCredentialsException::class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    fun handleInvalidCredentialsException(ex: InvalidCredentialsException): Map<String, String> =
+        mapOf("error" to ex.message!!)
+
+    @ExceptionHandler(InvalidEmailException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleInvalidEmailException(ex: InvalidEmailException): Map<String, String> =
+        mapOf("error" to ex.message!!)
+
+    @ExceptionHandler(InvalidTokenException::class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    fun handleInvalidTokenException(ex: InvalidTokenException): Map<String, String> =
+        mapOf("error" to ex.message!!)
+
+    @ExceptionHandler(NotFoundException::class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun handleNotFoundException(ex: NotFoundException): Map<String, String> =
+        mapOf("error" to ex.message!!)
 }
