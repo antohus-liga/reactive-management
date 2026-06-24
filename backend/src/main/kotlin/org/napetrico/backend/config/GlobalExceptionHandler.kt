@@ -37,4 +37,9 @@ class GlobalExceptionHandler{
     @ResponseStatus(HttpStatus.NOT_FOUND)
     fun handleNotFoundException(ex: NotFoundException): Map<String, String> =
         mapOf("error" to ex.message!!)
+
+    @ExceptionHandler(Exception::class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    fun handleExceptionFallback(ex: Exception): Map<String, String> =
+        mapOf("error" to (ex.message ?: "Unknown error"))
 }
