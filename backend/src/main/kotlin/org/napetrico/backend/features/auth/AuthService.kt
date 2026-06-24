@@ -26,7 +26,7 @@ class AuthService(
     private val authenticationManager: AuthenticationManager,
 ) {
     fun register(request: RegisterRequest) {
-        userService.getUserByEmail(request.email)?.let {
+        userService.getUserByEmail(Email(request.email))?.let {
             throw AlreadyExistsException("Email ${it.email}")
         }
 
@@ -49,17 +49,17 @@ class AuthService(
         try {
             authenticationManager.authenticate(
                 UsernamePasswordAuthenticationToken(
-                    request.email.toString(), request.password
+                    request.email, request.password
                 )
             )
         } catch (_: AuthenticationException) {
             throw InvalidCredentialsException()
         }
 
-        val user = userService.getUserByEmail(request.email)!!
+        val user = userService.getUserByEmail(Email(request.email))!!
         return TokenResponse(
-            accessToken = jwtService.generateAccessToken(user.email),
-            refreshToken = jwtService.generateRefreshToken(user.email)
+            accessToken = jwtService.generateAccessToken(Email(user.email)),
+            refreshToken = jwtService.generateRefreshToken(Email(user.email))
         )
     }
 
@@ -73,8 +73,8 @@ class AuthService(
             ?: throw NotFoundException("User with email $email")
 
         return TokenResponse(
-            accessToken = jwtService.generateAccessToken(user.email),
-            refreshToken = jwtService.generateRefreshToken(user.email)
+            accessToken = jwtService.generateAccessToken(Email(user.email)),
+            refreshToken = jwtService.generateRefreshToken(Email(user.email))
         )
     }
 
