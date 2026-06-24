@@ -2,7 +2,6 @@ package org.napetrico.backend.config
 
 import org.napetrico.backend.common.exceptions.AlreadyExistsException
 import org.napetrico.backend.common.exceptions.InvalidCredentialsException
-import org.napetrico.backend.common.exceptions.InvalidEmailException
 import org.napetrico.backend.common.exceptions.InvalidTokenException
 import org.napetrico.backend.common.exceptions.NotFoundException
 import org.springframework.http.HttpStatus
@@ -23,9 +22,9 @@ class GlobalExceptionHandler{
     fun handleInvalidCredentialsException(ex: InvalidCredentialsException): Map<String, String> =
         mapOf("error" to ex.message!!)
 
-    @ExceptionHandler(InvalidEmailException::class)
+    @ExceptionHandler(IllegalArgumentException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    fun handleInvalidEmailException(ex: InvalidEmailException): Map<String, String> =
+    fun handleInvalidEmailException(ex: IllegalArgumentException): Map<String, String> =
         mapOf("error" to ex.message!!)
 
     @ExceptionHandler(InvalidTokenException::class)
