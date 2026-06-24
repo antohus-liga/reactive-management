@@ -55,8 +55,8 @@ class AuthController(
 
     @PostMapping("/logout")
     fun logout(response: HttpServletResponse): ResponseEntity<Unit> {
-        response.addCookie(createCookie("accessToken", "", 0))
-        response.addCookie(createCookie("refreshToken", "", 0))
+        response.addCookie(createCookie("accessToken", "", 0, "/"))
+        response.addCookie(createCookie("refreshToken", "", 0, "/api/auth/refresh"))
         return ResponseEntity.ok().build()
     }
 
@@ -66,15 +66,29 @@ class AuthController(
     }
 
     fun HttpServletResponse.addAuthCookies(tokens: TokenResponse) {
-        addCookie(createCookie("accessToken", tokens.accessToken, 15 * 60))          // 15 min
-        addCookie(createCookie("refreshToken", tokens.refreshToken, 7 * 24 * 60 * 60)) // 7 days
+        addCookie(
+            createCookie(
+                "accessToken",
+                tokens.accessToken,
+                15 * 60,
+                "/"
+            )
+        )          // 15 min
+        addCookie(
+            createCookie(
+                "refreshToken",
+                tokens.refreshToken,
+                7 * 24 * 60 * 60,
+                "/api/auth/refresh"
+            )
+        ) // 7 days
     }
 
-    fun createCookie(name: String, value: String, maxAgeSeconds: Int): Cookie =
+    fun createCookie(name: String, value: String, maxAgeSeconds: Int, path: String): Cookie =
         Cookie(name, value).apply {
             isHttpOnly = false
             secure = false       // HTTPS only — set to false for local dev
-            path = "/"
+            this.path = path
             maxAge = maxAgeSeconds
             setAttribute("SameSite", "Lax")
         }
