@@ -46,6 +46,7 @@ class CategoryService(
     fun deleteCategory(publicId: UUID) =
         categoryRepository.deleteByPublicIdAndUser(publicId, userService.getCurrentUser())
 
+    // Internal function, don't use in controllers
     fun getCategory(publicId: UUID): Category =
         categoryRepository.findByPublicId(publicId)
             ?: throw NotFoundException("Category")

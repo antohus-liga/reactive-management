@@ -19,6 +19,7 @@ class UserService(
     fun createUser(createUserRequest: CreateUserRequest): UserResponse =
         userRepository.save(createUserRequest.toEntity()).toResponse()
 
+    // Internal function, don't use in controllers
     fun getCurrentUser(): User {
         val email = SecurityContextHolder.getContext().authentication?.name
             ?: throw NotFoundException("User")
