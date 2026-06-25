@@ -1,13 +1,19 @@
 package org.napetrico.backend.common.values
 
-@JvmInline
-value class SellingMargin(val value: String) {
+import org.napetrico.backend.common.parsers.SellingMarginParser
+import java.math.BigDecimal
 
-    init {
+@JvmInline
+value class SellingMargin(val value: BigDecimal) {
+
+    fun from(value: String): SellingMargin {
         require(value.matches(Regex("^\\d+(\\.\\d+)?%$"))) {
             "Invalid SellingMargin format: $value (expected digits, optional decimal, ending with %)"
         }
+        return SellingMargin(SellingMarginParser.parseToBigDecimal(value))
     }
 
-    override fun toString(): String = value
+    fun from(value: BigDecimal): SellingMargin {
+        return SellingMargin(value)
+    }
 }
