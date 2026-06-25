@@ -6,6 +6,7 @@ import org.napetrico.backend.common.exceptions.AlreadyExistsException
 import org.napetrico.backend.common.exceptions.NotFoundException
 import org.napetrico.backend.common.parsers.SellingMarginParser
 import org.napetrico.backend.common.values.Price
+import org.napetrico.backend.features.categories.Category
 import org.napetrico.backend.features.categories.CategoryService
 import org.napetrico.backend.features.products.ProductMapper.applyUpdate
 import org.napetrico.backend.features.products.ProductMapper.toEntity
@@ -38,10 +39,9 @@ class ProductService(
 
     fun createProduct(request: CreateProductRequest): ProductResponse {
         val user = userService.getCurrentUser()
-
-        validateRequest(request, user)
-
         val category = categoryService.getCategory(request.categoryPublicId)
+
+        validateRequest(request, user, category)
 
         return productRepository.save(
             request.toEntity(user, category)
@@ -54,11 +54,12 @@ class ProductService(
         val user = userService.getCurrentUser()
         val product = productRepository.findByPublicIdAndUser(publicId, user)
             ?: throw NotFoundException("Product")
+        val category = categoryService.getCategory(request.categoryPublicId)
 
-        validateRequest(request, user, product)
+        validateRequest(request, user, category, product)
 
         return productRepository.save(
-            product.applyUpdate(request)
+            product.applyUpdate(request, category)
         ).toResponse(
             productionCost = Price(BigDecimal(1)) // TODO: calculate total price with product_materials data
         )
@@ -69,7 +70,7 @@ class ProductService(
     fun deleteProduct(publicId: UUID) =
         productRepository.deleteByPublicIdAndUser(publicId, userService.getCurrentUser())
 
-    private fun validateRequest(request: ProductRequest, user: User, product: Product? = null) {
+    private fun validateRequest(request: ProductRequest, user: User, category: Category, product: Product? = null) {
         if (!((request.fixedPrice != null) xor (request.sellingMargin != null)))
             throw IllegalArgumentException("Exactly one of fixedPrice or sellingMargin must be provided.")
 
@@ -91,7 +92,6 @@ class ProductService(
             )
         }
 
-        val category = categoryService.getCategory(request.categoryPublicId)
         if (category.type == CategoryType.MATERIAL)
             throw IllegalArgumentException("${category.name} category cannot be used because it's a material category.")
     }

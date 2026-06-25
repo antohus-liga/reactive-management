@@ -34,13 +34,15 @@ object ProductMapper {
         category = category,
     )
 
-    fun Product.applyUpdate(update: UpdateProductRequest): Product {
+    fun Product.applyUpdate(update: UpdateProductRequest, category: Category): Product {
         description = update.description
         measurement = update.measurement
         quantity = update.quantity
         fixedPrice = update.fixedPrice?.let { Price(it) }
         sellingMargin = update.sellingMargin?.let { SellingMargin.from(it) }
         updatedAt = LocalDateTime.now()
+
+        this.category = category
 
         return this
     }
