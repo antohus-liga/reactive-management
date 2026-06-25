@@ -16,11 +16,11 @@ import org.napetrico.backend.features.products.ProductMapper.toEntity
 import org.napetrico.backend.features.products.ProductMapper.toResponse
 import org.napetrico.backend.features.products.dto.CreateProductRecipeRequest
 import org.napetrico.backend.features.products.dto.CreateProductRequest
+import org.napetrico.backend.features.products.dto.IngredientRequest
 import org.napetrico.backend.features.products.dto.MaterialIngredientResponse
 import org.napetrico.backend.features.products.dto.ProductRecipeResponse
 import org.napetrico.backend.features.products.dto.ProductRequest
 import org.napetrico.backend.features.products.dto.ProductResponse
-import org.napetrico.backend.features.products.dto.UpdateProductRecipeRequest
 import org.napetrico.backend.features.products.dto.UpdateProductRequest
 import org.napetrico.backend.features.users.User
 import org.napetrico.backend.features.users.UserService
@@ -28,7 +28,6 @@ import org.springframework.stereotype.Service
 import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.util.UUID
-import kotlin.collections.sumOf
 
 @Service
 class ProductService(
@@ -81,50 +80,13 @@ class ProductService(
         productRepository.deleteByPublicIdAndUser(publicId, userService.getCurrentUser())
 
     @Transactional
-    fun createProductRecipe(request: CreateProductRecipeRequest): ProductRecipeResponse {
+    fun replaceRecipe(request: CreateProductRecipeRequest): ProductRecipeResponse {
         val user = userService.getCurrentUser()
         val product = productRepository.findByPublicIdAndUser(request.productPublicId, user)
             ?: throw NotFoundException("Product")
-        if (productMaterialService.recipeExists(product, user))
-            throw AlreadyExistsException("Product ${product.description}recipe")
 
-        val materials = materialService.getAllByPublicIds(request.ingredients.map { it.materialPublicId })
-
-        val materialMap = materials.associateBy { it.publicId }
-
-        val productMaterials = request.ingredients.map { ingredient ->
-
-            val material = materialMap[ingredient.materialPublicId]
-                ?: throw NotFoundException("Material")
-
-            ProductMaterial(
-                product = product,
-                material = material,
-                quantity = ingredient.quantity,
-                user = user,
-            )
-        }
-        productMaterialService.createAllProductMaterials(productMaterials)
-
-        val ingredientResponses = productMaterials.map {
-            MaterialIngredientResponse(
-                materialPublicId = it.material.publicId,
-                materialDescription = it.material.description,
-                materialUnitPrice = it.material.unitPrice.value,
-                quantityNeeded = it.quantity
-            )
-        }.toSet()
-
-        return ProductRecipeResponse(
-            productPublicId = product.publicId,
-            productDescription = product.description,
-            ingredients = ingredientResponses,
-            productionCost = productMaterials.fold(BigDecimal.ZERO) { acc, pm ->
-                acc + pm.material.unitPrice.value.multiply(BigDecimal(pm.material.quantity))
-            },
-            createdAt = LocalDateTime.now(),
-            updatedAt = LocalDateTime.now(),
-        )
+        val pms = replaceProductMaterials(product, request.ingredients, user)
+        return getProductRecipeResponseFromProductMaterials(product, pms)
     }
 
     fun getProductRecipe(publicId: UUID): ProductRecipeResponse {
@@ -159,5 +121,55 @@ class ProductService(
 
         if (category.type == CategoryType.MATERIAL)
             throw IllegalArgumentException("${category.name} category cannot be used because it's a material category.")
+    }
+
+    private fun replaceProductMaterials(
+        product: Product,
+        ingredients: Set<IngredientRequest>,
+        user: User
+    ): List<ProductMaterial> {
+        productMaterialService.deleteRecipe(product, user)
+
+        val materials = materialService.getAllByPublicIds(ingredients.map { it.materialPublicId })
+        val materialMap = materials.associateBy { it.publicId }
+
+        val productMaterials = ingredients.map { ingredient ->
+
+            val material = materialMap[ingredient.materialPublicId]
+                ?: throw NotFoundException("Material")
+
+            ProductMaterial(
+                product = product,
+                material = material,
+                quantity = ingredient.quantity,
+                user = user,
+            )
+        }
+        return productMaterialService.createAllProductMaterials(productMaterials)
+    }
+
+    private fun getProductRecipeResponseFromProductMaterials(
+        product: Product,
+        pms: List<ProductMaterial>,
+    ): ProductRecipeResponse {
+        val ingredientResponses = pms.map {
+            MaterialIngredientResponse(
+                materialPublicId = it.material.publicId,
+                materialDescription = it.material.description,
+                materialUnitPrice = it.material.unitPrice.value,
+                quantityNeeded = it.quantity
+            )
+        }.toSet()
+
+        return ProductRecipeResponse(
+            productPublicId = product.publicId,
+            productDescription = product.description,
+            ingredients = ingredientResponses,
+            productionCost = pms.fold(BigDecimal.ZERO) { acc, pm ->
+                acc + pm.material.unitPrice.value.multiply(BigDecimal(pm.quantity))
+            },
+            createdAt = LocalDateTime.now(),
+            updatedAt = LocalDateTime.now(),
+        )
     }
 }
