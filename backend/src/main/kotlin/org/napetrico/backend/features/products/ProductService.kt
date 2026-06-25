@@ -14,9 +14,9 @@ import org.napetrico.backend.features.productMaterials.ProductMaterialService
 import org.napetrico.backend.features.products.ProductMapper.applyUpdate
 import org.napetrico.backend.features.products.ProductMapper.toEntity
 import org.napetrico.backend.features.products.ProductMapper.toResponse
-import org.napetrico.backend.features.products.dto.CreateProductRecipeRequest
+import org.napetrico.backend.features.products.dto.ProductRecipeRequest
 import org.napetrico.backend.features.products.dto.CreateProductRequest
-import org.napetrico.backend.features.products.dto.IngredientRequest
+import org.napetrico.backend.features.products.dto.MaterialIngredientRequest
 import org.napetrico.backend.features.products.dto.MaterialIngredientResponse
 import org.napetrico.backend.features.products.dto.ProductRecipeResponse
 import org.napetrico.backend.features.products.dto.ProductRequest
@@ -80,9 +80,9 @@ class ProductService(
         productRepository.deleteByPublicIdAndUser(publicId, userService.getCurrentUser())
 
     @Transactional
-    fun replaceRecipe(request: CreateProductRecipeRequest): ProductRecipeResponse {
+    fun replaceRecipe(productPublicId: UUID, request: ProductRecipeRequest): ProductRecipeResponse {
         val user = userService.getCurrentUser()
-        val product = productRepository.findByPublicIdAndUser(request.productPublicId, user)
+        val product = productRepository.findByPublicIdAndUser(productPublicId, user)
             ?: throw NotFoundException("Product")
 
         val pms = replaceProductMaterials(product, request.ingredients, user)
@@ -125,7 +125,7 @@ class ProductService(
 
     private fun replaceProductMaterials(
         product: Product,
-        ingredients: Set<IngredientRequest>,
+        ingredients: Set<MaterialIngredientRequest>,
         user: User
     ): List<ProductMaterial> {
         productMaterialService.deleteRecipe(product, user)

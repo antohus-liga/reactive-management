@@ -14,5 +14,6 @@ interface MaterialRepository : JpaRepository<Material, Long> {
         description: String,
         unitPrice: BigDecimal?,
         user: User,
-    ): Material?
+    ): Material? // TODO: Simplify condition to just description being unique, also make a migration
+    fun getByPublicIdAndUser(publicId: UUID, user: User): Material?
 }
