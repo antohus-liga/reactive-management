@@ -5,18 +5,15 @@ import java.math.BigDecimal
 import java.util.UUID
 
 data class CreateProductRequest(
-    val description: String,
-    val categoryPublicId: UUID,
-    val measurement: MeasurementType,
-    val fixedPrice: BigDecimal? = null,
-    val sellingMargin: BigDecimal? = null,
-) {
-    init {
-        validate()
-    }
-
-    fun validate() {
-        if (!((fixedPrice != null) xor (sellingMargin != null)))
-            throw IllegalArgumentException("Exactly one of fixedPrice or sellingMargin must be provided.")
-    }
-}
+    override val description: String,
+    override val categoryPublicId: UUID,
+    override val measurement: MeasurementType,
+    override val fixedPrice: BigDecimal? = null,
+    override val sellingMargin: String? = null,
+) : ProductRequest(
+    description = description,
+    categoryPublicId = categoryPublicId,
+    measurement = measurement,
+    fixedPrice = fixedPrice,
+    sellingMargin = sellingMargin,
+)

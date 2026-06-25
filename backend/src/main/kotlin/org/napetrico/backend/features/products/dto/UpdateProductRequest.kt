@@ -5,19 +5,16 @@ import java.math.BigDecimal
 import java.util.UUID
 
 data class UpdateProductRequest(
-    val description: String,
+    override val description: String,
+    override val categoryPublicId: UUID,
+    override val measurement: MeasurementType,
+    override val fixedPrice: BigDecimal? = null,
+    override val sellingMargin: String? = null,
     val quantity: Int,
-    val categoryPublicId: UUID,
-    val measurement: MeasurementType,
-    val fixedPrice: BigDecimal? = null,
-    val sellingMargin: BigDecimal? = null,
-) {
-    init {
-        validate()
-    }
-
-    fun validate() {
-        if ((fixedPrice != null) xor (sellingMargin != null))
-            throw IllegalArgumentException("Only fixed price or selling margin is supported. Can't fill both.")
-    }
-}
+) : ProductRequest(
+    description = description,
+    categoryPublicId = categoryPublicId,
+    measurement = measurement,
+    fixedPrice = fixedPrice,
+    sellingMargin = sellingMargin,
+)
