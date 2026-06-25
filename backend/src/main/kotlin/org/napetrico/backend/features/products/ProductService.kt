@@ -20,6 +20,7 @@ import org.napetrico.backend.features.products.dto.MaterialIngredientResponse
 import org.napetrico.backend.features.products.dto.ProductRecipeResponse
 import org.napetrico.backend.features.products.dto.ProductRequest
 import org.napetrico.backend.features.products.dto.ProductResponse
+import org.napetrico.backend.features.products.dto.UpdateProductRecipeRequest
 import org.napetrico.backend.features.products.dto.UpdateProductRequest
 import org.napetrico.backend.features.users.User
 import org.napetrico.backend.features.users.UserService
@@ -84,6 +85,9 @@ class ProductService(
         val user = userService.getCurrentUser()
         val product = productRepository.findByPublicIdAndUser(request.productPublicId, user)
             ?: throw NotFoundException("Product")
+        if (productMaterialService.recipeExists(product, user))
+            throw AlreadyExistsException("Product ${product.description}recipe")
+
         val materials = materialService.getAllByPublicIds(request.ingredients.map { it.materialPublicId })
 
         val materialMap = materials.associateBy { it.publicId }

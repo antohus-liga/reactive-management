@@ -47,4 +47,6 @@ class ProductMaterialService(
 
     fun createAllProductMaterials(productMaterial: List<ProductMaterial>) =
         productMaterialRepository.saveAll(productMaterial)
+
+    fun recipeExists(product: Product, user: User) = productMaterialRepository.existsByProductAndUser(product, user)
 }
