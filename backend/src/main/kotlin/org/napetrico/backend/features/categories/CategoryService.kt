@@ -45,4 +45,8 @@ class CategoryService(
     @Transactional
     fun deleteCategory(publicId: UUID) =
         categoryRepository.deleteByPublicIdAndUser(publicId, userService.getCurrentUser())
+
+    fun getCategory(publicId: UUID): Category =
+        categoryRepository.findByPublicId(publicId)
+            ?: throw NotFoundException("Category")
 }
