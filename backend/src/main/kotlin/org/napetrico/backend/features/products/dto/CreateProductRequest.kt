@@ -16,7 +16,7 @@ data class CreateProductRequest(
     }
 
     fun validate() {
-        if ((fixedPrice != null) xor (sellingMargin != null))
-            throw IllegalArgumentException("Only fixed price or selling margin is supported. Can't fill both.")
+        if (!((fixedPrice != null) xor (sellingMargin != null)))
+            throw IllegalArgumentException("Exactly one of fixedPrice or sellingMargin must be provided.")
     }
 }
