@@ -1,7 +1,9 @@
 package org.napetrico.backend.features.categories
 
 import jakarta.transaction.Transactional
+import org.napetrico.backend.common.enums.CategoryType
 import org.napetrico.backend.common.exceptions.AlreadyExistsException
+import org.napetrico.backend.common.exceptions.CannotEditCategoryTypeException
 import org.napetrico.backend.common.exceptions.NotFoundException
 import org.napetrico.backend.features.categories.CategoryMapper.applyUpdate
 import org.napetrico.backend.features.categories.CategoryMapper.toEntity
@@ -33,6 +35,18 @@ class CategoryService(
         val user = userService.getCurrentUser()
         val category = categoryRepository.findByPublicIdAndUser(publicId, user)
             ?: throw NotFoundException("Category")
+
+        val dependencyCount = when (request.type) {
+            CategoryType.MATERIAL -> category.products.count()
+            CategoryType.PRODUCT -> category.materials.count()
+            CategoryType.BOTH -> 0
+        }
+
+        if (dependencyCount > 0) {
+            throw CannotEditCategoryTypeException(
+                "there are $dependencyCount dependencies preventing type change"
+            )
+        }
 
         val conflict = categoryRepository.findByNameAndUser(request.name, user)
 

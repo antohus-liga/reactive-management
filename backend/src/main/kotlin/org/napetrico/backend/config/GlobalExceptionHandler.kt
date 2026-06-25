@@ -1,6 +1,7 @@
 package org.napetrico.backend.config
 
 import org.napetrico.backend.common.exceptions.AlreadyExistsException
+import org.napetrico.backend.common.exceptions.CannotEditCategoryTypeException
 import org.napetrico.backend.common.exceptions.InvalidCredentialsException
 import org.napetrico.backend.common.exceptions.InvalidTokenException
 import org.napetrico.backend.common.exceptions.NotFoundException
@@ -35,6 +36,11 @@ class GlobalExceptionHandler{
     @ExceptionHandler(NotFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     fun handleNotFoundException(ex: NotFoundException): Map<String, String> =
+        mapOf("error" to ex.message!!)
+
+    @ExceptionHandler(CannotEditCategoryTypeException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleCannotEditCategoryTypeException(ex: CannotEditCategoryTypeException): Map<String, String> =
         mapOf("error" to ex.message!!)
 
     @ExceptionHandler(Exception::class)

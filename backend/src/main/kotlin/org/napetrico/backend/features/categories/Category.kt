@@ -9,10 +9,13 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
+import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes
 import org.napetrico.backend.common.enums.CategoryType
+import org.napetrico.backend.features.materials.Material
+import org.napetrico.backend.features.products.Product
 import org.napetrico.backend.features.users.User
 import java.time.LocalDateTime
 import java.util.UUID
@@ -40,4 +43,10 @@ class Category (
 
     var createdAt: LocalDateTime = LocalDateTime.now(),
     var updatedAt: LocalDateTime = LocalDateTime.now(),
+
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    var products: MutableSet<Product> = mutableSetOf(),
+
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    var materials: MutableSet<Material> = mutableSetOf()
 )
