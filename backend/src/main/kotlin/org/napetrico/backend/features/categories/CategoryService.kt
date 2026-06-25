@@ -36,7 +36,7 @@ class CategoryService(
 
         val conflict = categoryRepository.findByNameAndUser(request.name, user)
 
-        if (conflict != null && category.id == conflict.id)
+        if (conflict != null && category.id != conflict.id)
             throw AlreadyExistsException("Category with name '${request.name}'")
 
         return categoryRepository.save(category.applyUpdate(request)).toResponse()
