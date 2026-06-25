@@ -14,6 +14,7 @@ data class ProductResponse(
     val measurement: MeasurementType,
     val fixedPrice: BigDecimal? = null,
     val sellingMargin: BigDecimal? = null,
+    val price: BigDecimal = fixedPrice ?: sellingMargin!!,
     val productionCost: BigDecimal,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime,

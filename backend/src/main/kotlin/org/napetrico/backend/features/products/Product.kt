@@ -36,7 +36,7 @@ class Product (
     var category: Category,
 
     var description: String,
-    var quantity: Int,
+    var quantity: Int = 0,
 
     @Enumerated(EnumType.STRING)
     var measurement: MeasurementType,
