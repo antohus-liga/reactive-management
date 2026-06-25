@@ -1,6 +1,8 @@
 package org.napetrico.backend.features.products
 
 import org.napetrico.backend.features.products.dto.CreateProductRequest
+import org.napetrico.backend.features.products.dto.ProductRecipeRequest
+import org.napetrico.backend.features.products.dto.ProductRecipeResponse
 import org.napetrico.backend.features.products.dto.ProductResponse
 import org.napetrico.backend.features.products.dto.UpdateProductRequest
 import org.springframework.http.ResponseEntity
@@ -20,26 +22,34 @@ class ProductController(
     val productService: ProductService
 ) {
     @GetMapping
-    fun get(): ResponseEntity<List<ProductResponse>> {
-        return ResponseEntity.ok(productService.getAllByUser())
-    }
+    fun get(): ResponseEntity<List<ProductResponse>> =
+        ResponseEntity.ok(productService.getAllByUser())
 
     @PostMapping
-    fun create(@RequestBody request: CreateProductRequest): ResponseEntity<ProductResponse> {
-        return ResponseEntity.ok(productService.createProduct(request))
-    }
+    fun create(@RequestBody request: CreateProductRequest): ResponseEntity<ProductResponse> =
+        ResponseEntity.ok(productService.createProduct(request))
 
     @PutMapping("/{publicId}")
     fun update(
         @PathVariable publicId: UUID,
         @RequestBody request: UpdateProductRequest
-    ): ResponseEntity<ProductResponse> {
-        return ResponseEntity.ok(productService.updateProduct(publicId, request))
-    }
+    ): ResponseEntity<ProductResponse> =
+        ResponseEntity.ok(productService.updateProduct(publicId, request))
 
     @DeleteMapping("/{publicId}")
     fun delete(@PathVariable publicId: UUID): ResponseEntity<Unit> {
         productService.deleteProduct(publicId)
         return ResponseEntity.ok().build()
     }
+
+    @GetMapping("/{publicId}/recipe")
+    fun getRecipe(@PathVariable publicId: UUID): ResponseEntity<ProductRecipeResponse> =
+        ResponseEntity.ok(productService.getProductRecipe(publicId))
+
+    @PostMapping("/{publicId}/recipe")
+    fun replaceRecipe(@PathVariable publicId: UUID, @RequestBody request: ProductRecipeRequest): ResponseEntity<ProductRecipeResponse> =
+        ResponseEntity.ok(productService.replaceRecipe(publicId, request))
+
+    @DeleteMapping("/{publicId}/recipe")
+    fun deleteRecipe(@PathVariable publicId: UUID) = productService.deleteProduct(publicId)
 }

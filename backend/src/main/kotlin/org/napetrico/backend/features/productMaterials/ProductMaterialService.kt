@@ -17,8 +17,8 @@ class ProductMaterialService(
     @Transactional
     fun getProductRecipe(product: Product, user: User): ProductRecipeResponse {
         val productMaterials = productMaterialRepository.getAllByProductAndUserOrderByUpdatedAt(product, user)
-            ?: throw NotFoundException("Product '${product.description}' data")
-        val firstProduct = productMaterialRepository.getAllByProductAndUserOrderByCreatedAt(product, user)!!.first()
+            .let { it.ifEmpty { throw NotFoundException("Product '${product.description}' recipe data") } }
+        val firstProduct = productMaterialRepository.getAllByProductAndUserOrderByCreatedAt(product, user).first()
 
         val ingredients = productMaterials.map { pm ->
             MaterialIngredientResponse(
@@ -47,4 +47,6 @@ class ProductMaterialService(
 
     fun createAllProductMaterials(productMaterial: List<ProductMaterial>) =
         productMaterialRepository.saveAll(productMaterial)
+
+    fun deleteRecipe(product: Product, user: User) = productMaterialRepository.deleteByProductAndUser(product, user)
 }

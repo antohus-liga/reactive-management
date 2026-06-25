@@ -14,5 +14,5 @@ interface ProductRepository : JpaRepository<Product, Long> {
         fixedPrice: BigDecimal?,
         sellingMargin: BigDecimal?,
         user: User,
-    ): Product?
+    ): Product? // TODO: Simplify condition to just description being unique, also make a migration
 }

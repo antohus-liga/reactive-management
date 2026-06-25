@@ -71,4 +71,10 @@ class MaterialService(
         if (category.type == CategoryType.PRODUCT)
             throw IllegalArgumentException("${category.name} category cannot be used because it's a product category.")
     }
+
+    fun getAllByPublicIds(publicIds: List<UUID>): List<Material> =
+        publicIds.map {
+            materialRepository.getByPublicIdAndUser(it, userService.getCurrentUser())
+                ?: throw NotFoundException("Material")
+        }
 }
