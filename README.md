@@ -7,7 +7,8 @@ Working APIs:
 - api/auth/**
 - api/companies/**
 - api/categories/**
-- api/products/** (no production cost calculation, yet)
+- api/products/**
+- api/products/{publicId}/recipe
   
 ---
 
