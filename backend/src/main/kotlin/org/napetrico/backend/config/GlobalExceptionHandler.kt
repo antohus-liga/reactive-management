@@ -24,7 +24,7 @@ class GlobalExceptionHandler{
 
     @ExceptionHandler(IllegalArgumentException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    fun handleInvalidEmailException(ex: IllegalArgumentException): Map<String, String> =
+    fun handleIllegalArgumentException(ex: IllegalArgumentException): Map<String, String> =
         mapOf("error" to ex.message!!)
 
     @ExceptionHandler(InvalidTokenException::class)
