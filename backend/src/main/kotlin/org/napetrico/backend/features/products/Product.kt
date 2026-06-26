@@ -15,6 +15,7 @@ import org.napetrico.backend.common.values.Price
 import org.napetrico.backend.common.values.SellingMargin
 import org.napetrico.backend.features.categories.Category
 import org.napetrico.backend.features.users.User
+import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -43,6 +44,7 @@ class Product (
 
     var fixedPrice: Price? = null,
     var sellingMargin: SellingMargin? = null,
+    var price: Price = Price.from(BigDecimal(0)),
 
     var createdAt: LocalDateTime = LocalDateTime.now(),
     var updatedAt: LocalDateTime = LocalDateTime.now(),

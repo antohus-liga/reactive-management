@@ -26,8 +26,11 @@ import org.napetrico.backend.features.users.User
 import org.napetrico.backend.features.users.UserService
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
+import java.math.RoundingMode
 import java.time.LocalDateTime
 import java.util.UUID
+import kotlin.plus
+import kotlin.times
 
 @Service
 class ProductService(
@@ -52,11 +55,9 @@ class ProductService(
 
         validateRequest(request, user, category)
 
-        return productRepository.save(
-            request.toEntity(user, category)
-        ).let {
-            it.toResponse(Price.from(productMaterialService.getTotalCostForProduct(it, user)))
-        }
+        val product = request.toEntity(user, category)
+
+        return productRepository.save(product).toResponse(Price.from(BigDecimal(0)))
     }
 
     fun updateProduct(publicId: UUID, request: UpdateProductRequest): ProductResponse {
@@ -67,11 +68,12 @@ class ProductService(
 
         validateRequest(request, user, category, product)
 
+        val productionCost = productMaterialService.getTotalCostForProduct(product, user)
+        val price: BigDecimal = getPrice(request, productionCost)
+
         return productRepository.save(
-            product.applyUpdate(request, category)
-        ).let {
-            it.toResponse(Price.from(productMaterialService.getTotalCostForProduct(it, user)))
-        }
+            product.applyUpdate(request, category, Price.from(price))
+        ).toResponse(Price.from(productionCost))
 
     }
 
@@ -168,4 +170,16 @@ class ProductService(
             updatedAt = LocalDateTime.now(),
         )
     }
+
+    private fun getPrice(request: ProductRequest, productionCost: BigDecimal): BigDecimal =
+        request.fixedPrice
+            ?: (
+                    productionCost * (
+                            BigDecimal(1) + SellingMarginParser.parseToBigDecimal(request.sellingMargin!!)
+                            )
+                    ).setScale(
+                    2,
+                    RoundingMode.HALF_UP
+                )
+
 }
