@@ -53,9 +53,8 @@ class MaterialService(
         materialRepository.deleteByPublicIdAndUser(publicId, userService.getCurrentUser())
 
     private fun validateRequest(request: MaterialRequest, user: User, category: Category, material: Material? = null) {
-        val conflict = materialRepository.findByDescriptionAndUnitPriceAndUser(
+        val conflict = materialRepository.findByDescriptionAndUser(
             request.description,
-            request.unitPrice,
             user
         )
 
@@ -64,7 +63,7 @@ class MaterialService(
             (request !is UpdateMaterialRequest || conflict.id != material?.id)
         ) {
             throw AlreadyExistsException(
-                "Material with description ${request.description} and fixed unit ${request.unitPrice}"
+                "Material with description ${request.description}"
             )
         }
 

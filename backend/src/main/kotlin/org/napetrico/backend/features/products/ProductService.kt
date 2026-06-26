@@ -101,10 +101,8 @@ class ProductService(
         if (!((request.fixedPrice != null) xor (request.sellingMargin != null)))
             throw IllegalArgumentException("Exactly one of fixedPrice or sellingMargin must be provided.")
 
-        val conflict = productRepository.findByDescriptionAndFixedPriceAndSellingMarginAndUser(
+        val conflict = productRepository.findByDescriptionAndUser(
             request.description,
-            request.fixedPrice,
-            request.sellingMargin?.let { SellingMarginParser.parseToBigDecimal(it) },
             user
         )
 
@@ -113,9 +111,7 @@ class ProductService(
             (request !is UpdateProductRequest || conflict.id != product?.id)
         ) {
             throw AlreadyExistsException(
-                "Product with description ${request.description} and " +
-                        (request.sellingMargin?.let { "selling margin $it" }
-                            ?: "fixed price ${request.fixedPrice}")
+                "Product with description ${request.description}"
             )
         }
 

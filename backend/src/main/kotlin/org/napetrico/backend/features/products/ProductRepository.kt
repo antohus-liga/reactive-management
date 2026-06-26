@@ -9,10 +9,5 @@ interface ProductRepository : JpaRepository<Product, Long> {
     fun findAllByUser(user: User): List<Product>
     fun findByPublicIdAndUser(id: UUID, user: User): Product?
     fun deleteByPublicIdAndUser(id: UUID, user: User)
-    fun findByDescriptionAndFixedPriceAndSellingMarginAndUser(
-        description: String,
-        fixedPrice: BigDecimal?,
-        sellingMargin: BigDecimal?,
-        user: User,
-    ): Product? // TODO: Simplify condition to just description being unique, also make a migration
+    fun findByDescriptionAndUser(description: String, user: User): Product?
 }
