@@ -43,6 +43,6 @@ class Order (
     var createdAt: LocalDateTime = LocalDateTime.now(),
     var updatedAt: LocalDateTime = LocalDateTime.now(),
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     var movements: MutableSet<Movement> = mutableSetOf(),
 )
