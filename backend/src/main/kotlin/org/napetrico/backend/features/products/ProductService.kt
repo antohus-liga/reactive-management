@@ -62,8 +62,7 @@ class ProductService(
 
     fun updateProduct(publicId: UUID, request: UpdateProductRequest): ProductResponse {
         val user = userService.getCurrentUser()
-        val product = productRepository.findByPublicIdAndUser(publicId, user)
-            ?: throw NotFoundException("Product")
+        val product = getProduct(publicId, user)
         val category = categoryService.getCategory(request.categoryPublicId)
 
         validateRequest(request, user, category, product)
@@ -84,8 +83,7 @@ class ProductService(
     @Transactional
     fun replaceRecipe(productPublicId: UUID, request: ProductRecipeRequest): ProductRecipeResponse {
         val user = userService.getCurrentUser()
-        val product = productRepository.findByPublicIdAndUser(productPublicId, user)
-            ?: throw NotFoundException("Product")
+        val product = getProduct(productPublicId, user)
 
         val pms = replaceProductMaterials(product, request.ingredients, user)
         return getProductRecipeResponseFromProductMaterials(product, pms)
@@ -93,7 +91,7 @@ class ProductService(
 
     fun getProductRecipe(publicId: UUID): ProductRecipeResponse {
         val user = userService.getCurrentUser()
-        val product = productRepository.findByPublicIdAndUser(publicId, user)
+        val product = getProduct(publicId, user)
             ?: throw NotFoundException("Product")
 
         return productMaterialService.getProductRecipe(product, user)
@@ -182,4 +180,8 @@ class ProductService(
                     RoundingMode.HALF_UP
                 )
 
+    // Internal function, don't use in controllers
+    fun getProduct(publicId: UUID, user: User): Product =
+        productRepository.findByPublicIdAndUser(publicId, user)
+            ?: throw NotFoundException("Product")
 }
