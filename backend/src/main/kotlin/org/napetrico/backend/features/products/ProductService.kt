@@ -184,4 +184,7 @@ class ProductService(
     fun getProduct(publicId: UUID, user: User): Product =
         productRepository.findByPublicIdAndUser(publicId, user)
             ?: throw NotFoundException("Product")
+
+    fun changeProductQuantity(product: Product, quantity: Int) =
+        productRepository.save(product.apply { this.quantity = quantity })
 }

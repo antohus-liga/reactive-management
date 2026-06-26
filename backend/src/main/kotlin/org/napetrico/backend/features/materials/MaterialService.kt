@@ -13,6 +13,7 @@ import org.napetrico.backend.features.materials.dto.CreateMaterialRequest
 import org.napetrico.backend.features.materials.dto.MaterialRequest
 import org.napetrico.backend.features.materials.dto.MaterialResponse
 import org.napetrico.backend.features.materials.dto.UpdateMaterialRequest
+import org.napetrico.backend.features.products.Product
 import org.napetrico.backend.features.users.User
 import org.napetrico.backend.features.users.UserService
 import org.springframework.stereotype.Service
@@ -80,4 +81,7 @@ class MaterialService(
     fun getMaterial(publicId: UUID, user: User): Material =
         materialRepository.findByPublicIdAndUser(publicId, user)
             ?: throw NotFoundException("Material")
+
+    fun changeMaterialQuantity(material: Material, quantity: Int) =
+        materialRepository.save(material.apply { this.quantity = quantity })
 }
