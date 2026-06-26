@@ -26,8 +26,11 @@ import org.napetrico.backend.features.users.User
 import org.napetrico.backend.features.users.UserService
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
+import java.math.RoundingMode
 import java.time.LocalDateTime
 import java.util.UUID
+import kotlin.plus
+import kotlin.times
 
 @Service
 class ProductService(
@@ -52,26 +55,24 @@ class ProductService(
 
         validateRequest(request, user, category)
 
-        return productRepository.save(
-            request.toEntity(user, category)
-        ).let {
-            it.toResponse(Price.from(productMaterialService.getTotalCostForProduct(it, user)))
-        }
+        val product = request.toEntity(user, category)
+
+        return productRepository.save(product).toResponse(Price.from(BigDecimal(0)))
     }
 
     fun updateProduct(publicId: UUID, request: UpdateProductRequest): ProductResponse {
         val user = userService.getCurrentUser()
-        val product = productRepository.findByPublicIdAndUser(publicId, user)
-            ?: throw NotFoundException("Product")
+        val product = getProduct(publicId, user)
         val category = categoryService.getCategory(request.categoryPublicId)
 
         validateRequest(request, user, category, product)
 
+        val productionCost = productMaterialService.getTotalCostForProduct(product, user)
+        val price: BigDecimal = getPrice(request, productionCost)
+
         return productRepository.save(
-            product.applyUpdate(request, category)
-        ).let {
-            it.toResponse(Price.from(productMaterialService.getTotalCostForProduct(it, user)))
-        }
+            product.applyUpdate(request, category, Price.from(price))
+        ).toResponse(Price.from(productionCost))
 
     }
 
@@ -82,8 +83,7 @@ class ProductService(
     @Transactional
     fun replaceRecipe(productPublicId: UUID, request: ProductRecipeRequest): ProductRecipeResponse {
         val user = userService.getCurrentUser()
-        val product = productRepository.findByPublicIdAndUser(productPublicId, user)
-            ?: throw NotFoundException("Product")
+        val product = getProduct(productPublicId, user)
 
         val pms = replaceProductMaterials(product, request.ingredients, user)
         return getProductRecipeResponseFromProductMaterials(product, pms)
@@ -91,7 +91,7 @@ class ProductService(
 
     fun getProductRecipe(publicId: UUID): ProductRecipeResponse {
         val user = userService.getCurrentUser()
-        val product = productRepository.findByPublicIdAndUser(publicId, user)
+        val product = getProduct(publicId, user)
             ?: throw NotFoundException("Product")
 
         return productMaterialService.getProductRecipe(product, user)
@@ -168,4 +168,23 @@ class ProductService(
             updatedAt = LocalDateTime.now(),
         )
     }
+
+    private fun getPrice(request: ProductRequest, productionCost: BigDecimal): BigDecimal =
+        request.fixedPrice
+            ?: (
+                    productionCost * (
+                            BigDecimal(1) + SellingMarginParser.parseToBigDecimal(request.sellingMargin!!)
+                            )
+                    ).setScale(
+                    2,
+                    RoundingMode.HALF_UP
+                )
+
+    // Internal function, don't use in controllers
+    fun getProduct(publicId: UUID, user: User): Product =
+        productRepository.findByPublicIdAndUser(publicId, user)
+            ?: throw NotFoundException("Product")
+
+    fun changeProductQuantity(product: Product, quantity: Int) =
+        productRepository.save(product.apply { this.quantity = quantity })
 }

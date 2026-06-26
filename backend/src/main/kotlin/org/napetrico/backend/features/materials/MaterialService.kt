@@ -13,6 +13,7 @@ import org.napetrico.backend.features.materials.dto.CreateMaterialRequest
 import org.napetrico.backend.features.materials.dto.MaterialRequest
 import org.napetrico.backend.features.materials.dto.MaterialResponse
 import org.napetrico.backend.features.materials.dto.UpdateMaterialRequest
+import org.napetrico.backend.features.products.Product
 import org.napetrico.backend.features.users.User
 import org.napetrico.backend.features.users.UserService
 import org.springframework.stereotype.Service
@@ -39,8 +40,7 @@ class MaterialService(
 
     fun updateMaterial(publicId: UUID, request: UpdateMaterialRequest): MaterialResponse {
         val user = userService.getCurrentUser()
-        val material = materialRepository.findByPublicIdAndUser(publicId, user)
-            ?: throw NotFoundException("Material")
+        val material = getMaterial(publicId, user)
         val category = categoryService.getCategory(request.categoryPublicId)
 
         validateRequest(request, user, category, material)
@@ -71,9 +71,17 @@ class MaterialService(
             throw IllegalArgumentException("${category.name} category cannot be used because it's a product category.")
     }
 
-    fun getAllByPublicIds(publicIds: List<UUID>): List<Material> =
-        publicIds.map {
-            materialRepository.getByPublicIdAndUser(it, userService.getCurrentUser())
-                ?: throw NotFoundException("Material")
-        }
+    // Internal function, don't use in controllers
+    fun getAllByPublicIds(publicIds: List<UUID>): List<Material> {
+        val user = userService.getCurrentUser()
+        return publicIds.map { getMaterial(it, user) }
+    }
+
+    // Internal function, don't use in controllers
+    fun getMaterial(publicId: UUID, user: User): Material =
+        materialRepository.findByPublicIdAndUser(publicId, user)
+            ?: throw NotFoundException("Material")
+
+    fun changeMaterialQuantity(material: Material, quantity: Int) =
+        materialRepository.save(material.apply { this.quantity = quantity })
 }

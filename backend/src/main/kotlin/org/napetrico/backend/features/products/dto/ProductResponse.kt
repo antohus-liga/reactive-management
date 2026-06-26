@@ -16,9 +16,7 @@ data class ProductResponse(
     val fixedPrice: BigDecimal? = null,
     val sellingMargin: BigDecimal? = null,
     val productionCost: BigDecimal,
-    val price: BigDecimal =
-        fixedPrice
-            ?: (productionCost * (BigDecimal(1) + sellingMargin!!)).setScale(2, RoundingMode.HALF_UP),
+    val price: BigDecimal,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime,
 )
