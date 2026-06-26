@@ -1,13 +1,13 @@
 package org.napetrico.backend.features.orders.dto
 
-import org.napetrico.backend.common.values.Price
+import java.math.BigDecimal
 
 data class MovementResponse(
     val productDescription: String?,
-    val productPrice: Price?,
+    val productPrice: BigDecimal?,
     val materialDescription: String?,
-    val materialUnitPrice: Price?,
+    val materialUnitPrice: BigDecimal?,
     val quantity: Int,
-    val totalPrice: Price,
+    val totalPrice: BigDecimal,
     val notes: String?,
 )
