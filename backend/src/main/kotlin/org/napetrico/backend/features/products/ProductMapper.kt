@@ -7,10 +7,13 @@ import org.napetrico.backend.features.products.dto.CreateProductRequest
 import org.napetrico.backend.features.products.dto.ProductResponse
 import org.napetrico.backend.features.products.dto.UpdateProductRequest
 import org.napetrico.backend.features.users.User
+import java.math.BigDecimal
 import java.time.LocalDateTime
 
 object ProductMapper {
-    fun Product.toResponse(productionCost: Price): ProductResponse = ProductResponse(
+    fun Product.toResponse(
+        productionCost: Price = Price.from(BigDecimal(0))
+    ): ProductResponse = ProductResponse(
         publicId = publicId,
         description = description,
         quantity = quantity,
@@ -20,6 +23,7 @@ object ProductMapper {
         fixedPrice = fixedPrice?.value,
         sellingMargin = sellingMargin?.value,
         productionCost = productionCost.value,
+        price = price.value,
         createdAt = createdAt,
         updatedAt = updatedAt,
     )
@@ -34,7 +38,7 @@ object ProductMapper {
         category = category,
     )
 
-    fun Product.applyUpdate(update: UpdateProductRequest, category: Category): Product {
+    fun Product.applyUpdate(update: UpdateProductRequest, category: Category, price: Price): Product {
         description = update.description
         measurement = update.measurement
         quantity = update.quantity
@@ -42,6 +46,7 @@ object ProductMapper {
         sellingMargin = update.sellingMargin?.let { SellingMargin.from(it) }
         updatedAt = LocalDateTime.now()
 
+        this.price = price
         this.category = category
 
         return this

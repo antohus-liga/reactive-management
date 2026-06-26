@@ -4,7 +4,9 @@ import org.napetrico.backend.common.exceptions.AlreadyExistsException
 import org.napetrico.backend.common.exceptions.CannotEditCategoryTypeException
 import org.napetrico.backend.common.exceptions.InvalidCredentialsException
 import org.napetrico.backend.common.exceptions.InvalidTokenException
+import org.napetrico.backend.common.exceptions.NegativeQuantityException
 import org.napetrico.backend.common.exceptions.NotFoundException
+import org.napetrico.backend.common.exceptions.OrderHasNoMovementsException
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -41,6 +43,16 @@ class GlobalExceptionHandler{
     @ExceptionHandler(CannotEditCategoryTypeException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleCannotEditCategoryTypeException(ex: CannotEditCategoryTypeException): Map<String, String> =
+        mapOf("error" to ex.message!!)
+
+    @ExceptionHandler(NegativeQuantityException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleCannotEditCategoryTypeException(ex: NegativeQuantityException): Map<String, String> =
+        mapOf("error" to ex.message!!)
+
+    @ExceptionHandler(OrderHasNoMovementsException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleCannotEditCategoryTypeException(ex: OrderHasNoMovementsException): Map<String, String> =
         mapOf("error" to ex.message!!)
 
     @ExceptionHandler(Exception::class)
