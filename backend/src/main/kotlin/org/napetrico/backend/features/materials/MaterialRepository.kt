@@ -9,5 +9,4 @@ interface MaterialRepository : JpaRepository<Material, Long> {
     fun findByPublicIdAndUser(id: UUID, user: User): Material?
     fun deleteByPublicIdAndUser(id: UUID, user: User)
     fun findByDescriptionAndUser(description: String, user: User): Material?
-    fun getByPublicIdAndUser(id: UUID, user: User): Material?
 }
