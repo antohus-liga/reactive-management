@@ -33,11 +33,11 @@ class Movement(
     var order: Order,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
+    @JoinColumn(name = "product_id")
     var product: Product?,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "material_id", nullable = false)
+    @JoinColumn(name = "material_id")
     var material: Material?,
 
     var quantity: Int,
