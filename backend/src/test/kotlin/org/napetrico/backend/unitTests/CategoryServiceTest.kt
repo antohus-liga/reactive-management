@@ -111,9 +111,9 @@ class CategoryServiceTest {
 
     @Test
     fun `throws when conflict exists on edit`() {
-        val category = Fixtures.categoryFixture(name = "Food")
-        val conflict = Fixtures.categoryFixture(id = 1, name = "Name")
-        val request = UpdateCategoryRequest("Food", "", CategoryType.MATERIAL)
+        val category = Fixtures.categoryFixture()
+        val conflict = Fixtures.categoryFixture(id = 1)
+        val request = UpdateCategoryRequest("", "", CategoryType.MATERIAL)
 
         every { userService.getCurrentUser() } returns user
         every { categoryRepository.findByPublicIdAndUser(category.publicId, user) } returns category
