@@ -7,6 +7,7 @@ Working APIs:
 - api/auth/**
 - api/companies/**
 - api/categories/**
+- api/materials/**
 - api/products/**
 - api/products/{publicId}/recipe
   
