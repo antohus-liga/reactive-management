@@ -14,13 +14,13 @@ import org.napetrico.backend.features.users.User
 import java.time.LocalDateTime
 
 object Fixtures {
-    fun userFixture(companyName: String = "", taxId: String = ""): User = User(
+    fun userFixture(companyName: String = "", taxId: String = "", email: String = "a@a.a"): User = User(
         password = "",
         companyName = companyName,
         companyType = CompanyType.LIMITED_LIABILITY_COMPANY,
         taxId = taxId,
         phoneNumber = "",
-        email = Email("a@a.a"),
+        email = Email(email),
         country = "",
         address = "",
         createdAt = LocalDateTime.now(),
