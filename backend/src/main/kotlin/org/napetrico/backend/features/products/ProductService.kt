@@ -41,13 +41,8 @@ class ProductService(
     private val userService: UserService,
 ) {
 
-    fun getAllByUser(): List<ProductResponse> {
-        val user = userService.getCurrentUser()
-
-        return productRepository.findAllByUser(user).map {
-            it.toResponse(Price.from(productMaterialService.getTotalCostForProduct(it, user)))
-        }
-    }
+    fun getAllByUser(): List<ProductResponse> =
+        productRepository.findAllByUser(userService.getCurrentUser()).map { it.toResponse() }
 
     fun createProduct(request: CreateProductRequest): ProductResponse {
         val user = userService.getCurrentUser()
@@ -57,7 +52,7 @@ class ProductService(
 
         val product = request.toEntity(user, category)
 
-        return productRepository.save(product).toResponse(Price.from(BigDecimal(0)))
+        return productRepository.save(product).toResponse()
     }
 
     fun updateProduct(publicId: UUID, request: UpdateProductRequest): ProductResponse {
@@ -68,11 +63,16 @@ class ProductService(
         validateRequest(request, user, category, product)
 
         val productionCost = productMaterialService.getTotalCostForProduct(product, user)
-        val price: BigDecimal = getPrice(request, productionCost)
+        val price: BigDecimal = getPrice(product, productionCost)
 
         return productRepository.save(
-            product.applyUpdate(request, category, Price.from(price))
-        ).toResponse(Price.from(productionCost))
+            product.applyUpdate(
+                request,
+                category,
+                Price.from(price),
+                Price.from(productionCost)
+            )
+        ).toResponse()
 
     }
 
@@ -86,13 +86,14 @@ class ProductService(
         val product = getProduct(productPublicId, user)
 
         val pms = replaceProductMaterials(product, request.ingredients, user)
+        product.productionCost = Price.from(productMaterialService.getTotalCostForProduct(product, user))
+        product.price = Price.from(getPrice(product, product.productionCost.value))
         return getProductRecipeResponseFromProductMaterials(product, pms)
     }
 
     fun getProductRecipe(publicId: UUID): ProductRecipeResponse {
         val user = userService.getCurrentUser()
         val product = getProduct(publicId, user)
-            ?: throw NotFoundException("Product")
 
         return productMaterialService.getProductRecipe(product, user)
     }
@@ -169,16 +170,13 @@ class ProductService(
         )
     }
 
-    private fun getPrice(request: ProductRequest, productionCost: BigDecimal): BigDecimal =
-        request.fixedPrice
+    private fun getPrice(product: Product, productionCost: BigDecimal): BigDecimal =
+        product.fixedPrice?.value
             ?: (
-                    productionCost * (
-                            BigDecimal(1) + SellingMarginParser.parseToBigDecimal(request.sellingMargin!!)
-                            )
-                    ).setScale(
-                    2,
-                    RoundingMode.HALF_UP
-                )
+                    productionCost.multiply(
+                        BigDecimal(1).add(product.sellingMargin?.value)
+                    ).setScale(2, RoundingMode.HALF_UP)
+                    )
 
     // Internal function, don't use in controllers
     fun getProduct(publicId: UUID, user: User): Product =

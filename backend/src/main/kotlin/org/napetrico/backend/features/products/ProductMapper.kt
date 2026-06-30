@@ -11,9 +11,7 @@ import java.math.BigDecimal
 import java.time.LocalDateTime
 
 object ProductMapper {
-    fun Product.toResponse(
-        productionCost: Price = Price.from(BigDecimal(0))
-    ): ProductResponse = ProductResponse(
+    fun Product.toResponse(): ProductResponse = ProductResponse(
         publicId = publicId,
         description = description,
         quantity = quantity,
@@ -38,7 +36,12 @@ object ProductMapper {
         category = category,
     )
 
-    fun Product.applyUpdate(update: UpdateProductRequest, category: Category, price: Price): Product {
+    fun Product.applyUpdate(
+        update: UpdateProductRequest,
+        category: Category,
+        price: Price,
+        productionCost: Price
+    ): Product {
         description = update.description
         measurement = update.measurement
         quantity = update.quantity
@@ -48,6 +51,7 @@ object ProductMapper {
 
         this.price = price
         this.category = category
+        this.productionCost = productionCost
 
         return this
     }
