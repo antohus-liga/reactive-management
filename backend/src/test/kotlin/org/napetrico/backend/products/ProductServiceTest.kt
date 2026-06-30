@@ -6,7 +6,6 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.assertThrows
 import org.napetrico.backend.common.enums.CategoryType
 import org.napetrico.backend.common.enums.MeasurementType
@@ -155,7 +154,7 @@ class ProductServiceTest {
     @Test
     fun `updates product with fixed price`() {
         val category = Fixtures.categoryFixture(type = CategoryType.PRODUCT)
-        val product = Fixtures.productFixture(category = category)
+        val product = Fixtures.productFixture(category = category, fixedPrice = Price.from("1"))
 
         val request = UpdateProductRequest(
             description = "Updated",
@@ -183,7 +182,7 @@ class ProductServiceTest {
     @Test
     fun `updates product with same description`() {
         val category = Fixtures.categoryFixture(type = CategoryType.PRODUCT)
-        val product = Fixtures.productFixture(description = "Coffee")
+        val product = Fixtures.productFixture(fixedPrice = Price.from("1"), description = "Coffee")
 
         val request = UpdateProductRequest(
             description = "Coffee",
@@ -309,7 +308,7 @@ class ProductServiceTest {
         every { userService.getCurrentUser() } returns user
         every { productRepository.findByPublicIdAndUser(publicId, user) } returns null
 
-        assertThrows<NotFoundException> { productService.getProductRecipe(publicId) }
+        assertThrows<NotFoundException> { productService.getProductRecipeDto(publicId) }
     }
 
     @Test
@@ -347,7 +346,7 @@ class ProductServiceTest {
 
     @Test
     fun `replaces recipe`() {
-        val product = Fixtures.productFixture(productionCost = Price.from(BigDecimal("999.99")))
+        val product = Fixtures.productFixture(fixedPrice = Price.from("1"), productionCost = Price.from(BigDecimal("999.99")))
         val material = Fixtures.materialFixture(unitPrice = Price.from(BigDecimal(10)))
 
         val request = ProductRecipeRequest(
