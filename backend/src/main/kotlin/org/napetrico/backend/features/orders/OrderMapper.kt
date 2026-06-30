@@ -10,13 +10,12 @@ object OrderMapper {
         publicId = publicId,
         companyName = company.companyName,
         companyCountry = company.country,
-        type = type,
         createdAt = createdAt,
         updatedAt = updatedAt,
     )
 
     fun CreateOrderRequest.toEntity(company: Company, user: User): Order = Order(
-        type = type,
+        withRole = withRole,
 
         company = company,
         user = user,

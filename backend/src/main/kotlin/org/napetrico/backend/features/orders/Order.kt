@@ -11,7 +11,9 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
-import org.napetrico.backend.common.enums.OrderType
+import org.hibernate.annotations.JdbcTypeCode
+import org.hibernate.type.SqlTypes
+import org.napetrico.backend.common.enums.CompanyRole
 import org.napetrico.backend.features.companies.Company
 import org.napetrico.backend.features.movements.Movement
 import org.napetrico.backend.features.users.User
@@ -36,7 +38,8 @@ class Order (
     var company: Company,
 
     @Enumerated(EnumType.STRING)
-    var type: OrderType,
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    var withRole: CompanyRole,
 
     var isCompleted: Boolean = false,
 

@@ -11,4 +11,5 @@ data class MaterialResponse(
     val categoryColor: String,
     val measurement: MeasurementType,
     val unitPrice: BigDecimal,
+    val quantity: Int,
 )

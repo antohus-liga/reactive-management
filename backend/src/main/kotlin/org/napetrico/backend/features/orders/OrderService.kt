@@ -1,6 +1,7 @@
 package org.napetrico.backend.features.orders
 
 import jakarta.transaction.Transactional
+import org.napetrico.backend.common.enums.MovementType
 import org.napetrico.backend.common.exceptions.NegativeQuantityException
 import org.napetrico.backend.common.exceptions.NotFoundException
 import org.napetrico.backend.common.exceptions.OrderHasNoMovementsException
@@ -40,6 +41,9 @@ class OrderService(
     fun createOrder(request: CreateOrderRequest): OrderResponse {
         val user = userService.getCurrentUser()
         val company = companyService.getCompany(request.companyPublicId, user)
+
+        if (!company.roles.contains(request.withRole))
+            throw IllegalArgumentException("This company does not have role ${request.withRole}.")
 
         return orderRepository.save(request.toEntity(company, user)).toResponse()
     }
@@ -93,23 +97,31 @@ class OrderService(
         }
     }
 
+    fun deleteMovement(publicId: UUID) = movementService.deleteMovement(publicId, userService.getCurrentUser())
+
     // Internal function, don't use in controllers
     fun getOrder(publicId: UUID, user: User): Order =
         orderRepository.findByPublicIdAndUser(publicId, user)
             ?: throw NotFoundException("Order")
 
     private fun updateQuantity(movement: Movement, delta: Int) {
+        val factor = when (movement.movementType) {
+            MovementType.INBOUND -> 1
+            MovementType.OUTBOUND -> -1
+        }
+
+        fun Int.applyDelta() = this + (factor * delta)
+
         movement.product?.let { product ->
-            val newQuantity = product.quantity - delta
+            val newQuantity = product.quantity.applyDelta()
             if (newQuantity < 0) throw NegativeQuantityException()
             productService.changeProductQuantity(product, newQuantity)
         }
 
         movement.material?.let { material ->
-            val newQuantity = material.quantity + delta
+            val newQuantity = material.quantity.applyDelta()
             if (newQuantity < 0) throw NegativeQuantityException()
             materialService.changeMaterialQuantity(material, newQuantity)
         }
     }
-
 }

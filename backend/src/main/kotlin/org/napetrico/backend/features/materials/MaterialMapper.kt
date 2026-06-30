@@ -15,6 +15,7 @@ object MaterialMapper {
         categoryColor = category.colorHex,
         measurement = measurement,
         unitPrice = unitPrice.value,
+        quantity = quantity,
     )
 
     fun CreateMaterialRequest.toEntity(category: Category, user: User): Material = Material(

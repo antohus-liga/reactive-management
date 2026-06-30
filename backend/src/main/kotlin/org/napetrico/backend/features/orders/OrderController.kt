@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("api/orders")
 class OrderController(
     private val orderService: OrderService
 ) {
@@ -46,9 +46,11 @@ class OrderController(
     ): ResponseEntity<MovementResponse> =
         ResponseEntity.ok(orderService.addMovementToOrder(publicId, request))
 
-    @DeleteMapping("/{publicId}/detail")
-    fun deleteOrder(@PathVariable publicId: UUID): ResponseEntity<Unit> =
-        ResponseEntity.ok(orderService.deleteOrder(publicId))
+    @DeleteMapping("/detail/{movementPublicId}")
+    fun deleteMovement(
+        @PathVariable movementPublicId: UUID
+    ): ResponseEntity<Unit> =
+        ResponseEntity.ok(orderService.deleteMovement(movementPublicId))
 
     @PostMapping("/{publicId}/complete")
     fun completeOrder(@PathVariable publicId: UUID): ResponseEntity<Unit> =
