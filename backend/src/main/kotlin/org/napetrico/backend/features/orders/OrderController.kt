@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("api/orders")
 class OrderController(
     private val orderService: OrderService
 ) {
