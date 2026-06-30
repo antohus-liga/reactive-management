@@ -4,7 +4,6 @@ import jakarta.transaction.Transactional
 import org.napetrico.backend.common.enums.CategoryType
 import org.napetrico.backend.common.exceptions.AlreadyExistsException
 import org.napetrico.backend.common.exceptions.NotFoundException
-import org.napetrico.backend.common.parsers.SellingMarginParser
 import org.napetrico.backend.common.values.Price
 import org.napetrico.backend.features.categories.Category
 import org.napetrico.backend.features.categories.CategoryService
@@ -30,7 +29,6 @@ import java.math.RoundingMode
 import java.time.LocalDateTime
 import java.util.UUID
 import kotlin.plus
-import kotlin.times
 
 @Service
 class ProductService(
@@ -91,11 +89,11 @@ class ProductService(
         return getProductRecipeResponseFromProductMaterials(product, pms)
     }
 
-    fun getProductRecipe(publicId: UUID): ProductRecipeResponse {
+    fun getProductRecipeDto(publicId: UUID): ProductRecipeResponse {
         val user = userService.getCurrentUser()
         val product = getProduct(publicId, user)
 
-        return productMaterialService.getProductRecipe(product, user)
+        return productMaterialService.getProductRecipeDto(product, user)
     }
 
     private fun validateRequest(request: ProductRequest, user: User, category: Category, product: Product? = null) {
@@ -188,6 +186,10 @@ class ProductService(
     fun getProduct(publicId: UUID, user: User): Product =
         productRepository.findByPublicIdAndUser(publicId, user)
             ?: throw NotFoundException("Product")
+
+    // Internal function, don't use in controllers
+    fun getProductRecipe(product: Product, user: User): List<ProductMaterial> =
+        productMaterialService.getProductRecipe(product, user)
 
     fun changeProductQuantity(product: Product, quantity: Int) =
         productRepository.save(product.apply { this.quantity = quantity })

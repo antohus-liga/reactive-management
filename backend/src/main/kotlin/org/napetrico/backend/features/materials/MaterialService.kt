@@ -3,6 +3,7 @@ package org.napetrico.backend.features.materials
 import jakarta.transaction.Transactional
 import org.napetrico.backend.common.enums.CategoryType
 import org.napetrico.backend.common.exceptions.AlreadyExistsException
+import org.napetrico.backend.common.exceptions.InsufficientQuantityException
 import org.napetrico.backend.common.exceptions.NotFoundException
 import org.napetrico.backend.features.categories.Category
 import org.napetrico.backend.features.categories.CategoryService
@@ -13,6 +14,7 @@ import org.napetrico.backend.features.materials.dto.CreateMaterialRequest
 import org.napetrico.backend.features.materials.dto.MaterialRequest
 import org.napetrico.backend.features.materials.dto.MaterialResponse
 import org.napetrico.backend.features.materials.dto.UpdateMaterialRequest
+import org.napetrico.backend.features.productMaterials.ProductMaterial
 import org.napetrico.backend.features.products.Product
 import org.napetrico.backend.features.users.User
 import org.napetrico.backend.features.users.UserService
@@ -84,4 +86,19 @@ class MaterialService(
 
     fun changeMaterialQuantity(material: Material, quantity: Int) =
         materialRepository.save(material.apply { this.quantity = quantity })
+
+    @Transactional
+    fun consumeMaterials(
+        recipe: List<ProductMaterial>,
+        productionQuantity: Int
+    ) {
+        recipe.forEach { pm ->
+            val totalNeeded = pm.quantity * productionQuantity
+
+            if (pm.material.quantity < totalNeeded)
+                throw InsufficientQuantityException(pm.material.description, totalNeeded, pm.material.quantity)
+
+            pm.material.quantity -= totalNeeded
+        }
+    }
 }

@@ -44,7 +44,7 @@ class ProductController(
 
     @GetMapping("/{publicId}/recipe")
     fun getRecipe(@PathVariable publicId: UUID): ResponseEntity<ProductRecipeResponse> =
-        ResponseEntity.ok(productService.getProductRecipe(publicId))
+        ResponseEntity.ok(productService.getProductRecipeDto(publicId))
 
     @PostMapping("/{publicId}/recipe")
     fun replaceRecipe(@PathVariable publicId: UUID, @RequestBody request: ProductRecipeRequest): ResponseEntity<ProductRecipeResponse> =
