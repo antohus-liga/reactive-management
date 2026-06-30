@@ -96,6 +96,8 @@ class OrderService(
         }
     }
 
+    fun deleteMovement(publicId: UUID) = movementService.deleteMovement(publicId, userService.getCurrentUser())
+
     // Internal function, don't use in controllers
     fun getOrder(publicId: UUID, user: User): Order =
         orderRepository.findByPublicIdAndUser(publicId, user)

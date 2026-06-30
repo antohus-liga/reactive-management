@@ -10,6 +10,7 @@ import org.napetrico.backend.features.users.User
 
 object MovementMapper {
     fun Movement.toResponse(totalPrice: Price): MovementResponse = MovementResponse(
+        publicId = publicId,
         productDescription = product?.description,
         productPrice = product?.price?.value,
         materialDescription = material?.description,
