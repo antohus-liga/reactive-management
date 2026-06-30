@@ -13,6 +13,7 @@ import org.napetrico.backend.features.companies.Company
 import org.napetrico.backend.features.materials.Material
 import org.napetrico.backend.features.movements.Movement
 import org.napetrico.backend.features.orders.Order
+import org.napetrico.backend.features.orders.dto.MovementResponse
 import org.napetrico.backend.features.productMaterials.ProductMaterial
 import org.napetrico.backend.features.products.Product
 import org.napetrico.backend.features.users.User
@@ -130,13 +131,13 @@ object Fixtures {
         user: User = userFixture(),
         company: Company = companyFixture(),
         type: OrderType = OrderType.INBOUND,
-        movements: List<Movement> = listOf(),
+        movements: MutableSet<Movement> = mutableSetOf(),
     ): Order = Order(
         id = id,
         user = user,
         company = company,
         type = type,
-        movements = movements.toMutableSet(),
+        movements = movements,
     )
 
     fun movementFixture(
@@ -155,5 +156,17 @@ object Fixtures {
         material = material,
         quantity = quantity,
         notes = notes,
+    )
+
+    fun movementResponseFixture(
+        totalPrice: BigDecimal = BigDecimal.ZERO,
+    ): MovementResponse = MovementResponse(
+        totalPrice = totalPrice,
+        productDescription = null,
+        productPrice = null,
+        materialDescription = null,
+        materialUnitPrice = null,
+        quantity = 0,
+        notes = null
     )
 }
