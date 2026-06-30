@@ -53,6 +53,15 @@ class MovementService(
         val product = request.productPublicId?.let { productService.getProduct(it, user) }
         val material = request.materialPublicId?.let { materialService.getMaterial(it, user) }
 
+        order.movements.forEach { mov ->
+            if (mov.product == product || mov.material == material)
+                throw AlreadyExistsException(
+                    "Movement with " +
+                            (product?.let { "product '${it.description}'" } ?: "") +
+                            (material?.let { "material '${it.description}'" } ?: "")
+                )
+        }
+
         return movementRepository.save(
             request.toEntity(user, order, product, material)
         ).let {
