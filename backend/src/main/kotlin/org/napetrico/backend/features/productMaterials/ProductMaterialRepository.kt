@@ -18,7 +18,21 @@ interface ProductMaterialRepository : JpaRepository<ProductMaterial, Long> {
     """
     )
     fun getTotalCostByProductAndUser(productId: Long, userId: Long): BigDecimal?
-    fun getAllByProductAndUserOrderByUpdatedAt(product: Product, user: User): List<ProductMaterial>
+
+    @Query(
+        """
+    select pm
+    from ProductMaterial pm
+    join fetch pm.material
+    where pm.product = :product
+      and pm.user = :user
+    """
+    )
+    fun findRecipeByProductAndUser(
+        product: Product,
+        user: User
+    ): List<ProductMaterial>
+
     fun getAllByProductAndUserOrderByCreatedAt(product: Product, user: User): List<ProductMaterial>
     fun deleteByProductAndUser(product: Product, user: User)
 }
