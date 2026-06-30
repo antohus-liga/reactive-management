@@ -7,14 +7,12 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.assertThrows
 import org.napetrico.backend.common.enums.OrderType
 import org.napetrico.backend.common.exceptions.NegativeQuantityException
 import org.napetrico.backend.common.exceptions.NotFoundException
 import org.napetrico.backend.common.exceptions.OrderHasNoMovementsException
-import org.napetrico.backend.common.values.Price
 import org.napetrico.backend.features.companies.CompanyService
 import org.napetrico.backend.features.materials.MaterialService
 import org.napetrico.backend.features.movements.MovementService
@@ -23,7 +21,6 @@ import org.napetrico.backend.features.orders.OrderRepository
 import org.napetrico.backend.features.orders.OrderService
 import org.napetrico.backend.features.orders.dto.CreateMovementRequest
 import org.napetrico.backend.features.orders.dto.CreateOrderRequest
-import org.napetrico.backend.features.orders.dto.MovementResponse
 import org.napetrico.backend.features.products.ProductService
 import org.napetrico.backend.features.users.UserService
 import org.napetrico.backend.helper.Fixtures
@@ -128,7 +125,7 @@ class OrderServiceTest {
 
         every {
             productService.changeProductQuantity(product, 7)
-        } just Awaits
+        } returns product
 
         every {
             orderRepository.delete(order)
@@ -210,6 +207,7 @@ class OrderServiceTest {
 
         val movement = Fixtures.movementFixture(
             product = product,
+            material = null,
             quantity = 3
         )
 
@@ -221,7 +219,7 @@ class OrderServiceTest {
 
         every {
             productService.changeProductQuantity(product, 7)
-        } just Awaits
+        } returns product
 
         every {
             orderRepository.save(order)
@@ -275,7 +273,7 @@ class OrderServiceTest {
 
         every {
             materialService.changeMaterialQuantity(material, 25)
-        } just Awaits
+        } returns material
 
         every {
             orderRepository.save(order)
