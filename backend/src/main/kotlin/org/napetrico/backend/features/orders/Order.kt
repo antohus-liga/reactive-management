@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
+import org.napetrico.backend.common.enums.CompanyRole
 import org.napetrico.backend.common.enums.OrderType
 import org.napetrico.backend.features.companies.Company
 import org.napetrico.backend.features.movements.Movement
@@ -34,6 +35,9 @@ class Order (
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id", nullable = false)
     var company: Company,
+
+    @Enumerated(EnumType.STRING)
+    var withRole: CompanyRole,
 
     @Enumerated(EnumType.STRING)
     var type: OrderType,

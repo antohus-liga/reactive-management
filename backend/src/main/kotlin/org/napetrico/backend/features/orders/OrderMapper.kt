@@ -17,6 +17,7 @@ object OrderMapper {
 
     fun CreateOrderRequest.toEntity(company: Company, user: User): Order = Order(
         type = type,
+        withRole = withRole,
 
         company = company,
         user = user,
