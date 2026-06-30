@@ -7,5 +7,4 @@ import java.util.UUID
 data class CreateOrderRequest(
     val companyPublicId: UUID,
     val withRole: CompanyRole,
-    val type: MovementType,
 )
