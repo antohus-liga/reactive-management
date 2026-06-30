@@ -51,7 +51,7 @@ class ProductMaterialServiceTest {
         )
 
         every {
-            productMaterialRepository.getAllByProductAndUserOrderByUpdatedAt(product, user)
+            productMaterialRepository.findRecipeByProductAndUser(product, user)
         } returns listOf(pm1, pm2)
 
         every {
@@ -63,7 +63,7 @@ class ProductMaterialServiceTest {
         } returns BigDecimal("14.00")
 
         product.productionCost = Price.from(productMaterialService.getTotalCostForProduct(product, user))
-        val response = productMaterialService.getProductRecipe(product, user)
+        val response = productMaterialService.getProductRecipeDto(product, user)
 
         assertEquals(product.publicId, response.productPublicId)
         assertEquals(product.description, response.productDescription)
@@ -96,11 +96,11 @@ class ProductMaterialServiceTest {
         val product = Fixtures.productFixture()
 
         every {
-            productMaterialRepository.getAllByProductAndUserOrderByUpdatedAt(product, user)
+            productMaterialRepository.findRecipeByProductAndUser(product, user)
         } returns emptyList()
 
         assertThrows<NotFoundException> {
-            productMaterialService.getProductRecipe(product, user)
+            productMaterialService.getProductRecipeDto(product, user)
         }
 
         verify(exactly = 0) {
