@@ -1,6 +1,7 @@
 package org.napetrico.backend.features.movements
 
 import jakarta.transaction.Transactional
+import org.napetrico.backend.common.enums.CompanyRole
 import org.napetrico.backend.common.exceptions.NotFoundException
 import org.napetrico.backend.common.values.Price
 import org.napetrico.backend.features.materials.MaterialService
@@ -35,6 +36,19 @@ class MovementService(
     fun createMovement(order: Order, request: CreateMovementRequest, user: User): MovementResponse {
         if (!((request.productPublicId == null) xor (request.materialPublicId == null)))
             throw IllegalArgumentException("Exactly one of product or material must be provided.")
+
+        if (
+            order.withRole == CompanyRole.CLIENT
+            && request.productPublicId == null
+            && request.materialPublicId != null
+        )
+            throw IllegalArgumentException("Orders for companies with role CLIENT can only receive products.")
+        else if (
+            order.withRole == CompanyRole.SUPPLIER
+            && request.productPublicId != null
+            && request.materialPublicId == null
+        )
+            throw IllegalArgumentException("Orders for companies with role SUPPLIER can only provide materials.")
 
         val product = request.productPublicId?.let { productService.getProduct(it, user) }
         val material = request.materialPublicId?.let { materialService.getMaterial(it, user) }

@@ -41,6 +41,9 @@ class OrderService(
         val user = userService.getCurrentUser()
         val company = companyService.getCompany(request.companyPublicId, user)
 
+        if (!company.roles.contains(request.withRole))
+            throw IllegalArgumentException("This company does not have role ${request.withRole}.")
+
         return orderRepository.save(request.toEntity(company, user)).toResponse()
     }
 
