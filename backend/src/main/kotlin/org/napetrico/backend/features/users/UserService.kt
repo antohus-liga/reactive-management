@@ -8,6 +8,7 @@ import org.napetrico.backend.features.users.dto.CreateUserRequest
 import org.napetrico.backend.features.users.dto.UserResponse
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
+import java.util.UUID
 
 @Service
 class UserService(
@@ -18,6 +19,11 @@ class UserService(
 
     fun createUser(createUserRequest: CreateUserRequest): UserResponse =
         userRepository.save(createUserRequest.toEntity()).toResponse()
+
+    // Internal function, don't use in controllers
+    fun getUser(publicId: UUID): User =
+        userRepository.findByPublicId(publicId)
+            ?: throw NotFoundException("User")
 
     // Internal function, don't use in controllers
     fun getCurrentUser(): User {

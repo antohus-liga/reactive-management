@@ -45,6 +45,7 @@ class Product (
     var fixedPrice: Price? = null,
     var sellingMargin: SellingMargin? = null,
     var price: Price = Price.from(BigDecimal(0)),
+    var productionCost: Price = Price.from(BigDecimal(0)),
 
     var createdAt: LocalDateTime = LocalDateTime.now(),
     var updatedAt: LocalDateTime = LocalDateTime.now(),

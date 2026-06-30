@@ -5,6 +5,7 @@ import org.napetrico.backend.common.enums.CompanyRole
 import org.napetrico.backend.common.enums.CompanyType
 import org.napetrico.backend.common.enums.MeasurementType
 import org.napetrico.backend.common.enums.MovementType
+import org.napetrico.backend.common.enums.ProductionStatus
 import org.napetrico.backend.common.values.Email
 import org.napetrico.backend.common.values.Price
 import org.napetrico.backend.common.values.SellingMargin
@@ -15,6 +16,7 @@ import org.napetrico.backend.features.movements.Movement
 import org.napetrico.backend.features.orders.Order
 import org.napetrico.backend.features.orders.dto.MovementResponse
 import org.napetrico.backend.features.productMaterials.ProductMaterial
+import org.napetrico.backend.features.productionOrders.ProductionOrder
 import org.napetrico.backend.features.products.Product
 import org.napetrico.backend.features.users.User
 import java.math.BigDecimal
@@ -56,7 +58,8 @@ object Fixtures {
         fixedPrice: Price? = null,
         sellingMargin: SellingMargin? = null,
         price: Price = Price.from(BigDecimal(0)),
-        user: User = userFixture()
+        user: User = userFixture(),
+        productionCost: Price = Price.from(BigDecimal(0)),
     ): Product = Product(
         id = id,
         user = user,
@@ -67,6 +70,7 @@ object Fixtures {
         fixedPrice = fixedPrice,
         sellingMargin = sellingMargin,
         price = price,
+        productionCost = productionCost
     )
 
     fun companyFixture(
@@ -117,7 +121,7 @@ object Fixtures {
         id: Long = 0,
         user: User = userFixture(),
         product: Product = productFixture(),
-        material: Material, //TODO() Fixtures.materialFixture()
+        material: Material = materialFixture(),
         quantity: Int = 1,
     ): ProductMaterial = ProductMaterial(
         id = id,
@@ -172,5 +176,17 @@ object Fixtures {
         quantity = 0,
         notes = null,
         publicId = UUID.randomUUID(),
+    )
+
+    fun productionOrderFixture(
+        user: User = userFixture(),
+        product: Product = productFixture(),
+        status: ProductionStatus = ProductionStatus.PENDING,
+        quantity: Int = 1,
+    ): ProductionOrder = ProductionOrder(
+        user = user,
+        product = product,
+        status = status,
+        quantity = quantity,
     )
 }

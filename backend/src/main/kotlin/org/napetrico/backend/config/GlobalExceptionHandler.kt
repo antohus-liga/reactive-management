@@ -1,7 +1,9 @@
 package org.napetrico.backend.config
 
 import org.napetrico.backend.common.exceptions.AlreadyExistsException
+import org.napetrico.backend.common.exceptions.CannotDeleteProductionOrderException
 import org.napetrico.backend.common.exceptions.CannotEditCategoryTypeException
+import org.napetrico.backend.common.exceptions.InsufficientQuantityException
 import org.napetrico.backend.common.exceptions.InvalidCredentialsException
 import org.napetrico.backend.common.exceptions.InvalidTokenException
 import org.napetrico.backend.common.exceptions.NegativeQuantityException
@@ -13,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestControllerAdvice
-class GlobalExceptionHandler{
+class GlobalExceptionHandler {
 
     @ExceptionHandler(AlreadyExistsException::class)
     @ResponseStatus(HttpStatus.CONFLICT)
@@ -53,6 +55,16 @@ class GlobalExceptionHandler{
     @ExceptionHandler(OrderHasNoMovementsException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleCannotEditCategoryTypeException(ex: OrderHasNoMovementsException): Map<String, String> =
+        mapOf("error" to ex.message!!)
+
+    @ExceptionHandler(CannotDeleteProductionOrderException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleCannotDeleteProductionOrderException(ex: CannotDeleteProductionOrderException): Map<String, String> =
+        mapOf("error" to ex.message!!)
+
+    @ExceptionHandler(InsufficientQuantityException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleInsufficientQuantityException(ex: InsufficientQuantityException): Map<String, String> =
         mapOf("error" to ex.message!!)
 
     @ExceptionHandler(Exception::class)
