@@ -10,6 +10,8 @@ Working APIs:
 - api/materials/**
 - api/products/**
 - api/products/{publicId}/recipe
+- api/orders/**
+- api/orders/{publicId}/movements
   
 ---
 
