@@ -35,18 +35,18 @@ class OrderController(
         return ResponseEntity.ok().build()
     }
 
-    @GetMapping("/{publicId}/detail")
+    @GetMapping("/{publicId}/movements")
     fun getOrderDetail(@PathVariable publicId: UUID): ResponseEntity<OrderDetailsResponse> =
         ResponseEntity.ok(orderService.getOrderDetails(publicId))
 
-    @PostMapping("/{publicId}/detail")
+    @PostMapping("/{publicId}/movements")
     fun addMovement(
         @PathVariable publicId: UUID,
         @RequestBody request: CreateMovementRequest
     ): ResponseEntity<MovementResponse> =
         ResponseEntity.ok(orderService.addMovementToOrder(publicId, request))
 
-    @DeleteMapping("/detail/{movementPublicId}")
+    @DeleteMapping("/movements/{movementPublicId}")
     fun deleteMovement(
         @PathVariable movementPublicId: UUID
     ): ResponseEntity<Unit> =
