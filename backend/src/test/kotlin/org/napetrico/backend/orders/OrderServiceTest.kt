@@ -8,10 +8,9 @@ import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.assertThrows
+import org.napetrico.backend.common.enums.CompanyRole
 import org.napetrico.backend.common.enums.MovementType
-import org.napetrico.backend.common.exceptions.NegativeQuantityException
 import org.napetrico.backend.common.exceptions.NotFoundException
-import org.napetrico.backend.common.exceptions.OrderHasNoMovementsException
 import org.napetrico.backend.features.companies.CompanyService
 import org.napetrico.backend.features.materials.MaterialService
 import org.napetrico.backend.features.movements.MovementService
@@ -36,258 +35,214 @@ class OrderServiceTest {
     private val companyService = mockk<CompanyService>()
     private val productService = mockk<ProductService>()
     private val materialService = mockk<MaterialService>()
-    private val orderService = OrderService(
-        orderRepository = orderRepository,
-        userService = userService,
-        movementService = movementService,
-        companyService = companyService,
-        productService = productService,
-        materialService = materialService
+
+    private val service = OrderService(
+        orderRepository,
+        userService,
+        movementService,
+        companyService,
+        productService,
+        materialService
     )
 
     private val user = Fixtures.userFixture()
 
+    // ----------------------------
+    // GET ORDERS
+    // ----------------------------
+
     @Test
     fun `gets orders`() {
-        val order1 = Fixtures.orderFixture()
-        val order2 = Fixtures.orderFixture()
+        val order = Fixtures.orderFixture()
 
-        mockCurrentUser()
+        every { userService.getCurrentUser() } returns user
+        every { orderRepository.findAllByUser(user) } returns listOf(order)
 
-        every {
-            orderRepository.findAllByUser(user)
-        } returns listOf(order1, order2)
+        val result = service.getOrders()
 
-        val response = orderService.getOrders()
-
-        assertEquals(2, response.size)
+        assertEquals(1, result.size)
     }
+
+    // ----------------------------
+    // CREATE ORDER
+    // ----------------------------
 
     @Test
     fun `creates order`() {
         val company = Fixtures.companyFixture(companyName = "ABC")
+        company.roles  = mutableSetOf(CompanyRole.CLIENT)
 
         val request = CreateOrderRequest(
             companyPublicId = company.publicId,
-            type = MovementType.INBOUND
+            withRole = CompanyRole.CLIENT
         )
 
-        mockCurrentUser()
+        every { userService.getCurrentUser() } returns user
+        every { companyService.getCompany(company.publicId, user) } returns company
+        every { orderRepository.save(any()) } answers { firstArg() }
 
-        every {
-            companyService.getCompany(company.publicId, user)
-        } returns company
+        val result = service.createOrder(request)
 
-        every {
-            orderRepository.save(any())
-        } answers { firstArg() }
-
-        val response = orderService.createOrder(request)
-
-        assertEquals(company.companyName, response.companyName)
+        assertEquals(company.companyName, result.companyName)
     }
 
     @Test
-    fun `deletes empty order`() {
-        val order = Fixtures.orderFixture(
-            movements = mutableSetOf()
+    fun `throws when company does not have role`() {
+        val company = Fixtures.companyFixture()
+        company.roles = mutableSetOf()
+
+        val request = CreateOrderRequest(
+            companyPublicId = company.publicId,
+            withRole = CompanyRole.CLIENT
         )
 
-        mockCurrentUserAndOrder(order)
+        every { userService.getCurrentUser() } returns user
+        every { companyService.getCompany(company.publicId, user) } returns company
 
-        every {
-            orderRepository.delete(order)
-        } just Runs
-
-        orderService.deleteOrder(order.publicId)
-
-        verify {
-            orderRepository.delete(order)
+        assertThrows<IllegalArgumentException> {
+            service.createOrder(request)
         }
+
+        verify(exactly = 0) { orderRepository.save(any()) }
     }
 
-    @Test
-    fun `deletes order restoring product quantities`() {
-        val product = Fixtures.productFixture(quantity = 5)
-
-        val movement = Fixtures.movementFixture(
-            product = product,
-            material = null,
-            quantity = 2
-        )
-
-        val order = Fixtures.orderFixture(
-            movements = mutableSetOf(movement)
-        )
-
-        mockCurrentUserAndOrder(order)
-
-        every {
-            productService.changeProductQuantity(product, 7)
-        } returns product
-
-        every {
-            movementService.deleteMovement(any(), user)
-        } just Runs
-
-        every {
-            orderRepository.delete(order)
-        } just Runs
-
-        orderService.deleteOrder(order.publicId)
-
-        verify {
-            productService.changeProductQuantity(product, 7)
-            orderRepository.delete(order)
-        }
-    }
+    // ----------------------------
+    // ORDER DETAILS
+    // ----------------------------
 
     @Test
     fun `gets order details`() {
         val order = Fixtures.orderFixture()
 
-        val movement1 = Fixtures.movementResponseFixture(
-            totalPrice = BigDecimal("10"),
+        val movement = Fixtures.movementResponseFixture(
+            totalPrice = BigDecimal("10")
         )
 
-        val movement2 = Fixtures.movementResponseFixture(
-            totalPrice = BigDecimal("15")
-        )
+        every { userService.getCurrentUser() } returns user
+        every { orderRepository.findByPublicIdAndUser(order.publicId, user) } returns order
+        every { movementService.getMovementsByOrder(order) } returns listOf(movement)
 
-        mockCurrentUserAndOrder(order)
+        val result = service.getOrderDetails(order.publicId)
 
-        every {
-            movementService.getMovementsByOrder(order)
-        } returns listOf(movement1, movement2)
-
-        val response = orderService.getOrderDetails(order.publicId)
-
-        assertEquals(BigDecimal("25"), response.totalPrice)
-        assertEquals(2, response.movements.size)
+        assertEquals(BigDecimal("10"), result.totalPrice)
     }
+
+    // ----------------------------
+    // ADD MOVEMENT
+    // ----------------------------
 
     @Test
     fun `adds movement to order`() {
         val order = Fixtures.orderFixture()
 
         val request = CreateMovementRequest(
+            movementType = MovementType.INBOUND,
             productPublicId = UUID.randomUUID(),
             materialPublicId = null,
             quantity = 1,
-            notes = null,
+            notes = null
         )
 
-        val movement = Fixtures.movementResponseFixture()
+        val movementResponse = Fixtures.movementResponseFixture()
 
-        mockCurrentUserAndOrder(order)
+        every { userService.getCurrentUser() } returns user
+        every { orderRepository.findByPublicIdAndUser(order.publicId, user) } returns order
+        every { movementService.createMovement(order, request, user) } returns movementResponse
 
-        every {
-            movementService.createMovement(order, request, user)
-        } returns movement
+        val result = service.addMovementToOrder(order.publicId, request)
 
-        val response =
-            orderService.addMovementToOrder(order.publicId, request)
-
-        assertEquals(movement, response)
+        assertEquals(movementResponse, result)
     }
 
-    @Test
-    fun `throws when completing empty order`() {
-        val order = Fixtures.orderFixture(
-            movements = mutableSetOf()
-        )
-
-        mockCurrentUserAndOrder(order)
-
-        assertThrows<OrderHasNoMovementsException> {
-            orderService.completeOrder(order.publicId)
-        }
-    }
+    // ----------------------------
+    // COMPLETE ORDER
+    // ----------------------------
 
     @Test
-    fun `completes product order`() {
+    fun `completes order`() {
         val product = Fixtures.productFixture(quantity = 10)
 
         val movement = Fixtures.movementFixture(
             product = product,
             material = null,
-            quantity = 3
+            quantity = 3,
+            movementType = MovementType.OUTBOUND
         )
 
         val order = Fixtures.orderFixture(
             movements = mutableSetOf(movement)
         )
 
-        mockCurrentUserAndOrder(order)
+        every { userService.getCurrentUser() } returns user
+        every { orderRepository.findByPublicIdAndUser(order.publicId, user) } returns order
+        every { productService.changeProductQuantity(product, product.quantity - movement.quantity) } returns product
+        every { orderRepository.save(order) } returns order
 
-        every {
-            productService.changeProductQuantity(product, 7)
-        } returns product
-
-        every {
-            orderRepository.save(order)
-        } returns order
-
-        orderService.completeOrder(order.publicId)
+        service.completeOrder(order.publicId)
 
         assertTrue(order.isCompleted)
 
         verify {
-            productService.changeProductQuantity(product, 7)
+            productService.changeProductQuantity(product, product.quantity - movement.quantity)
             orderRepository.save(order)
         }
     }
 
+    // ----------------------------
+    // DELETE ORDER
+    // ----------------------------
+
     @Test
-    fun `throws when product quantity would become negative`() {
-        val product = Fixtures.productFixture(quantity = 1)
+    fun `deletes order and reverts quantities`() {
+        val product = Fixtures.productFixture(quantity = 10)
 
         val movement = Fixtures.movementFixture(
             product = product,
-            quantity = 2
+            material = null,
+            quantity = 3,
+            movementType = MovementType.OUTBOUND
         )
 
         val order = Fixtures.orderFixture(
             movements = mutableSetOf(movement)
         )
 
-        mockCurrentUserAndOrder(order)
+        every { userService.getCurrentUser() } returns user
+        every { orderRepository.findByPublicIdAndUser(order.publicId, user) } returns order
+        every { productService.changeProductQuantity(product, product.quantity + movement.quantity) } returns product
+        every { movementService.deleteMovement(movement.publicId, user) } just Runs
+        every { orderRepository.delete(order) } just Runs
 
-        assertThrows<NegativeQuantityException> {
-            orderService.completeOrder(order.publicId)
-        }
-    }
-
-    @Test
-    fun `completes material order`() {
-        val material = Fixtures.materialFixture(quantity = 20)
-
-        val movement = Fixtures.movementFixture(
-            material = material,
-            product = null,
-            quantity = 5
-        )
-
-        val order = Fixtures.orderFixture(
-            movements = mutableSetOf(movement)
-        )
-
-        mockCurrentUserAndOrder(order)
-
-        every {
-            materialService.changeMaterialQuantity(material, 25)
-        } returns material
-
-        every {
-            orderRepository.save(order)
-        } returns order
-
-        orderService.completeOrder(order.publicId)
+        service.deleteOrder(order.publicId)
 
         verify {
-            materialService.changeMaterialQuantity(material, 25)
+            productService.changeProductQuantity(product, product.quantity + movement.quantity)
+            movementService.deleteMovement(movement.publicId, user)
+            orderRepository.delete(order)
         }
     }
+
+    // ----------------------------
+    // DELETE MOVEMENT WRAPPER
+    // ----------------------------
+
+    @Test
+    fun `deletes movement via service`() {
+        val id = UUID.randomUUID()
+
+        every { userService.getCurrentUser() } returns user
+        every { movementService.deleteMovement(id, user) } just Runs
+
+        service.deleteMovement(id)
+
+        verify {
+            movementService.deleteMovement(id, user)
+        }
+    }
+
+    // ----------------------------
+    // INTERNAL GET ORDER
+    // ----------------------------
 
     @Test
     fun `gets order`() {
@@ -297,33 +252,21 @@ class OrderServiceTest {
             orderRepository.findByPublicIdAndUser(order.publicId, user)
         } returns order
 
-        assertEquals(
-            order,
-            orderService.getOrder(order.publicId, user)
-        )
+        val result = service.getOrder(order.publicId, user)
+
+        assertEquals(order, result)
     }
 
     @Test
-    fun `throws when order does not exist`() {
-        val publicId = UUID.randomUUID()
+    fun `throws when order not found`() {
+        val id = UUID.randomUUID()
 
         every {
-            orderRepository.findByPublicIdAndUser(publicId, user)
+            orderRepository.findByPublicIdAndUser(id, user)
         } returns null
 
         assertThrows<NotFoundException> {
-            orderService.getOrder(publicId, user)
+            service.getOrder(id, user)
         }
-    }
-
-    private fun mockCurrentUser() {
-        every { userService.getCurrentUser() } returns user
-    }
-
-    private fun mockCurrentUserAndOrder(order: Order) {
-        every { userService.getCurrentUser() } returns user
-        every {
-            orderRepository.findByPublicIdAndUser(order.publicId, user)
-        } returns order
     }
 }

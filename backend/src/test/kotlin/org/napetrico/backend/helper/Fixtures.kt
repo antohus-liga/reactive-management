@@ -19,6 +19,7 @@ import org.napetrico.backend.features.products.Product
 import org.napetrico.backend.features.users.User
 import java.math.BigDecimal
 import java.time.LocalDateTime
+import java.util.UUID
 
 object Fixtures {
     fun userFixture(companyName: String = "", taxId: String = "", email: String = "a@a.a"): User = User(
@@ -130,14 +131,14 @@ object Fixtures {
         id: Long = 0,
         user: User = userFixture(),
         company: Company = companyFixture(),
-        type: MovementType = MovementType.INBOUND,
+        withRole: CompanyRole = CompanyRole.SUPPLIER,
         movements: MutableSet<Movement> = mutableSetOf(),
     ): Order = Order(
         id = id,
         user = user,
         company = company,
-        type = type,
         movements = movements,
+        withRole = withRole,
     )
 
     fun movementFixture(
@@ -148,6 +149,7 @@ object Fixtures {
         material: Material? = materialFixture(),
         quantity: Int = 1,
         notes: String? = null,
+        movementType: MovementType = MovementType.INBOUND
     ): Movement = Movement(
         id = id,
         user = user,
@@ -156,6 +158,7 @@ object Fixtures {
         material = material,
         quantity = quantity,
         notes = notes,
+        movementType = movementType,
     )
 
     fun movementResponseFixture(
@@ -167,6 +170,7 @@ object Fixtures {
         materialDescription = null,
         materialUnitPrice = null,
         quantity = 0,
-        notes = null
+        notes = null,
+        publicId = UUID.randomUUID(),
     )
 }
