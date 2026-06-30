@@ -125,6 +125,12 @@ class ProductService(
         ingredients: Set<MaterialIngredientRequest>,
         user: User
     ): List<ProductMaterial> {
+        require(
+            ingredients.map { it.materialPublicId }.distinct().size == ingredients.size
+        ) {
+            "Materials must be unique."
+        }
+
         productMaterialService.deleteRecipe(product, user)
 
         val materials = materialService.getAllByPublicIds(ingredients.map { it.materialPublicId })
