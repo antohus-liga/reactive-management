@@ -2,6 +2,7 @@ package org.napetrico.backend.features.movements
 
 import jakarta.transaction.Transactional
 import org.napetrico.backend.common.enums.CompanyRole
+import org.napetrico.backend.common.exceptions.AlreadyExistsException
 import org.napetrico.backend.common.exceptions.NotFoundException
 import org.napetrico.backend.common.values.Price
 import org.napetrico.backend.features.materials.MaterialService

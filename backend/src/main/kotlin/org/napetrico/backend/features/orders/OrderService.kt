@@ -1,6 +1,7 @@
 package org.napetrico.backend.features.orders
 
 import jakarta.transaction.Transactional
+import org.napetrico.backend.common.enums.MovementType
 import org.napetrico.backend.common.exceptions.NegativeQuantityException
 import org.napetrico.backend.common.exceptions.NotFoundException
 import org.napetrico.backend.common.exceptions.OrderHasNoMovementsException
@@ -104,17 +105,23 @@ class OrderService(
             ?: throw NotFoundException("Order")
 
     private fun updateQuantity(movement: Movement, delta: Int) {
+        val factor = when (movement.movementType) {
+            MovementType.INBOUND -> 1
+            MovementType.OUTBOUND -> -1
+        }
+
+        fun Int.applyDelta() = this + (factor * delta)
+
         movement.product?.let { product ->
-            val newQuantity = product.quantity - delta
+            val newQuantity = product.quantity.applyDelta()
             if (newQuantity < 0) throw NegativeQuantityException()
             productService.changeProductQuantity(product, newQuantity)
         }
 
         movement.material?.let { material ->
-            val newQuantity = material.quantity + delta
+            val newQuantity = material.quantity.applyDelta()
             if (newQuantity < 0) throw NegativeQuantityException()
             materialService.changeMaterialQuantity(material, newQuantity)
         }
     }
-
 }
