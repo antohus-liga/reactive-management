@@ -12,6 +12,7 @@ Working APIs:
 - api/products/{publicId}/recipe
 - api/orders/**
 - api/orders/{publicId}/movements
+- api/production-orders/**
   
 ---
 
