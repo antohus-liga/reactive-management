@@ -128,6 +128,10 @@ class OrderServiceTest {
         } returns product
 
         every {
+            movementService.deleteMovement(any(), user)
+        } just Runs
+
+        every {
             orderRepository.delete(order)
         } just Runs
 
@@ -312,8 +316,6 @@ class OrderServiceTest {
             orderService.getOrder(publicId, user)
         }
     }
-
-
 
     private fun mockCurrentUser() {
         every { userService.getCurrentUser() } returns user
