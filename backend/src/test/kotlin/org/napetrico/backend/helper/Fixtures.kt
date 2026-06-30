@@ -9,6 +9,8 @@ import org.napetrico.backend.common.values.Price
 import org.napetrico.backend.common.values.SellingMargin
 import org.napetrico.backend.features.categories.Category
 import org.napetrico.backend.features.companies.Company
+import org.napetrico.backend.features.materials.Material
+import org.napetrico.backend.features.productMaterials.ProductMaterial
 import org.napetrico.backend.features.products.Product
 import org.napetrico.backend.features.users.User
 import java.time.LocalDateTime
@@ -41,6 +43,7 @@ object Fixtures {
     )
 
     fun productFixture(
+        id: Long = 0,
         description: String = "",
         category: Category = categoryFixture(),
         quantity: Int = 1,
@@ -48,6 +51,7 @@ object Fixtures {
         sellingMargin: SellingMargin? = null,
         user: User = userFixture()
     ): Product = Product(
+        id = id,
         user = user,
         category = category,
         description = description,
@@ -81,5 +85,37 @@ object Fixtures {
         address = address,
         createdAt = LocalDateTime.now(),
         updatedAt = LocalDateTime.now()
+    )
+
+    fun materialFixture(
+        id: Long = 0,
+        description: String = "",
+        category: Category = categoryFixture(),
+        quantity: Int = 1,
+        unitPrice: Price = Price.from("1"),
+        measurement: MeasurementType = MeasurementType.BAG,
+        user: User = userFixture()
+    ): Material = Material(
+        id = id,
+        user = user,
+        description = description,
+        quantity = quantity,
+        category = category,
+        measurement = measurement,
+        unitPrice = unitPrice,
+    )
+
+    fun productMaterialFixture(
+        id: Long = 0,
+        user: User = userFixture(),
+        product: Product = productFixture(),
+        material: Material, //TODO() Fixtures.materialFixture()
+        quantity: Int = 1,
+    ): ProductMaterial = ProductMaterial(
+        id = id,
+        user = user,
+        product = product,
+        material = material,
+        quantity = quantity,
     )
 }
