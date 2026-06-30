@@ -55,7 +55,7 @@ class CategoryServiceTest {
     @Test
     fun `updates category with different name`() {
         val category = Fixtures.categoryFixture()
-        val request = UpdateCategoryRequest("ABC", "123", CategoryType.BOTH)
+        val request = UpdateCategoryRequest("ABC", "123", CategoryType.PRODUCT)
 
         every { userService.getCurrentUser() } returns user
         every { categoryRepository.findByPublicIdAndUser(category.publicId, user) } returns category
@@ -66,13 +66,13 @@ class CategoryServiceTest {
 
         assertEquals("ABC", response.name)
         assertEquals("123", response.colorHex)
-        assertEquals(CategoryType.BOTH, response.type)
+        assertEquals(CategoryType.PRODUCT, response.type)
     }
 
     @Test
     fun `updates category with same name`() {
         val category = Fixtures.categoryFixture(name = "ABC")
-        val request = UpdateCategoryRequest("ABC", "123", CategoryType.BOTH)
+        val request = UpdateCategoryRequest("ABC", "123", CategoryType.PRODUCT)
 
         every { userService.getCurrentUser() } returns user
         every { categoryRepository.findByPublicIdAndUser(category.publicId, user) } returns category
@@ -83,7 +83,7 @@ class CategoryServiceTest {
 
         assertEquals("ABC", response.name)
         assertEquals("123", response.colorHex)
-        assertEquals(CategoryType.BOTH, response.type)
+        assertEquals(CategoryType.PRODUCT, response.type)
     }
 
     @Test
