@@ -4,7 +4,7 @@ import org.napetrico.backend.common.enums.CategoryType
 import org.napetrico.backend.common.enums.CompanyRole
 import org.napetrico.backend.common.enums.CompanyType
 import org.napetrico.backend.common.enums.MeasurementType
-import org.napetrico.backend.common.enums.OrderType
+import org.napetrico.backend.common.enums.MovementType
 import org.napetrico.backend.common.values.Email
 import org.napetrico.backend.common.values.Price
 import org.napetrico.backend.common.values.SellingMargin
@@ -130,7 +130,7 @@ object Fixtures {
         id: Long = 0,
         user: User = userFixture(),
         company: Company = companyFixture(),
-        type: OrderType = OrderType.INBOUND,
+        type: MovementType = MovementType.INBOUND,
         movements: MutableSet<Movement> = mutableSetOf(),
     ): Order = Order(
         id = id,

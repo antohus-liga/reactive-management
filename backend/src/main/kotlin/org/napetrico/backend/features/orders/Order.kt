@@ -14,7 +14,6 @@ import jakarta.persistence.Table
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes
 import org.napetrico.backend.common.enums.CompanyRole
-import org.napetrico.backend.common.enums.OrderType
 import org.napetrico.backend.features.companies.Company
 import org.napetrico.backend.features.movements.Movement
 import org.napetrico.backend.features.users.User
@@ -41,10 +40,6 @@ class Order (
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     var withRole: CompanyRole,
-
-    @Enumerated(EnumType.STRING)
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-    var type: OrderType,
 
     var isCompleted: Boolean = false,
 

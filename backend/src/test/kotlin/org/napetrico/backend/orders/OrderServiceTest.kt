@@ -1,6 +1,5 @@
 package org.napetrico.backend.orders
 
-import io.mockk.Awaits
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -9,7 +8,7 @@ import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.assertThrows
-import org.napetrico.backend.common.enums.OrderType
+import org.napetrico.backend.common.enums.MovementType
 import org.napetrico.backend.common.exceptions.NegativeQuantityException
 import org.napetrico.backend.common.exceptions.NotFoundException
 import org.napetrico.backend.common.exceptions.OrderHasNoMovementsException
@@ -70,7 +69,7 @@ class OrderServiceTest {
 
         val request = CreateOrderRequest(
             companyPublicId = company.publicId,
-            type = OrderType.INBOUND
+            type = MovementType.INBOUND
         )
 
         mockCurrentUser()

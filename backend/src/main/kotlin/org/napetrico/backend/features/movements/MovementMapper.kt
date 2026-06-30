@@ -26,6 +26,7 @@ object MovementMapper {
         product: Product?,
         material: Material?
     ): Movement = Movement(
+        movementType = movementType,
         quantity = quantity,
         notes = notes,
 
