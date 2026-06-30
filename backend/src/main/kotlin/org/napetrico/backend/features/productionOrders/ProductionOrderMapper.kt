@@ -8,13 +8,13 @@ import org.napetrico.backend.features.users.User
 import java.math.BigDecimal
 
 object ProductionOrderMapper {
-    fun ProductionOrder.toResponse(productionCost: BigDecimal): ProductionOrderResponse = ProductionOrderResponse(
+    fun ProductionOrder.toResponse(): ProductionOrderResponse = ProductionOrderResponse(
         publicId = publicId,
         productDescription = product.description,
-        productProductionCost = productionCost,
+        productProductionCost = product.productionCost.value,
         quantity = quantity,
         status = status,
-        totalCost = productionCost.multiply(BigDecimal(quantity)),
+        totalCost = product.productionCost.value.multiply(BigDecimal(quantity)),
         notes = notes,
         createdAt = createdAt,
         updatedAt = updatedAt,

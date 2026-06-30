@@ -38,7 +38,7 @@ class ProductionOrder (
 
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-    val status: ProductionStatus,
+    var status: ProductionStatus,
 
     val quantity: Int,
     val notes: String? = null,
