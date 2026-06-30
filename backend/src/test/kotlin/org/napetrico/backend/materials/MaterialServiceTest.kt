@@ -12,6 +12,7 @@ import org.mockito.Mockito.verify
 import org.napetrico.backend.common.enums.CategoryType
 import org.napetrico.backend.common.enums.MeasurementType
 import org.napetrico.backend.common.exceptions.AlreadyExistsException
+import org.napetrico.backend.common.exceptions.InsufficientQuantityException
 import org.napetrico.backend.common.exceptions.NotFoundException
 import org.napetrico.backend.features.categories.CategoryService
 import org.napetrico.backend.features.materials.MaterialRepository
@@ -246,5 +247,62 @@ class MaterialServiceTest {
         verify {
             materialRepository.save(material)
         }
+    }
+
+    @Test
+    fun `consumes materials`() {
+        val flour = Fixtures.materialFixture(
+            description = "Flour",
+            quantity = 20
+        )
+
+        val sugar = Fixtures.materialFixture(
+            description = "Sugar",
+            quantity = 10
+        )
+
+        val recipe = listOf(
+            Fixtures.productMaterialFixture(
+                material = flour,
+                quantity = 2
+            ),
+            Fixtures.productMaterialFixture(
+                material = sugar,
+                quantity = 1
+            )
+        )
+
+        materialService.consumeMaterials(
+            recipe = recipe,
+            productionQuantity = 3
+        )
+
+        assertEquals(14, flour.quantity) // 20 - (2 * 3)
+        assertEquals(7, sugar.quantity)  // 10 - (1 * 3)
+    }
+
+    @Test
+    fun `throws when material quantity is insufficient`() {
+        val flour = Fixtures.materialFixture(
+            description = "Flour",
+            quantity = 5
+        )
+
+        val recipe = listOf(
+            Fixtures.productMaterialFixture(
+                material = flour,
+                quantity = 2
+            )
+        )
+
+        assertThrows<InsufficientQuantityException> {
+            materialService.consumeMaterials(
+                recipe = recipe,
+                productionQuantity = 3 // needs 6, only has 5
+            )
+        }
+
+        // Quantity should remain unchanged
+        assertEquals(5, flour.quantity)
     }
 }
