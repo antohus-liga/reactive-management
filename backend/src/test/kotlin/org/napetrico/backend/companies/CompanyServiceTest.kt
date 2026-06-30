@@ -1,4 +1,4 @@
-package org.napetrico.backend.unitTests
+package org.napetrico.backend.companies
 
 import io.mockk.every
 import io.mockk.mockk

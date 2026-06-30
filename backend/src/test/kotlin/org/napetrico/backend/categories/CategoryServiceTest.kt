@@ -1,8 +1,7 @@
-package org.napetrico.backend.unitTests
+package org.napetrico.backend.categories
 
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
 import org.junit.jupiter.api.assertThrows
 import org.napetrico.backend.common.enums.CategoryType
 import org.napetrico.backend.common.exceptions.AlreadyExistsException
