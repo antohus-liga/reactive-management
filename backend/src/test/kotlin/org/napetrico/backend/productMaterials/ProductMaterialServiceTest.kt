@@ -58,6 +58,11 @@ class ProductMaterialServiceTest {
             productMaterialRepository.getAllByProductAndUserOrderByCreatedAt(product, user)
         } returns listOf(pm1, pm2)
 
+        every {
+            productMaterialRepository.getTotalCostByProductAndUser(product.id, user.id)
+        } returns BigDecimal("14.00")
+
+        product.productionCost = Price.from(productMaterialService.getTotalCostForProduct(product, user))
         val response = productMaterialService.getProductRecipe(product, user)
 
         assertEquals(product.publicId, response.productPublicId)

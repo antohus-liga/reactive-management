@@ -56,7 +56,8 @@ object Fixtures {
         fixedPrice: Price? = null,
         sellingMargin: SellingMargin? = null,
         price: Price = Price.from(BigDecimal(0)),
-        user: User = userFixture()
+        user: User = userFixture(),
+        productionCost: Price = Price.from(BigDecimal(0)),
     ): Product = Product(
         id = id,
         user = user,
@@ -67,6 +68,7 @@ object Fixtures {
         fixedPrice = fixedPrice,
         sellingMargin = sellingMargin,
         price = price,
+        productionCost = productionCost
     )
 
     fun companyFixture(
