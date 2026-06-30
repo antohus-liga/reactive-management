@@ -4,15 +4,19 @@ import org.napetrico.backend.common.enums.CategoryType
 import org.napetrico.backend.common.enums.CompanyRole
 import org.napetrico.backend.common.enums.CompanyType
 import org.napetrico.backend.common.enums.MeasurementType
+import org.napetrico.backend.common.enums.OrderType
 import org.napetrico.backend.common.values.Email
 import org.napetrico.backend.common.values.Price
 import org.napetrico.backend.common.values.SellingMargin
 import org.napetrico.backend.features.categories.Category
 import org.napetrico.backend.features.companies.Company
 import org.napetrico.backend.features.materials.Material
+import org.napetrico.backend.features.movements.Movement
+import org.napetrico.backend.features.orders.Order
 import org.napetrico.backend.features.productMaterials.ProductMaterial
 import org.napetrico.backend.features.products.Product
 import org.napetrico.backend.features.users.User
+import java.math.BigDecimal
 import java.time.LocalDateTime
 
 object Fixtures {
@@ -49,6 +53,7 @@ object Fixtures {
         quantity: Int = 1,
         fixedPrice: Price? = null,
         sellingMargin: SellingMargin? = null,
+        price: Price = Price.from(BigDecimal(0)),
         user: User = userFixture()
     ): Product = Product(
         id = id,
@@ -59,6 +64,7 @@ object Fixtures {
         measurement = MeasurementType.BAG,
         fixedPrice = fixedPrice,
         sellingMargin = sellingMargin,
+        price = price,
     )
 
     fun companyFixture(
@@ -117,5 +123,37 @@ object Fixtures {
         product = product,
         material = material,
         quantity = quantity,
+    )
+
+    fun orderFixture(
+        id: Long = 0,
+        user: User = userFixture(),
+        company: Company = companyFixture(),
+        type: OrderType = OrderType.INBOUND,
+        movements: List<Movement> = listOf(),
+    ): Order = Order(
+        id = id,
+        user = user,
+        company = company,
+        type = type,
+        movements = movements.toMutableSet(),
+    )
+
+    fun movementFixture(
+        id: Long = 0,
+        user: User = userFixture(),
+        order: Order = orderFixture(),
+        product: Product? = productFixture(),
+        material: Material? = materialFixture(),
+        quantity: Int = 1,
+        notes: String? = null,
+    ): Movement = Movement(
+        id = id,
+        user = user,
+        order = order,
+        product = product,
+        material = material,
+        quantity = quantity,
+        notes = notes,
     )
 }
