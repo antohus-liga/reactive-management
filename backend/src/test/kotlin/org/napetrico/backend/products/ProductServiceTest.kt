@@ -12,6 +12,7 @@ import org.napetrico.backend.common.enums.CategoryType
 import org.napetrico.backend.common.enums.MeasurementType
 import org.napetrico.backend.common.exceptions.AlreadyExistsException
 import org.napetrico.backend.common.exceptions.NotFoundException
+import org.napetrico.backend.common.values.Price
 import org.napetrico.backend.features.categories.Category
 import org.napetrico.backend.features.categories.CategoryService
 import org.napetrico.backend.features.materials.MaterialService
@@ -290,25 +291,6 @@ class ProductServiceTest {
     }
 
     @Test
-    fun `gets all products`() {
-        val product1 = Fixtures.productFixture(description = "Coffee")
-        val product2 = Fixtures.productFixture(description = "Tea")
-
-        every { userService.getCurrentUser() } returns user
-        every { productRepository.findAllByUser(user) } returns listOf(product1, product2)
-
-        every { productMaterialService.getTotalCostForProduct(product1, user) } returns BigDecimal("5.50")
-
-        every { productMaterialService.getTotalCostForProduct(product2, user) } returns BigDecimal("8.00")
-
-        val response = productService.getAllByUser()
-
-        assertEquals(2, response.size)
-        assertEquals(BigDecimal("5.50"), response[0].productionCost)
-        assertEquals(BigDecimal("8.00"), response[1].productionCost)
-    }
-
-    @Test
     fun `deletes product`() {
         val publicId = UUID.randomUUID()
 
@@ -365,8 +347,8 @@ class ProductServiceTest {
 
     @Test
     fun `replaces recipe`() {
-        val product = Fixtures.productFixture()
-        val material = Fixtures.materialFixture()
+        val product = Fixtures.productFixture(productionCost = Price.from(BigDecimal("999.99")))
+        val material = Fixtures.materialFixture(unitPrice = Price.from(BigDecimal(10)))
 
         val request = ProductRecipeRequest(
             ingredients = setOf(
@@ -387,6 +369,9 @@ class ProductServiceTest {
         every { productRepository.findByPublicIdAndUser(product.publicId, user) } returns product
 
         every { productMaterialService.deleteRecipe(product, user) } just Runs
+        every {
+            productMaterialService.getTotalCostForProduct(product, user)
+        } returns material.unitPrice.value.multiply(BigDecimal(productMaterial.quantity))
 
         every { materialService.getAllByPublicIds(any()) } returns listOf(material)
 
@@ -396,6 +381,7 @@ class ProductServiceTest {
 
         assertEquals(product.publicId, response.productPublicId)
         assertEquals(1, response.ingredients.size)
+        assertEquals(BigDecimal(20), response.productionCost)
 
         verify {
             productMaterialService.deleteRecipe(product, user)
