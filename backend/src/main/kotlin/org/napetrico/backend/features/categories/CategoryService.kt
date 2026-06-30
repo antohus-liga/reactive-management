@@ -39,7 +39,6 @@ class CategoryService(
         val dependencyCount = when (request.type) {
             CategoryType.MATERIAL -> category.products.count()
             CategoryType.PRODUCT -> category.materials.count()
-            CategoryType.BOTH -> 0
         }
 
         if (dependencyCount > 0) {
