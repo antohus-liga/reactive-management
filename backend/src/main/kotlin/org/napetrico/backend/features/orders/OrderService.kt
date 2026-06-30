@@ -95,16 +95,17 @@ class OrderService(
         orderRepository.findByPublicIdAndUser(publicId, user)
             ?: throw NotFoundException("Order")
 
-    private fun updateQuantity(movement: Movement, quantity: Int) {
-        movement.product?.let {
-            val newQuantity = it.quantity - movement.quantity
+    private fun updateQuantity(movement: Movement, delta: Int) {
+        movement.product?.let { product ->
+            val newQuantity = product.quantity - delta
             if (newQuantity < 0) throw NegativeQuantityException()
-            productService.changeProductQuantity(it, it.quantity - quantity)
+            productService.changeProductQuantity(product, newQuantity)
         }
-        movement.material?.let {
-            val newQuantity = it.quantity + movement.quantity
+
+        movement.material?.let { material ->
+            val newQuantity = material.quantity + delta
             if (newQuantity < 0) throw NegativeQuantityException()
-            materialService.changeMaterialQuantity(it, it.quantity + quantity)
+            materialService.changeMaterialQuantity(material, newQuantity)
         }
     }
 
