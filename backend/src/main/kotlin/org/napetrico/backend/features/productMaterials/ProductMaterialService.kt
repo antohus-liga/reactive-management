@@ -33,9 +33,7 @@ class ProductMaterialService(
             productPublicId = product.publicId,
             productDescription = product.description,
             ingredients = ingredients,
-            productionCost = productMaterials.fold(BigDecimal.ZERO) { acc, pm ->
-                acc + pm.material.unitPrice.value.multiply(BigDecimal(pm.quantity))
-            },
+            productionCost = product.productionCost.value,
             createdAt = firstProduct.createdAt,
             updatedAt = productMaterials.last().createdAt,
         )
