@@ -229,11 +229,29 @@ class OrderServiceTest {
     @Test
     fun `deletes movement via service`() {
         val id = UUID.randomUUID()
+        val order = Fixtures.orderFixture()
 
         every { userService.getCurrentUser() } returns user
         every { movementService.deleteMovement(id, user) } just Runs
+        every { orderRepository.findByPublicIdAndUser(order.publicId, user) } returns order
 
-        service.deleteMovement(id)
+        service.deleteMovement(order.publicId, id)
+
+        verify {
+            movementService.deleteMovement(id, user)
+        }
+    }
+
+    @Test
+    fun `throws on delete movement via service when order completed`() {
+        val id = UUID.randomUUID()
+        val order = Fixtures.orderFixture()
+
+        every { userService.getCurrentUser() } returns user
+        every { movementService.deleteMovement(id, user) } just Runs
+        every { orderRepository.findByPublicIdAndUser(order.publicId, user) } returns order
+
+        service.deleteMovement(order.publicId, id)
 
         verify {
             movementService.deleteMovement(id, user)
