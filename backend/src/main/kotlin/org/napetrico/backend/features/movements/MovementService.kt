@@ -56,8 +56,8 @@ class MovementService(
 
         order.movements.forEach { mov ->
             if (
-                (mov.product?.id == product?.id && mov.material?.id == null) ||
-                (mov.product?.id == null && mov.material?.id == material?.id)
+                (mov.product?.id == product?.id && material?.id == null) ||
+                (product?.id == null && mov.material?.id == material?.id)
             )
                 throw AlreadyExistsException(
                     "Movement with " +
