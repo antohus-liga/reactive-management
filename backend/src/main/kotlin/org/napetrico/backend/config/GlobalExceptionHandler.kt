@@ -67,6 +67,25 @@ class GlobalExceptionHandler {
     fun handleInsufficientQuantityException(ex: InsufficientQuantityException): Map<String, String> =
         mapOf("error" to ex.message!!)
 
+    @ExceptionHandler(MethodArgumentNotValidException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleMethodArgumentNotValidException(ex: MethodArgumentNotValidException): ResponseEntity<Map<String, Any>> {
+        val errors = ex.bindingResult
+            .allErrors
+            .filterIsInstance<FieldError>()
+            .associate { it.field to (it.defaultMessage ?: "Invalid value") }
+
+        return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(
+                mapOf(
+                    "message" to "Validation failed",
+                    "errors" to errors
+                )
+            )
+    }
+
+
     @ExceptionHandler(Exception::class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     fun handleExceptionFallback(ex: Exception): Map<String, String> =
