@@ -1,5 +1,6 @@
 package org.napetrico.backend.features.products
 
+import jakarta.validation.Valid
 import org.napetrico.backend.features.products.dto.CreateProductRequest
 import org.napetrico.backend.features.products.dto.ProductRecipeRequest
 import org.napetrico.backend.features.products.dto.ProductRecipeResponse
@@ -26,13 +27,13 @@ class ProductController(
         ResponseEntity.ok(productService.getAllByUser())
 
     @PostMapping
-    fun create(@RequestBody request: CreateProductRequest): ResponseEntity<ProductResponse> =
+    fun create(@Valid @RequestBody request: CreateProductRequest): ResponseEntity<ProductResponse> =
         ResponseEntity.ok(productService.createProduct(request))
 
     @PutMapping("/{publicId}")
     fun update(
         @PathVariable publicId: UUID,
-        @RequestBody request: UpdateProductRequest
+        @Valid @RequestBody request: UpdateProductRequest
     ): ResponseEntity<ProductResponse> =
         ResponseEntity.ok(productService.updateProduct(publicId, request))
 
@@ -47,7 +48,10 @@ class ProductController(
         ResponseEntity.ok(productService.getProductRecipeDto(publicId))
 
     @PostMapping("/{publicId}/recipe")
-    fun replaceRecipe(@PathVariable publicId: UUID, @RequestBody request: ProductRecipeRequest): ResponseEntity<ProductRecipeResponse> =
+    fun replaceRecipe(
+        @PathVariable publicId: UUID,
+        @Valid @RequestBody request: ProductRecipeRequest
+    ): ResponseEntity<ProductRecipeResponse> =
         ResponseEntity.ok(productService.replaceRecipe(publicId, request))
 
     @DeleteMapping("/{publicId}/recipe")
