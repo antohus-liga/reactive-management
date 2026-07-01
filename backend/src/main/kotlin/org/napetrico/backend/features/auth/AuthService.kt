@@ -11,6 +11,7 @@ import org.napetrico.backend.features.auth.dto.RegisterRequest
 import org.napetrico.backend.features.auth.dto.TokenResponse
 import org.napetrico.backend.features.users.UserService
 import org.napetrico.backend.features.users.dto.CreateUserRequest
+import org.napetrico.backend.features.users.dto.UpdateUserRequest
 import org.napetrico.backend.features.users.dto.UserResponse
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -44,6 +45,8 @@ class AuthService(
 
         userService.createUser(createUserRequest)
     }
+
+    fun updateUser(request: UpdateUserRequest) = userService.updateUser(request)
 
     fun login(request: LoginRequest): TokenResponse {
         try {
