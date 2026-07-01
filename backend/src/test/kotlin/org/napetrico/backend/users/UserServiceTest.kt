@@ -10,6 +10,7 @@ import org.napetrico.backend.common.values.Email
 import org.napetrico.backend.features.users.UserRepository
 import org.napetrico.backend.features.users.UserService
 import org.napetrico.backend.features.users.dto.CreateUserRequest
+import org.napetrico.backend.features.users.dto.UpdateUserRequest
 import org.napetrico.backend.helper.Auth
 import org.napetrico.backend.helper.Fixtures
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -96,6 +97,34 @@ class UserServiceTest {
         val response = userService.getCurrentUserResponse()
 
         assertEquals(user.email.value, response.email)
+    }
+
+    // =========================
+    // getCurrentUserResponse()
+    // =========================
+    @Test
+    fun `updates user`() {
+        val email = "a@a.a"
+        val user = Fixtures.userFixture(email = email)
+        val request = UpdateUserRequest(
+            companyName = "",
+            companyType = CompanyType.LIMITED_LIABILITY_COMPANY,
+            taxId = "",
+            phoneNumber = "",
+            email = "b@b.b",
+            country = "",
+            address = "",
+        )
+
+        Auth.setAuth(email)
+
+        every { userRepository.findByEmail(email) } returns user
+        every { userRepository.save(user) } returns user
+
+        val response = userService.updateUser(request)
+
+        assertEquals(user.email.value, response.email)
+        assertEquals(request.email, response.email)
     }
 
     @AfterEach

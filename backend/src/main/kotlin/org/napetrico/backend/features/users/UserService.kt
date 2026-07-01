@@ -2,9 +2,11 @@ package org.napetrico.backend.features.users
 
 import org.napetrico.backend.common.exceptions.NotFoundException
 import org.napetrico.backend.common.values.Email
+import org.napetrico.backend.features.users.UserMapper.applyUpdate
 import org.napetrico.backend.features.users.UserMapper.toEntity
 import org.napetrico.backend.features.users.UserMapper.toResponse
 import org.napetrico.backend.features.users.dto.CreateUserRequest
+import org.napetrico.backend.features.users.dto.UpdateUserRequest
 import org.napetrico.backend.features.users.dto.UserResponse
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
@@ -19,6 +21,11 @@ class UserService(
 
     fun createUser(createUserRequest: CreateUserRequest): UserResponse =
         userRepository.save(createUserRequest.toEntity()).toResponse()
+
+    fun updateUser(request: UpdateUserRequest): UserResponse {
+        val user = getCurrentUser()
+        return userRepository.save(user.applyUpdate(request)).toResponse()
+    }
 
     // Internal function, don't use in controllers
     fun getUser(publicId: UUID): User =

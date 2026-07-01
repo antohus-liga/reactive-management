@@ -8,6 +8,7 @@ import org.napetrico.backend.features.auth.dto.LoginRequest
 import org.napetrico.backend.features.auth.dto.RefreshRequest
 import org.napetrico.backend.features.auth.dto.RegisterRequest
 import org.napetrico.backend.features.auth.dto.TokenResponse
+import org.napetrico.backend.features.users.dto.UpdateUserRequest
 import org.napetrico.backend.features.users.dto.UserResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -60,6 +61,10 @@ class AuthController(
         response.addCookie(createCookie("refreshToken", "", 0, "/api/auth/refresh"))
         return ResponseEntity.ok().build()
     }
+
+    @PostMapping("/update")
+    fun update(@Valid @RequestBody request: UpdateUserRequest): ResponseEntity<UserResponse> =
+        ResponseEntity.ok(authService.updateUser(request))
 
     @GetMapping("/me")
     fun me(): ResponseEntity<UserResponse> {

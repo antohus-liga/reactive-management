@@ -35,7 +35,7 @@ object UserMapper {
         updatedAt = LocalDateTime.now(),
     )
 
-    fun User.applyUpdate(update: UpdateUserRequest) {
+    fun User.applyUpdate(update: UpdateUserRequest): User {
         companyName = update.companyName
         companyType = update.companyType
         taxId = update.taxId
@@ -44,5 +44,7 @@ object UserMapper {
         country = update.country
         address = update.address
         updatedAt = LocalDateTime.now()
+
+        return this
     }
 }
