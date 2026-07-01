@@ -103,7 +103,12 @@ class OrderService(
         }
     }
 
-    fun deleteMovement(publicId: UUID) = movementService.deleteMovement(publicId, userService.getCurrentUser())
+    fun deleteMovement(orderPublicId: UUID, movementPublicId: UUID) {
+        val user = userService.getCurrentUser()
+        val order = getOrder(orderPublicId, user)
+        if (order.isCompleted) throw OrderIsCompletedException()
+        movementService.deleteMovement(movementPublicId, user)
+    }
 
     // Internal function, don't use in controllers
     fun getOrder(publicId: UUID, user: User): Order =
