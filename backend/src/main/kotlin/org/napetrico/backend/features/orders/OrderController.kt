@@ -1,5 +1,6 @@
 package org.napetrico.backend.features.orders
 
+import jakarta.validation.Valid
 import org.napetrico.backend.features.orders.dto.CreateMovementRequest
 import org.napetrico.backend.features.orders.dto.CreateOrderRequest
 import org.napetrico.backend.features.orders.dto.MovementResponse
@@ -26,7 +27,7 @@ class OrderController(
         ResponseEntity.ok(orderService.getOrders())
 
     @PostMapping
-    fun create(@RequestBody request: CreateOrderRequest): ResponseEntity<OrderResponse> =
+    fun create(@Valid @RequestBody request: CreateOrderRequest): ResponseEntity<OrderResponse> =
         ResponseEntity.ok(orderService.createOrder(request))
 
     @DeleteMapping("/{publicId}")
@@ -42,15 +43,16 @@ class OrderController(
     @PostMapping("/{publicId}/movements")
     fun addMovement(
         @PathVariable publicId: UUID,
-        @RequestBody request: CreateMovementRequest
+        @Valid @RequestBody request: CreateMovementRequest
     ): ResponseEntity<MovementResponse> =
         ResponseEntity.ok(orderService.addMovementToOrder(publicId, request))
 
-    @DeleteMapping("/movements/{movementPublicId}")
+    @DeleteMapping("/{publicId}/movements/{movementPublicId}")
     fun deleteMovement(
+        @PathVariable publicId: UUID,
         @PathVariable movementPublicId: UUID
     ): ResponseEntity<Unit> =
-        ResponseEntity.ok(orderService.deleteMovement(movementPublicId))
+        ResponseEntity.ok(orderService.deleteMovement(publicId, movementPublicId))
 
     @PostMapping("/{publicId}/complete")
     fun completeOrder(@PathVariable publicId: UUID): ResponseEntity<Unit> =

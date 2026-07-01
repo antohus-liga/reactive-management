@@ -3,6 +3,7 @@ package org.napetrico.backend.features.auth
 import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import jakarta.validation.Valid
 import org.napetrico.backend.features.auth.dto.LoginRequest
 import org.napetrico.backend.features.auth.dto.RefreshRequest
 import org.napetrico.backend.features.auth.dto.RegisterRequest
@@ -23,7 +24,7 @@ class AuthController(
     private val authService: AuthService
 ) {
     @PostMapping("/register")
-    fun register(@RequestBody request: RegisterRequest): ResponseEntity<String> {
+    fun register(@Valid @RequestBody request: RegisterRequest): ResponseEntity<String> {
         authService.register(request)
 
         return ResponseEntity.ok().build()

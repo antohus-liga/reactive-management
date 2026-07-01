@@ -1,5 +1,6 @@
 package org.napetrico.backend.features.materials
 
+import jakarta.validation.Valid
 import org.napetrico.backend.features.materials.dto.CreateMaterialRequest
 import org.napetrico.backend.features.materials.dto.MaterialResponse
 import org.napetrico.backend.features.materials.dto.UpdateMaterialRequest
@@ -29,14 +30,14 @@ class MaterialController(
     }
 
     @PostMapping
-    fun create(@RequestBody request: CreateMaterialRequest): ResponseEntity<MaterialResponse> {
+    fun create(@Valid @RequestBody request: CreateMaterialRequest): ResponseEntity<MaterialResponse> {
         return ResponseEntity.ok(materialService.createMaterial(request))
     }
 
     @PutMapping("/{publicId}")
     fun update(
         @PathVariable publicId: UUID,
-        @RequestBody request: UpdateMaterialRequest
+        @Valid @RequestBody request: UpdateMaterialRequest
     ): ResponseEntity<MaterialResponse> {
         return ResponseEntity.ok(materialService.updateMaterial(publicId, request))
     }
