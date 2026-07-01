@@ -5,6 +5,7 @@ import org.napetrico.backend.common.enums.MovementType
 import org.napetrico.backend.common.exceptions.NegativeQuantityException
 import org.napetrico.backend.common.exceptions.NotFoundException
 import org.napetrico.backend.common.exceptions.OrderHasNoMovementsException
+import org.napetrico.backend.common.exceptions.OrderIsCompletedException
 import org.napetrico.backend.features.companies.CompanyService
 import org.napetrico.backend.features.materials.MaterialService
 import org.napetrico.backend.features.movements.Movement
@@ -79,6 +80,9 @@ class OrderService(
     fun addMovementToOrder(orderPublicId: UUID, request: CreateMovementRequest): MovementResponse {
         val user = userService.getCurrentUser()
         val order = getOrder(orderPublicId, user)
+
+        if (order.isCompleted) throw OrderIsCompletedException()
+
         return movementService.createMovement(order, request, user)
     }
 
@@ -86,6 +90,8 @@ class OrderService(
     fun completeOrder(orderPublicId: UUID) {
         val user = userService.getCurrentUser()
         val order = getOrder(orderPublicId, user)
+
+        if (order.isCompleted) throw OrderIsCompletedException()
 
         val movements = order.movements
         if (movements.isEmpty()) throw OrderHasNoMovementsException()

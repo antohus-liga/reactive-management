@@ -10,6 +10,7 @@ import org.napetrico.backend.common.exceptions.InvalidTokenException
 import org.napetrico.backend.common.exceptions.NegativeQuantityException
 import org.napetrico.backend.common.exceptions.NotFoundException
 import org.napetrico.backend.common.exceptions.OrderHasNoMovementsException
+import org.napetrico.backend.common.exceptions.OrderIsCompletedException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.FieldError
@@ -89,9 +90,13 @@ class GlobalExceptionHandler {
             )
     }
 
+    @ExceptionHandler(OrderIsCompletedException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleOrderIsCompletedException(ex: OrderIsCompletedException): Map<String, String> =
+        mapOf("error" to ex.message!!)
 
-@ExceptionHandler(Exception::class)
-@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-fun handleExceptionFallback(ex: Exception): Map<String, String> =
-    mapOf("error" to (ex.message ?: "Unknown error"))
+    @ExceptionHandler(Exception::class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    fun handleExceptionFallback(ex: Exception): Map<String, String> =
+        mapOf("error" to (ex.message ?: "Unknown error"))
 }
