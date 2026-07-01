@@ -55,7 +55,10 @@ class MovementService(
         val material = request.materialPublicId?.let { materialService.getMaterial(it, user) }
 
         order.movements.forEach { mov ->
-            if (mov.product == product || mov.material == material)
+            if (
+                (mov.product?.id == product?.id && mov.material?.id == null) ||
+                (mov.product?.id == null && mov.material?.id == material?.id)
+            )
                 throw AlreadyExistsException(
                     "Movement with " +
                             (product?.let { "product '${it.description}'" } ?: "") +
