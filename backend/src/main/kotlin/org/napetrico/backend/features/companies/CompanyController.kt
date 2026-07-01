@@ -1,5 +1,6 @@
 package org.napetrico.backend.features.companies
 
+import jakarta.validation.Valid
 import org.napetrico.backend.features.companies.dto.CompanyResponse
 import org.napetrico.backend.features.companies.dto.CreateCompanyRequest
 import org.napetrico.backend.features.companies.dto.UpdateCompanyRequest
@@ -26,14 +27,14 @@ class CompanyController(
     }
 
     @PostMapping
-    fun create(@RequestBody request: CreateCompanyRequest): ResponseEntity<CompanyResponse> {
+    fun create(@Valid @RequestBody request: CreateCompanyRequest): ResponseEntity<CompanyResponse> {
         return ResponseEntity.ok(companyService.createCompany(request))
     }
 
     @PutMapping("/{publicId}")
     fun update(
         @PathVariable publicId: UUID,
-        @RequestBody request: UpdateCompanyRequest
+        @Valid @RequestBody request: UpdateCompanyRequest
     ): ResponseEntity<CompanyResponse> {
         return ResponseEntity.ok(companyService.updateCompany(publicId, request))
     }
