@@ -1,5 +1,6 @@
 package org.napetrico.backend.features.productionOrders
 
+import jakarta.validation.Valid
 import org.napetrico.backend.features.productionOrders.dto.CreateProductionOrderRequest
 import org.napetrico.backend.features.productionOrders.dto.ProductionOrderResponse
 import org.springframework.http.ResponseEntity
@@ -22,7 +23,7 @@ class ProductionOrderController(
         ResponseEntity.ok(productionOrderService.getAll())
 
     @PostMapping
-    fun create(@RequestBody request: CreateProductionOrderRequest): ResponseEntity<ProductionOrderResponse> =
+    fun create(@Valid @RequestBody request: CreateProductionOrderRequest): ResponseEntity<ProductionOrderResponse> =
         ResponseEntity.ok(productionOrderService.createProductionOrder(request))
 
     @DeleteMapping("/{publicId}")
