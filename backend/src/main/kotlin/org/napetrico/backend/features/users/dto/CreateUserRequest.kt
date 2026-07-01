@@ -1,11 +1,11 @@
 package org.napetrico.backend.features.users.dto
 
+import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
 import org.napetrico.backend.common.enums.CompanyType
-import org.napetrico.backend.common.values.Email
 
 data class CreateUserRequest(
     @field:NotBlank(message = "Company name is required")
@@ -31,6 +31,7 @@ data class CreateUserRequest(
 
     @field:NotBlank(message = "Email is required")
     @field:Size(max = 255)
+    @Email(message = "Must be a valid email address")
     val email: String,
 
     @field:NotBlank(message = "Country is required")

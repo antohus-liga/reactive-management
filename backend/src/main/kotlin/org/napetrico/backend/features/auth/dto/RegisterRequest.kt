@@ -1,5 +1,6 @@
 package org.napetrico.backend.features.auth.dto
 
+import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Pattern
@@ -30,6 +31,7 @@ data class RegisterRequest(
 
     @field:NotBlank(message = "Email is required")
     @field:Size(max = 255)
+    @Email(message = "Must be a valid email address")
     val email: String,
 
     @field:NotBlank(message = "Country is required")
