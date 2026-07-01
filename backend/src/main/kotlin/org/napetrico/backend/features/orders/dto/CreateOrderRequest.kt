@@ -8,7 +8,5 @@ import java.util.UUID
 
 data class CreateOrderRequest(
     val companyPublicId: UUID,
-
-    @field:NotEmpty
     var withRole: CompanyRole,
 )
