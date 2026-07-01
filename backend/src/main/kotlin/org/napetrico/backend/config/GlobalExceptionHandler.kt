@@ -1,5 +1,6 @@
 package org.napetrico.backend.config
 
+import jakarta.validation.ValidationException
 import org.napetrico.backend.common.exceptions.AlreadyExistsException
 import org.napetrico.backend.common.exceptions.CannotDeleteProductionOrderException
 import org.napetrico.backend.common.exceptions.CannotEditCategoryTypeException
@@ -10,6 +11,9 @@ import org.napetrico.backend.common.exceptions.NegativeQuantityException
 import org.napetrico.backend.common.exceptions.NotFoundException
 import org.napetrico.backend.common.exceptions.OrderHasNoMovementsException
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import org.springframework.validation.FieldError
+import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
@@ -86,8 +90,8 @@ class GlobalExceptionHandler {
     }
 
 
-    @ExceptionHandler(Exception::class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    fun handleExceptionFallback(ex: Exception): Map<String, String> =
-        mapOf("error" to (ex.message ?: "Unknown error"))
+@ExceptionHandler(Exception::class)
+@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+fun handleExceptionFallback(ex: Exception): Map<String, String> =
+    mapOf("error" to (ex.message ?: "Unknown error"))
 }
