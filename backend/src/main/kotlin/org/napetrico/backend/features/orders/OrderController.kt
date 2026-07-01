@@ -47,11 +47,12 @@ class OrderController(
     ): ResponseEntity<MovementResponse> =
         ResponseEntity.ok(orderService.addMovementToOrder(publicId, request))
 
-    @DeleteMapping("/movements/{movementPublicId}")
+    @DeleteMapping("/{publicId}/movements/{movementPublicId}")
     fun deleteMovement(
+        @PathVariable publicId: UUID,
         @PathVariable movementPublicId: UUID
     ): ResponseEntity<Unit> =
-        ResponseEntity.ok(orderService.deleteMovement(movementPublicId))
+        ResponseEntity.ok(orderService.deleteMovement(publicId, movementPublicId))
 
     @PostMapping("/{publicId}/complete")
     fun completeOrder(@PathVariable publicId: UUID): ResponseEntity<Unit> =
