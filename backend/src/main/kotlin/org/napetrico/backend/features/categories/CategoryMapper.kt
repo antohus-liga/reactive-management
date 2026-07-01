@@ -5,7 +5,6 @@ import org.napetrico.backend.features.categories.dto.CreateCategoryRequest
 import org.napetrico.backend.features.categories.dto.UpdateCategoryRequest
 import org.napetrico.backend.features.users.User
 import java.time.LocalDateTime
-import java.time.ZoneOffset
 
 object CategoryMapper {
     fun Category.toResponse(): CategoryResponse = CategoryResponse(

@@ -4,9 +4,6 @@ import jakarta.validation.Valid
 import org.napetrico.backend.features.materials.dto.CreateMaterialRequest
 import org.napetrico.backend.features.materials.dto.MaterialResponse
 import org.napetrico.backend.features.materials.dto.UpdateMaterialRequest
-import org.napetrico.backend.features.products.dto.CreateProductRequest
-import org.napetrico.backend.features.products.dto.ProductResponse
-import org.napetrico.backend.features.products.dto.UpdateProductRequest
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping

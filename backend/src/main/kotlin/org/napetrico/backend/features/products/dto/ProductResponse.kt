@@ -2,7 +2,6 @@ package org.napetrico.backend.features.products.dto
 
 import org.napetrico.backend.common.enums.MeasurementType
 import java.math.BigDecimal
-import java.math.RoundingMode
 import java.time.LocalDateTime
 import java.util.UUID
 

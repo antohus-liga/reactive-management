@@ -1,6 +1,5 @@
 package org.napetrico.backend.config
 
-import jakarta.validation.ValidationException
 import org.napetrico.backend.common.exceptions.AlreadyExistsException
 import org.napetrico.backend.common.exceptions.CannotDeleteProductionOrderException
 import org.napetrico.backend.common.exceptions.CannotEditCategoryTypeException

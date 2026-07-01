@@ -7,7 +7,6 @@ import org.napetrico.backend.features.products.dto.CreateProductRequest
 import org.napetrico.backend.features.products.dto.ProductResponse
 import org.napetrico.backend.features.products.dto.UpdateProductRequest
 import org.napetrico.backend.features.users.User
-import java.math.BigDecimal
 import java.time.LocalDateTime
 
 object ProductMapper {

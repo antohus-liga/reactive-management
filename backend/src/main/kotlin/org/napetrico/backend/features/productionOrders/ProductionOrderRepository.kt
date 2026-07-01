@@ -8,6 +8,5 @@ import java.util.UUID
 
 interface ProductionOrderRepository : JpaRepository<ProductionOrder, Long> {
     fun findByPublicIdAndUser(publicId: UUID, user: User): ProductionOrder?
-    fun findByProductAndStatusAndUser(product: Product, status: ProductionStatus, user: User): ProductionOrder?
     fun findAllByUser(user: User): List<ProductionOrder>
 }

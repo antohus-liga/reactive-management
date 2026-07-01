@@ -6,11 +6,9 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
-import org.mockito.Mockito.verify
 import org.napetrico.backend.common.enums.ProductionStatus
 import org.napetrico.backend.common.exceptions.CannotDeleteProductionOrderException
 import org.napetrico.backend.common.exceptions.NotFoundException
@@ -19,13 +17,10 @@ import org.napetrico.backend.features.productionOrders.ProductionOrderRepository
 import org.napetrico.backend.features.productionOrders.ProductionOrderService
 import org.napetrico.backend.features.productionOrders.dto.CreateProductionOrderRequest
 import org.napetrico.backend.features.products.ProductService
-import org.napetrico.backend.features.products.dto.ProductRecipeResponse
 import org.napetrico.backend.features.users.UserService
 import org.napetrico.backend.helper.Fixtures
 import org.springframework.scheduling.TaskScheduler
-import java.math.BigDecimal
 import java.time.Instant
-import java.time.LocalDateTime
 import java.util.UUID
 import kotlin.test.Test
 

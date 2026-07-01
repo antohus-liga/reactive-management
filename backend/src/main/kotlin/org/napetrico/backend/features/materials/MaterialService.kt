@@ -15,7 +15,6 @@ import org.napetrico.backend.features.materials.dto.MaterialRequest
 import org.napetrico.backend.features.materials.dto.MaterialResponse
 import org.napetrico.backend.features.materials.dto.UpdateMaterialRequest
 import org.napetrico.backend.features.productMaterials.ProductMaterial
-import org.napetrico.backend.features.products.Product
 import org.napetrico.backend.features.users.User
 import org.napetrico.backend.features.users.UserService
 import org.springframework.stereotype.Service

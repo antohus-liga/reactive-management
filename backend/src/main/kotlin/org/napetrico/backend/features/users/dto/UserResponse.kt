@@ -1,7 +1,6 @@
 package org.napetrico.backend.features.users.dto
 
 import org.napetrico.backend.common.enums.CompanyType
-import org.napetrico.backend.common.values.Email
 import java.time.LocalDateTime
 import java.util.UUID
 

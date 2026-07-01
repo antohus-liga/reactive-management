@@ -29,8 +29,4 @@ value class Price(val value: BigDecimal) {
             return value.scale() <= 2
         }
     }
-
-    fun toRounded(): Price {
-        return Price(value.setScale(2, RoundingMode.HALF_UP))
-    }
 }

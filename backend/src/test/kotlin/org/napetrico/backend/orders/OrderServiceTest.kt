@@ -14,7 +14,6 @@ import org.napetrico.backend.common.exceptions.NotFoundException
 import org.napetrico.backend.features.companies.CompanyService
 import org.napetrico.backend.features.materials.MaterialService
 import org.napetrico.backend.features.movements.MovementService
-import org.napetrico.backend.features.orders.Order
 import org.napetrico.backend.features.orders.OrderRepository
 import org.napetrico.backend.features.orders.OrderService
 import org.napetrico.backend.features.orders.dto.CreateMovementRequest

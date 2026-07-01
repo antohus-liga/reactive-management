@@ -4,7 +4,6 @@ import jakarta.transaction.Transactional
 import org.napetrico.backend.common.enums.ProductionStatus
 import org.napetrico.backend.common.exceptions.CannotDeleteProductionOrderException
 import org.napetrico.backend.common.exceptions.NotFoundException
-import org.napetrico.backend.common.values.Email
 import org.napetrico.backend.features.materials.MaterialService
 import org.napetrico.backend.features.productionOrders.ProductionOrderMapper.toEntity
 import org.napetrico.backend.features.productionOrders.ProductionOrderMapper.toResponse

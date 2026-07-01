@@ -6,9 +6,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.assertThrows
-import org.mockito.Mockito.verify
 import org.napetrico.backend.common.enums.CategoryType
 import org.napetrico.backend.common.enums.MeasurementType
 import org.napetrico.backend.common.exceptions.AlreadyExistsException

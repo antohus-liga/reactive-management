@@ -1,6 +1,5 @@
 package org.napetrico.backend.features.companies
 
-import org.napetrico.backend.common.enums.CompanyRole
 import org.napetrico.backend.features.users.User
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.UUID
