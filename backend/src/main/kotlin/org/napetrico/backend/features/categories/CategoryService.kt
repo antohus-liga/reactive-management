@@ -25,7 +25,7 @@ class CategoryService(
 
     fun createCategory(request: CreateCategoryRequest): CategoryResponse {
         val user = userService.getCurrentUser()
-        if (categoryRepository.findByNameAndUser(request.name, user) != null)
+        if (categoryRepository.findByNameAndTypeAndUser(request.name, request.type, user) != null)
             throw AlreadyExistsException("Category with name '${request.name}'")
 
         return categoryRepository.save(request.toEntity(user)).toResponse()
@@ -47,7 +47,7 @@ class CategoryService(
             )
         }
 
-        val conflict = categoryRepository.findByNameAndUser(request.name, user)
+        val conflict = categoryRepository.findByNameAndTypeAndUser(request.name, request.type, user)
 
         if (conflict != null && category.id != conflict.id)
             throw AlreadyExistsException("Category with name '${request.name}'")
