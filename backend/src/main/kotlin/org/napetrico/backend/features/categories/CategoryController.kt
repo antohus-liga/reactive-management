@@ -1,5 +1,6 @@
 package org.napetrico.backend.features.categories
 
+import jakarta.validation.Valid
 import org.napetrico.backend.features.categories.dto.CategoryResponse
 import org.napetrico.backend.features.categories.dto.CreateCategoryRequest
 import org.napetrico.backend.features.categories.dto.UpdateCategoryRequest
@@ -24,13 +25,13 @@ class CategoryController(
         ResponseEntity.ok(categoryService.getAllByUser())
 
     @PostMapping
-    fun create(@RequestBody request: CreateCategoryRequest): ResponseEntity<CategoryResponse> =
+    fun create(@Valid @RequestBody request: CreateCategoryRequest): ResponseEntity<CategoryResponse> =
         ResponseEntity.ok(categoryService.createCategory(request))
 
     @PutMapping("/{publicId}")
     fun update(
         @PathVariable publicId: UUID,
-        @RequestBody request: UpdateCategoryRequest
+        @Valid @RequestBody request: UpdateCategoryRequest
     ): ResponseEntity<CategoryResponse> = ResponseEntity.ok(categoryService.updateCategory(publicId, request))
 
     @DeleteMapping("/{publicId}")
