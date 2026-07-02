@@ -1,16 +1,12 @@
 import {useSignInForm} from "@/features/auth/useSignInForm.ts";
 import {getErrorMessage} from "@/lib/getErrorMessage.ts";
-import {Link, Navigate} from "react-router-dom";
-import {useCurrentUser} from "@/features/auth/hooks.ts";
+import {Link} from "react-router-dom";
 
 export function SignInPage() {
-    const {data: user, isLoading} = useCurrentUser();
     const form = useSignInForm();
 
-    if (isLoading) return null;
-    if (user) return <Navigate to={"/dashboard"} replace/>
     return (
-        <div className={"h-screen flex flex-col items-center justify-center gap-16 bg-gray-900 text-white"}>
+        <>
             <div className="rounded-full relative w-70 h-70 flex items-center justify-center">
                 <img
                     src="/favicon.png"
@@ -50,6 +46,6 @@ export function SignInPage() {
                 </button>
                 <Link className={"text-xl underline hover:-translate-y-1 transition-transform duration-400"} to={`/register`}>or create a new one</Link>
             </form>
-        </div>
+        </>
     );
 }
