@@ -10,7 +10,7 @@ value class Discount(val value: String) {
     }
 
     companion object {
-        private val DISCOUNT_REGEX = Regex(
+        private val regex = Regex(
             "^(?:0\\.\\d*[1-9]\\d*|[1-9]\\d*(?:\\.\\d+)?)%(?:\\+(?:0\\.\\d*[1-9]\\d*|[1-9]\\d*(?:\\.\\d+)?)%)*$"
         )
 
