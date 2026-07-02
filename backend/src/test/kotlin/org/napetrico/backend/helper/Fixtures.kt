@@ -6,6 +6,7 @@ import org.napetrico.backend.common.enums.CompanyType
 import org.napetrico.backend.common.enums.MeasurementType
 import org.napetrico.backend.common.enums.MovementType
 import org.napetrico.backend.common.enums.ProductionStatus
+import org.napetrico.backend.common.values.Discount
 import org.napetrico.backend.common.values.Email
 import org.napetrico.backend.common.values.Price
 import org.napetrico.backend.common.values.SellingMargin
@@ -153,7 +154,8 @@ object Fixtures {
         material: Material? = materialFixture(),
         quantity: Int = 1,
         notes: String? = null,
-        movementType: MovementType = MovementType.INBOUND
+        movementType: MovementType = MovementType.INBOUND,
+        discount: Discount? = null,
     ): Movement = Movement(
         id = id,
         user = user,
@@ -163,10 +165,12 @@ object Fixtures {
         quantity = quantity,
         notes = notes,
         movementType = movementType,
+        discount = discount,
     )
 
     fun movementResponseFixture(
         totalPrice: BigDecimal = BigDecimal.ZERO,
+        discount: Discount? = null
     ): MovementResponse = MovementResponse(
         totalPrice = totalPrice,
         productDescription = null,
@@ -176,6 +180,7 @@ object Fixtures {
         quantity = 0,
         notes = null,
         publicId = UUID.randomUUID(),
+        discount = discount?.value,
     )
 
     fun productionOrderFixture(
