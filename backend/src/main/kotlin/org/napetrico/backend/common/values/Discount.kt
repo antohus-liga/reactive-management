@@ -10,8 +10,9 @@ value class Discount(val value: String) {
     }
 
     companion object {
-        private val regex =
-            Regex("^\\d+(\\.\\d+)?%(?:\\+\\d+(\\.\\d+)?%)*$")
+        private val DISCOUNT_REGEX = Regex(
+            "^(?:0\\.\\d*[1-9]\\d*|[1-9]\\d*(?:\\.\\d+)?)%(?:\\+(?:0\\.\\d*[1-9]\\d*|[1-9]\\d*(?:\\.\\d+)?)%)*$"
+        )
 
         fun from(value: String): Discount = Discount(value)
 
