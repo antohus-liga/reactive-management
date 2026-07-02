@@ -13,6 +13,7 @@ import jakarta.persistence.Table
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes
 import org.napetrico.backend.common.enums.MovementType
+import org.napetrico.backend.common.values.Discount
 import org.napetrico.backend.features.materials.Material
 import org.napetrico.backend.features.orders.Order
 import org.napetrico.backend.features.products.Product
@@ -49,6 +50,7 @@ class Movement(
     @JoinColumn(name = "material_id")
     var material: Material?,
 
+    var discount: Discount?,
     var quantity: Int,
     var notes: String?,
 

@@ -1,7 +1,9 @@
 package org.napetrico.backend.common.parsers
+
 import org.napetrico.backend.common.values.Discount
 import org.napetrico.backend.common.values.Price
 import java.math.BigDecimal
+import java.math.RoundingMode
 
 object DiscountParser {
 
