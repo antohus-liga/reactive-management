@@ -1,5 +1,5 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import {authApi} from "@/features/auth/api.ts";
+import {authApi, type RegisterPayload} from "@/features/auth/api.ts";
 import {useNavigate} from "react-router-dom";
 
 export function useSignIn() {
@@ -10,7 +10,11 @@ export function useSignIn() {
 
 export function useRegister() {
     return useMutation({
-        mutationFn: authApi.register,
+        mutationFn: async (payload: RegisterPayload) => {
+            const result = await authApi.register(payload);
+            await authApi.logout();
+            return result;
+        },
     });
 }
 

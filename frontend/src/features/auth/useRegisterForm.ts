@@ -3,6 +3,7 @@ import type {CompanyType} from "@/types/CompanyType.ts";
 import {useNavigate} from "react-router-dom";
 import {useRegister} from "@/features/auth/hooks.ts";
 import type {SubmitEvent} from "react";
+import {useQueryClient} from "@tanstack/react-query";
 
 export function useRegisterForm() {
     const [companyName, setCompanyName] = useState("");
@@ -16,6 +17,8 @@ export function useRegisterForm() {
     const navigate = useNavigate();
     const register = useRegister();
 
+    const queryClient = useQueryClient();
+
     function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
         e.preventDefault();
         register.mutate({
@@ -27,7 +30,12 @@ export function useRegisterForm() {
             country,
             address,
             password
-        }, {onSuccess: () => navigate("/signin")});
+        }, {
+            onSuccess: () => {
+                queryClient.clear()
+                navigate("/signin");
+            }
+        });
     }
 
     return {
