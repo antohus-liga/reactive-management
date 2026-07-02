@@ -23,6 +23,7 @@ export function useCurrentUser() {
         queryKey: ["auth", "me"],
         queryFn: authApi.me,
         retry: false,
+        staleTime: 1000 * 60 * 5,
     });
 }
 
