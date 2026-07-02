@@ -34,7 +34,7 @@ export function useLogout() {
         mutationFn: authApi.logout,
         onSuccess: () => {
             queryClient.clear() // clear the cached data to avoid leaks across sessions
-            navigate("/login")
+            navigate("/signin")
         }
     });
 }
