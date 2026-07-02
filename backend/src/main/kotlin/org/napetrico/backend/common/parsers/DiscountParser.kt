@@ -38,6 +38,9 @@ object DiscountParser {
         val effectiveDiscountPercentage = effectiveDiscount(discount)
         val remainingFactor = 1 - (effectiveDiscountPercentage / 100)
 
-        return Price.from(price.value.multiply(BigDecimal(remainingFactor)))
+        return Price.from(
+            price.value.multiply(BigDecimal(remainingFactor))
+                .setScale(2, RoundingMode.HALF_UP)
+        )
     }
 }
