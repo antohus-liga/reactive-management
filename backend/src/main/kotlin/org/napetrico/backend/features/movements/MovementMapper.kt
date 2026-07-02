@@ -1,5 +1,6 @@
 package org.napetrico.backend.features.movements
 
+import org.napetrico.backend.common.values.Discount
 import org.napetrico.backend.common.values.Price
 import org.napetrico.backend.features.materials.Material
 import org.napetrico.backend.features.orders.Order
@@ -15,6 +16,7 @@ object MovementMapper {
         productPrice = product?.price?.value,
         materialDescription = material?.description,
         materialUnitPrice = material?.unitPrice?.value,
+        discount = discount?.value,
         quantity = quantity,
         totalPrice = totalPrice.value,
         notes = notes,
@@ -27,6 +29,7 @@ object MovementMapper {
         material: Material?
     ): Movement = Movement(
         movementType = movementType,
+        discount = discount?.let { Discount.from(it) },
         quantity = quantity,
         notes = notes,
 
