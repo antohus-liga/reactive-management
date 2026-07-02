@@ -6,28 +6,8 @@ import {useRegisterForm} from "@/features/auth/useRegisterForm.ts";
 import type {Dispatch, SetStateAction} from "react";
 
 export function RegisterPage() {
-    const {
-        companyName,
-        setCompanyName,
-        companyType,
-        setCompanyType,
-        taxId,
-        setTaxId,
-        phoneNumber,
-        setPhoneNumber,
-        email,
-        setEmail,
-        country,
-        setCountry,
-        address,
-        setAddress,
-        password,
-        setPassword,
-        handleSubmit,
-        isPending,
-        error,
-    } = useRegisterForm()
-    const fieldErrors = getFieldErrors(error)
+    const form = useRegisterForm()
+    const fieldErrors = getFieldErrors(form.error)
 
     return (
         <div className={"h-full flex flex-col items-center justify-center gap-16 bg-gray-900 text-white p-8"}>
@@ -42,7 +22,7 @@ export function RegisterPage() {
                 </div>
             </div>
             <form
-                onSubmit={handleSubmit}
+                onSubmit={form.handleSubmit}
                 className={"bg-gray-700 drop-shadow-xl drop-shadow-emerald-200 rounded-lg p-8 gap-6 flex flex-col text-2xl"}>
                 <div className={"flex flex-col gap-4"}>
                     <h2 className={"text-3xl font-mono font-bold"}>Company Information</h2>
@@ -50,22 +30,22 @@ export function RegisterPage() {
                         Company Name
                         <input type="text" placeholder={"Enter your company name"}
                                required={true}
-                               value={companyName}
-                               onChange={(e) => setCompanyName(e.target.value)}
+                               value={form.companyName}
+                               onChange={(e) => form.setCompanyName(e.target.value)}
                                className={"p-2 rounded-lg ring-1 text-xl placeholder:text-lg"}/>
                         {fieldErrors?.companyName && <p className="text-red-400 text-xl">{fieldErrors.companyName}</p>}
                     </label>
                     <label className={"flex flex-col gap-2"}>
                         Company Type
-                        <CompanyTypeSelect value={companyType} setValue={setCompanyType}/>
+                        <CompanyTypeSelect value={form.companyType} setValue={form.setCompanyType}/>
                         {fieldErrors?.companyType && <p className="text-red-400 text-xl">{fieldErrors.companyType}</p>}
                     </label>
                     <label className={"flex flex-col gap-2"}>
                         Tax ID
                         <input type="text" placeholder={"Enter your company tax ID"}
                                required={true}
-                               value={taxId}
-                               onChange={(e) => setTaxId(e.target.value)}
+                               value={form.taxId}
+                               onChange={(e) => form.setTaxId(e.target.value)}
                                className={"p-2 rounded-lg ring-1 text-xl placeholder:text-lg"}/>
                         {fieldErrors?.taxId && <p className="text-red-400 text-xl">{fieldErrors.taxId}</p>}
                     </label>
@@ -77,8 +57,8 @@ export function RegisterPage() {
                         Phone number
                         <input type="text" placeholder={"Enter your company phone number"}
                                required={true}
-                               value={phoneNumber}
-                               onChange={(e) => setPhoneNumber(e.target.value)}
+                               value={form.phoneNumber}
+                               onChange={(e) => form.setPhoneNumber(e.target.value)}
                                className={"p-2 rounded-lg ring-1 text-xl placeholder:text-lg"}/>
                         {fieldErrors?.phoneNumber && <p className="text-red-400 text-xl">{fieldErrors.phoneNumber}</p>}
                     </label>
@@ -86,8 +66,8 @@ export function RegisterPage() {
                         Email
                         <input name="email" type="email" placeholder={"Enter your company email address"}
                                required={true}
-                               value={email}
-                               onChange={(e) => setEmail(e.target.value)}
+                               value={form.email}
+                               onChange={(e) => form.setEmail(e.target.value)}
                                className={"p-2 rounded-lg ring-1 text-xl placeholder:text-lg"}/>
                         {fieldErrors?.email && <p className="text-red-400 text-xl">{fieldErrors.email}</p>}
                     </label>
@@ -97,15 +77,15 @@ export function RegisterPage() {
                     <h2 className={"text-3xl font-mono font-bold"}>Company Localization</h2>
                     <label className={"flex flex-col gap-2"}>
                         Country
-                        <CountrySelect value={country} setValue={setCountry} />
+                        <CountrySelect value={form.country} setValue={form.setCountry} />
                         {fieldErrors?.country && <p className="text-red-400 text-xl">{fieldErrors.country}</p>}
                     </label>
                     <label className={"flex flex-col gap-2"}>
                         Address
                         <input type="text" placeholder={"Enter your company address"}
                                required={true}
-                               value={address}
-                               onChange={(e) => setAddress(e.target.value)}
+                               value={form.address}
+                               onChange={(e) => form.setAddress(e.target.value)}
                                className={"p-2 rounded-lg ring-1 text-xl placeholder:text-lg"}/>
                         {fieldErrors?.address && <p className="text-red-400 text-xl">{fieldErrors.address}</p>}
                     </label>
@@ -117,18 +97,18 @@ export function RegisterPage() {
                         Account Password
                         <input name="password" type="password"
                                required={true}
-                               value={password}
-                               onChange={(e) => setPassword(e.target.value)}
+                               value={form.password}
+                               onChange={(e) => form.setPassword(e.target.value)}
                                className={"p-2 rounded-lg ring-1 text-xl placeholder:text-lg"}/>
                         {fieldErrors?.password && <p className="text-red-400 text-xl">{fieldErrors.password}</p>}
                     </label>
                 </div>
                 <div className={"flex flex-col justify-center items-center gap-4"}>
-                    <p className={`text-red-400 text-xl ${!fieldErrors && error ? "visible" : "invisible"}`}>
-                        {!fieldErrors && error ? getErrorMessage(error) : "Placeholder"}
+                    <p className={`text-red-400 text-xl ${!fieldErrors && form.error ? "visible" : "invisible"}`}>
+                        {!fieldErrors && form.error ? getErrorMessage(form.error) : "Placeholder"}
                     </p>
                     <button
-                        disabled={isPending}
+                        disabled={form.isPending}
                         type={"submit"}
                         className={"mt-8 w-fit disabled:blur-xs bg-emerald-400 p-4 text-2xl font-bold border-2 border-emerald-500 rounded-xl hover:bg-emerald-600 transition duration-200"}
                     >

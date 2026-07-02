@@ -5,7 +5,7 @@ import {useCurrentUser} from "@/features/auth/hooks.ts";
 
 export function SignInPage() {
     const {data: user, isLoading} = useCurrentUser();
-    const {email, setEmail, password, setPassword, handleSubmit, isPending, error} = useSignInForm();
+    const form = useSignInForm();
 
     if (isLoading) return null;
     if (user) return <Navigate to={"/dashboard"} replace/>
@@ -22,27 +22,27 @@ export function SignInPage() {
                 </div>
             </div>
             <form
-                onSubmit={handleSubmit}
+                onSubmit={form.handleSubmit}
                 className={"bg-gray-700 drop-shadow-xl drop-shadow-emerald-200 rounded-lg p-8 gap-6 flex flex-col justify-center items-center text-2xl"}>
                 <label className={"flex flex-col gap-2"}>
                     Email
                     <input name="email" type="email"
-                           value={email}
-                           onChange={(e) => setEmail(e.target.value)}
+                           value={form.email}
+                           onChange={(e) => form.setEmail(e.target.value)}
                            className={"p-2 rounded-lg ring-1 text-shadow-sm text-shadow-emerald-100"}/>
                 </label>
                 <label className={"flex flex-col gap-2"}>
                     Password
                     <input name="password" type="password"
-                           value={password}
-                           onChange={(e) => setPassword(e.target.value)}
+                           value={form.password}
+                           onChange={(e) => form.setPassword(e.target.value)}
                            className={"p-2 rounded-lg ring-1 text-shadow-sm text-shadow-emerald-100"}/>
                 </label>
-                <p className={`text-red-400 text-xl ${error ? "visible" : "invisible"}`}>
-                    {error ? getErrorMessage(error) : "Placeholder"}
+                <p className={`text-red-400 text-xl ${form.error ? "visible" : "invisible"}`}>
+                    {form.error ? getErrorMessage(form.error) : "Placeholder"}
                 </p>
                 <button
-                    disabled={isPending}
+                    disabled={form.isPending}
                     type={"submit"}
                     className={"mt-8 w-fit disabled:blur-xs bg-emerald-400 p-4 text-2xl font-bold border-2 border-emerald-500 rounded-xl hover:bg-emerald-600 transition duration-200"}
                 >
