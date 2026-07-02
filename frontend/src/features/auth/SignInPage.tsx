@@ -1,9 +1,14 @@
 import {useSignInForm} from "@/features/auth/useSignInForm.ts";
 import {getErrorMessage} from "@/lib/getErrorMessage.ts";
-import {Link} from "react-router-dom";
+import {Link, Navigate} from "react-router-dom";
+import {useCurrentUser} from "@/features/auth/hooks.ts";
 
 export function SignInPage() {
-    const {email, setEmail, password, setPassword, handleSubmit, isPending, error} = useSignInForm()
+    const {data: user, isLoading} = useCurrentUser();
+    const {email, setEmail, password, setPassword, handleSubmit, isPending, error} = useSignInForm();
+
+    if (isLoading) return null;
+    if (user) return <Navigate to={"/dashboard"} replace/>
     return (
         <div className={"h-screen flex flex-col items-center justify-center gap-16 bg-gray-900 text-white"}>
             <div className="rounded-full relative w-70 h-70 flex items-center justify-center">
