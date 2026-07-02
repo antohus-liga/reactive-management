@@ -4,6 +4,8 @@ import jakarta.transaction.Transactional
 import org.napetrico.backend.common.enums.CompanyRole
 import org.napetrico.backend.common.exceptions.AlreadyExistsException
 import org.napetrico.backend.common.exceptions.NotFoundException
+import org.napetrico.backend.common.parsers.DiscountParser
+import org.napetrico.backend.common.values.Discount
 import org.napetrico.backend.common.values.Price
 import org.napetrico.backend.features.materials.MaterialService
 import org.napetrico.backend.features.movements.MovementMapper.toEntity
@@ -15,6 +17,7 @@ import org.napetrico.backend.features.products.ProductService
 import org.napetrico.backend.features.users.User
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
+import java.math.RoundingMode
 import java.util.UUID
 
 @Service
@@ -28,7 +31,7 @@ class MovementService(
 
         return movements.map {
             it.toResponse(
-                getTotalPrice(it.product?.price?.value ?: it.material!!.unitPrice.value, it.quantity)
+                getTotalPrice(it.discount, it.product?.price?.value ?: it.material!!.unitPrice.value, it.quantity)
             )
         }
     }
@@ -70,7 +73,10 @@ class MovementService(
             request.toEntity(user, order, product, material)
         ).let {
             it.toResponse(
-                getTotalPrice(it.product?.price?.value ?: it.material!!.unitPrice.value, it.quantity)
+                getTotalPrice(
+                    it.discount,
+                    it.product?.price?.value ?: it.material!!.unitPrice.value, it.quantity
+                )
             )
         }
     }
@@ -79,8 +85,13 @@ class MovementService(
     fun deleteMovement(publicId: UUID, user: User) =
         movementRepository.deleteByPublicIdAndUser(publicId, user)
 
-    private fun getTotalPrice(price: BigDecimal, quantity: Int): Price =
-        Price.from(price.multiply(BigDecimal(quantity)))
+    private fun getTotalPrice(discount: Discount?, price: BigDecimal, quantity: Int): Price {
+        val total = Price.from(
+            price.multiply(BigDecimal(quantity)).setScale(2, RoundingMode.HALF_UP)
+        )
+        discount?.let { return DiscountParser.apply(it, total) }
+        return total
+    }
 
     // Internal function, don't use in controllers
     fun getMovement(publicId: UUID, user: User): Movement =

@@ -12,6 +12,7 @@ import org.napetrico.backend.common.enums.CompanyRole
 import org.napetrico.backend.common.enums.MovementType
 import org.napetrico.backend.common.exceptions.AlreadyExistsException
 import org.napetrico.backend.common.exceptions.NotFoundException
+import org.napetrico.backend.common.values.Discount
 import org.napetrico.backend.common.values.Price
 import org.napetrico.backend.features.materials.MaterialService
 import org.napetrico.backend.features.movements.MovementRepository
@@ -30,7 +31,7 @@ class MovementServiceTest {
     private val productService = mockk<ProductService>()
     private val materialService = mockk<MaterialService>()
 
-    private val service = MovementService(
+    private val movementService = MovementService(
         movementRepository,
         productService,
         materialService
@@ -42,6 +43,8 @@ class MovementServiceTest {
 
         @JvmStatic
         fun validMovements() = listOf(
+
+            // Product movement
             Arguments.of(
                 Fixtures.orderFixture(withRole = CompanyRole.CLIENT),
                 CreateMovementRequest(
@@ -49,12 +52,14 @@ class MovementServiceTest {
                     productPublicId = UUID.randomUUID(),
                     materialPublicId = null,
                     quantity = 2,
+                    discount = "10%",
                     notes = "test"
                 ),
-                BigDecimal("20"),
+                BigDecimal("180.00"), // 100 * 2 = 200 -> 10% off = 180
                 true
             ),
 
+            // Material movement
             Arguments.of(
                 Fixtures.orderFixture(withRole = CompanyRole.SUPPLIER),
                 CreateMovementRequest(
@@ -62,10 +67,26 @@ class MovementServiceTest {
                     productPublicId = null,
                     materialPublicId = UUID.randomUUID(),
                     quantity = 3,
+                    discount = "20%",
                     notes = null
                 ),
-                BigDecimal("9"),
+                BigDecimal("120.00"), // 50 * 3 = 150 -> 20% off = 120
                 false
+            ),
+
+            // No discount
+            Arguments.of(
+                Fixtures.orderFixture(withRole = CompanyRole.CLIENT),
+                CreateMovementRequest(
+                    movementType = MovementType.OUTBOUND,
+                    productPublicId = UUID.randomUUID(),
+                    materialPublicId = null,
+                    quantity = 2,
+                    discount = null,
+                    notes = null
+                ),
+                BigDecimal("200.00"),
+                true
             )
         )
 
@@ -78,7 +99,8 @@ class MovementServiceTest {
                     productPublicId = null,
                     materialPublicId = UUID.randomUUID(),
                     quantity = 1,
-                    notes = null
+                    notes = null,
+                    discount = "0.5%+1.2%+2%"
                 )
             ),
             Arguments.of(
@@ -88,7 +110,8 @@ class MovementServiceTest {
                     productPublicId = UUID.randomUUID(),
                     materialPublicId = null,
                     quantity = 1,
-                    notes = null
+                    notes = null,
+                    discount = "0.1%+0.2%"
                 )
             )
         )
@@ -110,9 +133,32 @@ class MovementServiceTest {
 
         every { movementRepository.findAllByOrder(order) } returns listOf(m1, m2)
 
-        val result = service.getMovementsByOrder(order)
+        val result = movementService.getMovementsByOrder(order)
 
         assertEquals(2, result.size)
+    }
+
+    @Test
+    fun `gets movements by order applying discount`() {
+        val order = Fixtures.orderFixture()
+
+        val product = Fixtures.productFixture(
+            price = Price.from(BigDecimal("100"))
+        )
+
+        val movement = Fixtures.movementFixture(
+            order = order,
+            product = product,
+            quantity = 2,
+            discount = Discount.from("10%")
+        )
+
+        every { movementRepository.findAllByOrder(order) } returns listOf(movement)
+
+        val result = movementService.getMovementsByOrder(order)
+
+        assertEquals(1, result.size)
+        assertEquals(BigDecimal("180.00"), result.first().totalPrice)
     }
 
     // ----------------------------
@@ -133,19 +179,19 @@ class MovementServiceTest {
             every {
                 productService.getProduct(request.productPublicId!!, user)
             } returns Fixtures.productFixture(
-                price = Price.from(BigDecimal("10"))
+                price = Price.from(BigDecimal("100"))
             )
         } else {
             every {
                 materialService.getMaterial(request.materialPublicId!!, user)
             } returns Fixtures.materialFixture(
-                unitPrice = Price.from(BigDecimal("3"))
+                unitPrice = Price.from(BigDecimal("50"))
             )
         }
 
-        val result = service.createMovement(order, request, user)
+        val response = movementService.createMovement(order, request, user)
 
-        assertEquals(expectedTotal, result.totalPrice)
+        assertEquals(expectedTotal, response.totalPrice)
     }
 
 
@@ -162,11 +208,12 @@ class MovementServiceTest {
             productPublicId = UUID.randomUUID(),
             materialPublicId = UUID.randomUUID(),
             quantity = 1,
-            notes = null
+            notes = null,
+            discount = null,
         )
 
         assertThrows<IllegalArgumentException> {
-            service.createMovement(order, request, user)
+            movementService.createMovement(order, request, user)
         }
 
         verify(exactly = 0) { movementRepository.save(any()) }
@@ -179,7 +226,7 @@ class MovementServiceTest {
         request: CreateMovementRequest
     ) {
         assertThrows<IllegalArgumentException> {
-            service.createMovement(order, request, user)
+            movementService.createMovement(order, request, user)
         }
 
         verify(exactly = 0) {
@@ -222,28 +269,30 @@ class MovementServiceTest {
         } returns material
 
         assertThrows<AlreadyExistsException> {
-            service.createMovement(
+            movementService.createMovement(
                 productOrder,
                 CreateMovementRequest(
                     movementType = MovementType.OUTBOUND,
                     productPublicId = product.publicId,
                     materialPublicId = null,
                     quantity = 1,
-                    notes = null
+                    notes = null,
+                    discount = null,
                 ),
                 user
             )
         }
 
         assertThrows<AlreadyExistsException> {
-            service.createMovement(
+            movementService.createMovement(
                 materialOrder,
                 CreateMovementRequest(
                     movementType = MovementType.INBOUND,
                     productPublicId = null,
                     materialPublicId = material.publicId,
                     quantity = 1,
-                    notes = null
+                    notes = null,
+                    discount = null,
                 ),
                 user
             )
@@ -262,7 +311,7 @@ class MovementServiceTest {
             movementRepository.findByPublicIdAndUser(movement.publicId, user)
         } returns movement
 
-        val result = service.getMovement(movement.publicId, user)
+        val result = movementService.getMovement(movement.publicId, user)
 
         assertEquals(movement, result)
     }
@@ -276,7 +325,7 @@ class MovementServiceTest {
         } returns null
 
         assertThrows<NotFoundException> {
-            service.getMovement(id, user)
+            movementService.getMovement(id, user)
         }
     }
 }

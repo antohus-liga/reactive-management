@@ -139,7 +139,8 @@ class OrderServiceTest {
             productPublicId = UUID.randomUUID(),
             materialPublicId = null,
             quantity = 1,
-            notes = null
+            notes = null,
+            discount = null
         )
 
         val movementResponse = Fixtures.movementResponseFixture()
