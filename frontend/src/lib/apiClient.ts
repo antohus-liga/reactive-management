@@ -22,7 +22,7 @@ apiClient.interceptors.response.use(
             originalRequest.url?.includes("/api/auth/logout");
 
         // if status code = 401, retry once per request
-        if (error.response?.status === 401 && !originalRequest._retry && !isAuthEndpoint) {
+        if (error.response?.status === 403 && !originalRequest._retry && !isAuthEndpoint) {
             originalRequest._retry = true;
 
             if (isRefreshing) {
