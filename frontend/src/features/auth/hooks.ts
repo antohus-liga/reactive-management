@@ -5,7 +5,13 @@ import {useNavigate} from "react-router-dom";
 export function useSignIn() {
     return useMutation({
         mutationFn: authApi.signIn,
-    })
+    });
+}
+
+export function useRegister() {
+    return useMutation({
+        mutationFn: authApi.register,
+    });
 }
 
 export function useCurrentUser() {
@@ -13,7 +19,7 @@ export function useCurrentUser() {
         queryKey: ["auth", "me"],
         queryFn: authApi.me,
         retry: false,
-    })
+    });
 }
 
 export function useLogout() {
@@ -25,5 +31,5 @@ export function useLogout() {
             queryClient.clear() // clear the cached data to avoid leaks across sessions
             navigate("/login")
         }
-    })
+    });
 }
