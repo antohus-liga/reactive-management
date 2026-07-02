@@ -112,7 +112,7 @@ export function RegisterPage() {
                 </div>
                 <hr className={"w-full"}/>
                 <div className={"flex flex-col gap-4"}>
-                    <h2 className={"text-3xl font-mono font-bold"}>Company Contacts</h2>
+                    <h2 className={"text-3xl font-mono font-bold"}>Password</h2>
                     <label className={"flex flex-col gap-2"}>
                         Account Password
                         <input name="password" type="password"
