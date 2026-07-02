@@ -29,12 +29,12 @@ export default function WelcomePage() {
                 </p>
             </div>
 
-            {/* Login / Register */}
+            {/* Sign in / Register */}
             <div className={"bg-gray-700 p-6 rounded-2xl flex flex-col items-center gap-10 text-white"}>
                 <h2 className={"text-5xl font-bold"}>Try out now!</h2>
                 <div className={"flex gap-10"}>
-                    <Link to="/login"
-                          className={"bg-cyan-500 p-4 text-4xl font-bold border-2 border-cyan-600 rounded-xl hover:bg-sky-500 transition duration-200"}>Login</Link>
+                    <Link to="/signin"
+                          className={"bg-cyan-500 p-4 text-4xl font-bold border-2 border-cyan-600 rounded-xl hover:bg-sky-500 transition duration-200"}>Sign in</Link>
                     <Link to="/register"
                           className={"bg-white p-4 text-black text-4xl font-bold border-2 border-gray-200 rounded-xl hover:bg-mauve-300 transition duration-200"}>Register</Link>
                 </div>
