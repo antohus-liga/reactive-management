@@ -92,7 +92,7 @@ export default function NewCompanyModal({open, setOpen}: { open: boolean, setOpe
                                                 </div>
                                                 <hr className={"w-full"}/>
                                                 <div className={"flex flex-col gap-4"}>
-                                                    <h2 className={"text-3xl font-mono font-bold"}>Company
+                                                    <h2 className={"text-2xl font-mono font-bold"}>Company
                                                         Localization</h2>
                                                     <label className={"flex flex-col gap-2 text-xl"}>
                                                         Country
