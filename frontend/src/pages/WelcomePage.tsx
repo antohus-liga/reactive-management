@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 export default function WelcomePage() {
     return (
         <div
-            className="bg-gray-900 h-full flex flex-col items-center justify-center text-center gap-6 bg-[radial-gradient(circle,rgba(255,255,255,0.08)_1px,transparent_1px)]">
+            className={"flex flex-col items-center justify-center text-center gap-6"}>
             {/* Title */}
             <div className={"text-white p-4 flex flex-col items-center justify-center font-mono"}>
                 <div className="rounded-full relative w-100 h-100 flex items-center justify-center">
