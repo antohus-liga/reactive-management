@@ -10,7 +10,7 @@ export function RegisterPage() {
     const fieldErrors = getFieldErrors(form.error)
 
     return (
-        <div className={"h-full flex flex-col items-center justify-center gap-16 bg-gray-900 text-white p-8"}>
+        <>
             <div className="rounded-full relative w-70 h-70 flex items-center justify-center">
                 <img
                     src="/favicon.png"
@@ -118,7 +118,7 @@ export function RegisterPage() {
                           to={`/signin`}>or sign in</Link>
                 </div>
             </form>
-        </div>
+        </>
     );
 }
 

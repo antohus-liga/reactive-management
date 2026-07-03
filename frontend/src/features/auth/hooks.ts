@@ -23,6 +23,8 @@ export function useCurrentUser() {
         queryKey: ["auth", "me"],
         queryFn: authApi.me,
         retry: false,
+        refetchInterval: 60 * 1000,
+        refetchIntervalInBackground: true,
     });
 }
 
@@ -33,7 +35,7 @@ export function useLogout() {
         mutationFn: authApi.logout,
         onSuccess: () => {
             queryClient.clear() // clear the cached data to avoid leaks across sessions
-            navigate("/login")
+            navigate("/signin")
         }
     });
 }
