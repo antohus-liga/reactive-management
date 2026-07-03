@@ -4,7 +4,7 @@ import Sidebar from "@/components/layout/Sidebar.tsx";
 
 export default function AppShell() {
     return (
-        <div className={"bg-gray-900 text-white"}>
+        <>
             <Topbar/>
             <div className={"flex min-h-screen max-h-full"}>
                 <Sidebar/>
@@ -12,6 +12,6 @@ export default function AppShell() {
                     <Outlet/>
                 </main>
             </div>
-        </div>
+        </>
     )
 }
