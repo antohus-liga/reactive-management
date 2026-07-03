@@ -2,7 +2,7 @@ import {Outlet} from "react-router-dom";
 
 export default function PublicShell() {
     return (
-        <div className="h-screen flex flex-col items-center justify-center bg-gray-900 text-white">
+        <div className="min-h-screen max-h-full flex flex-col items-center justify-center gap-8">
             <Outlet/>
         </div>
     );
