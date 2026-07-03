@@ -1,4 +1,5 @@
 import * as axios from "axios";
+import type {InternalAxiosRequestConfig} from "axios";
 
 export const apiClient = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
@@ -7,46 +8,50 @@ export const apiClient = axios.create({
         "Content-Type": "application/json",
     }
 });
-
 let isRefreshing = false;
-let pendingQueue: (() => void)[] = [];
+let pendingQueue: {
+    resolve: (value: unknown) => void;
+    reject: (reason?: unknown) => void;
+    request: InternalAxiosRequestConfig;
+}[] = [];
 
 apiClient.interceptors.response.use(
     (res) => res,
     async error => {
         const originalRequest = error.config;
-
         const isAuthEndpoint =
             originalRequest.url?.includes("/api/auth/login") ||
             originalRequest.url?.includes("/api/auth/refresh") ||
             originalRequest.url?.includes("/api/auth/logout");
 
-        // if status code = 401, retry once per request
-        if (error.response?.status === 403 && !originalRequest._retry && !isAuthEndpoint) {
+        if (
+            (error.response?.status === 401 || error.response?.status === 403) &&
+            !originalRequest._retry &&
+            !isAuthEndpoint
+        ) {
             originalRequest._retry = true;
 
             if (isRefreshing) {
-                // if a refresh is already happening, add request to the queue
-                return new Promise((resolve) => {
-                    pendingQueue.push(() => resolve(apiClient(originalRequest)));
+                return new Promise((resolve, reject) => {
+                    pendingQueue.push({ resolve, reject, request: originalRequest });
                 });
             }
 
-            isRefreshing = true; // flag the refresh, so other requests don't request a refresh again
+            isRefreshing = true;
             try {
-                await apiClient.post("/api/auth/refresh"); // requests a token refresh with the refresh token cookie
-                pendingQueue.forEach((cb) => cb()); // calls pending requests if refresh is successful
+                await apiClient.post("/api/auth/refresh");
+                pendingQueue.forEach(({ resolve, request }) => resolve(apiClient(request)));
                 pendingQueue = [];
-                return apiClient(originalRequest); // retry the first failed request
+                return apiClient(originalRequest);
             } catch (refreshError) {
-                pendingQueue = []; // cancel requests if the token refresh failed
-                window.location.href = "/signin";
+                pendingQueue.forEach(({ reject }) => reject(refreshError)); // <-- reject the waiters too
+                pendingQueue = [];
                 return Promise.reject(refreshError);
             } finally {
-                isRefreshing = false; // terminate the refresh process
+                isRefreshing = false;
             }
         }
 
-        return Promise.reject(error); // if the status code != 401 or if it's a retry, just fail
+        return Promise.reject(error);
     }
-)
+);
