@@ -1,8 +1,9 @@
+import type {SubmitEvent} from "react";
 import {useState} from "react";
 import type {CompanyType} from "@/types/CompanyType.ts";
 import type {CompanyRole} from "@/types/CompanyRole.ts";
-import {useCreateCompany, useFetchCompanies} from "@/features/companies/hooks.ts";
-import type {SubmitEvent} from "react";
+import {useCreateCompany, useDeleteCompany, useFetchCompanies, useUpdateCompany} from "@/features/companies/hooks.ts";
+import type {CompanyResponse} from "@/features/companies/api.ts";
 
 export default function useCompanies() {
     const [companyName, setCompanyName] = useState<string>("");
@@ -13,6 +14,8 @@ export default function useCompanies() {
     const [email, setEmail] = useState<string>("");
     const [country, setCountry] = useState<string>("");
     const [address, setAddress] = useState<string>("");
+    const [open, setOpen] = useState<boolean>(false);
+    const [updateTarget, setUpdateTarget] = useState<CompanyResponse | null>(null);
 
     const state = {
         companyName, setCompanyName,
@@ -23,10 +26,14 @@ export default function useCompanies() {
         email, setEmail,
         country, setCountry,
         address, setAddress,
+        open, setOpen,
+        updateTarget, setUpdateTarget,
     }
 
     const get = useFetchCompanies()
     const create = useCreateCompany();
+    const update = useUpdateCompany();
+    const deleteCompany = useDeleteCompany();
 
     function toggleRole(role: CompanyRole, checked: boolean) {
         setRoles((current) =>
@@ -36,25 +43,54 @@ export default function useCompanies() {
         )
     }
 
-    function handleCreateCompany(e: SubmitEvent<HTMLFormElement>) {
+    function handleCreateCompany(e: SubmitEvent<HTMLFormElement>, updateTarget: CompanyResponse | null) {
         e.preventDefault();
-        create.mutate({
-            companyName,
-            companyType,
-            roles,
-            taxId,
-            phoneNumber,
-            email,
-            country,
-            address,
-        })
+        if (updateTarget === null) {
+            create.mutate({
+                companyName,
+                companyType,
+                roles,
+                taxId,
+                phoneNumber,
+                email,
+                country,
+                address,
+            }, {onSuccess: () => setOpen(false)});
+            return;
+        } else {
+            update.mutate({
+                publicId: updateTarget.publicId,
+                payload: {
+                    companyName,
+                    companyType,
+                    roles,
+                    taxId,
+                    phoneNumber,
+                    email,
+                    country,
+                    address,
+                }
+            }, {
+                onSuccess: () => {
+                    setOpen(false);
+                    setUpdateTarget(null)
+                }
+            });
+        }
+    }
+
+    function handleDeleteCompany(publicId: string) {
+        deleteCompany.mutate(publicId)
     }
 
     return {
         state,
         handleCreateCompany,
+        handleDeleteCompany,
         toggleRole,
         get,
         create,
+        update,
     };
+
 }

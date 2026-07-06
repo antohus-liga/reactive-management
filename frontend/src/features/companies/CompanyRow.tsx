@@ -1,36 +1,18 @@
-import {useEffect, useState} from "react";
 import type {CompanyResponse} from "@/features/companies/api.ts";
 import {CompanyTypeLabel} from "@/types/CompanyType.ts";
 import {countryLabels} from "@/features/auth/countryOptions.ts";
+import type {Dispatch, SetStateAction} from "react";
 
-export default function CompanyRow({ company }: { company: CompanyResponse }) {
-    const [menu, setMenu] = useState<{
-        x: number;
-        y: number;
-    } | null>(null);
-
-    useEffect(() => {
-        function closeMenu() {
-            setMenu(null);
-        }
-
-        window.addEventListener("click", closeMenu);
-
-        return () => window.removeEventListener("click", closeMenu);
-    }, []);
-
+export default function CompanyRow({company, onDelete, setOpen, setUpdateTarget}:
+                                   {
+                                       company: CompanyResponse,
+                                       onDelete: (publicId: string) => void,
+                                       setOpen: Dispatch<SetStateAction<boolean>>,
+                                       setUpdateTarget: Dispatch<SetStateAction<CompanyResponse | null>>,
+                                   }) {
     return (
         <>
-            <tr className="odd:bg-sky-800 border-b bg-sky-700 hover:bg-sky-600 transition duration-200"
-                onContextMenu={(e) => {
-                    e.preventDefault();
-
-                    setMenu({
-                        x: e.clientX,
-                        y: e.clientY,
-                    });
-                }}
-            >
+            <tr className="odd:bg-sky-800 border-b bg-sky-700 hover:bg-sky-600 transition duration-200">
                 <td className={"p-4"}>{company.companyName}</td>
                 <td className={"p-4"}>{CompanyTypeLabel[company.companyType]}</td>
                 <td className={"p-4"}>{company.taxId}</td>
@@ -40,20 +22,22 @@ export default function CompanyRow({ company }: { company: CompanyResponse }) {
                 <td className={"p-4"}>{company.address}</td>
                 <td className={"p-4"}>{new Date(company.createdAt).toLocaleString()}</td>
                 <td className={"p-4"}>{new Date(company.updatedAt).toLocaleString()}</td>
+                <td className={"p-4"}>
+                    <div className={"flex gap-3"}>
+                        <button className={"bg-blue-300 hover:bg-blue-400 p-2 rounded-lg transition outline-2"}
+                                onClick={() => {
+                                    setOpen(true);
+                                    setUpdateTarget(company)
+                                }}>
+                            <img className={"size-6"} src={"/edit.png"} alt={"Edit"}/>
+                        </button>
+                        <button className={"bg-red-300 hover:bg-red-400 p-2 rounded-lg transition outline-2"}
+                                onClick={() => onDelete(company.publicId)}>
+                            <img className={"size-6"} src={"/delete.png"} alt={"Delete"}/>
+                        </button>
+                    </div>
+                </td>
             </tr>
-
-            {menu && (
-                <div
-                    className="fixed flex flex-col p-4 bg-gray-800 border rounded shadow-lg"
-                    style={{
-                        left: menu.x,
-                        top: menu.y,
-                    }}
-                >
-                    <button>Edit</button>
-                    <button>Delete</button>
-                </div>
-            )}
         </>
     );
 }
