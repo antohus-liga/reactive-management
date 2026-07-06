@@ -32,7 +32,7 @@ export const companyApi = {
     create:
         (payload: CompanyRequest) => apiClient.post("/api/companies", payload).then((r) => r.data),
     update:
-        (payload: CompanyRequest) => apiClient.put("/api/companies", payload).then((r) => r.data),
+        (publicId: string, payload: CompanyRequest) => apiClient.put(`/api/companies/${publicId}`, payload).then((r) => r.data),
     delete:
-        () => apiClient.delete("/api/companies/{id}"),
+        (publicId: string) => apiClient.delete(`/api/companies/${publicId}`),
 };
