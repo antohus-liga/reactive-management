@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import type {CompanyResponse} from "@/features/companies/api.ts";
 import {CompanyTypeLabel} from "@/types/CompanyType.ts";
+import {countryLabels} from "@/features/auth/countryOptions.ts";
 
 export default function CompanyRow({ company }: { company: CompanyResponse }) {
     const [menu, setMenu] = useState<{
@@ -35,10 +36,10 @@ export default function CompanyRow({ company }: { company: CompanyResponse }) {
                 <td className={"p-4"}>{company.taxId}</td>
                 <td className={"p-4"}>{company.phoneNumber}</td>
                 <td className={"p-4"}>{company.email}</td>
-                <td className={"p-4"}>{company.country}</td>
+                <td className={"p-4"}>{countryLabels[company.country] ?? company.country}</td>
                 <td className={"p-4"}>{company.address}</td>
-                <td className={"p-4"}>{company.createdAt}</td>
-                <td className={"p-4"}>{company.updatedAt}</td>
+                <td className={"p-4"}>{new Date(company.createdAt).toLocaleString()}</td>
+                <td className={"p-4"}>{new Date(company.updatedAt).toLocaleString()}</td>
             </tr>
 
             {menu && (

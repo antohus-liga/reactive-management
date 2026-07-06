@@ -9,3 +9,6 @@ export const countryOptions = Object.entries(
     value: code,
     label: name,
 }));
+export const countryLabels = Object.fromEntries(
+    countryOptions.map(({ value, label }) => [value, label])
+);

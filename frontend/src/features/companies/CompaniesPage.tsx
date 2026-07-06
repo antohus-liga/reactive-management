@@ -1,12 +1,24 @@
 import {useState} from "react";
 import NewCompanyModal from "./NewCompanyModal";
+import CompanyRow from "@/features/companies/CompanyRow.tsx";
+import type {CompanyResponse} from "@/features/companies/api.ts";
+import useCompanies from "@/features/companies/useCompanies.ts";
+import {getFieldErrors} from "@/lib/getErrorMessage.ts";
 
 export default function CompaniesPage() {
     const [open, setOpen] = useState(false);
+    const companies = useCompanies();
+
+    if (companies.get.isLoading) return null;
+    if (companies.get.isError) return null;
 
     return (
         <>
-            <NewCompanyModal open={open} setOpen={setOpen}/>
+            <NewCompanyModal open={open} setOpen={setOpen} form={companies.state}
+                             handleCreateCompany={companies.handleCreateCompany}
+                             error={companies.create.error}
+                             fieldErrors={getFieldErrors(companies.create.error)}
+                             toggleRole={companies.toggleRole}/>
             <div
                 className={"relative flex flex-col w-auto max-h-[calc(100vh-25rem)] overflow-y-auto shadow-md shadow-white rounded-xl bg-clip-border"}>
                 <table className={"w-full text-left table-auto"}>
@@ -24,6 +36,9 @@ export default function CompaniesPage() {
                     </tr>
                     </thead>
                     <tbody>
+                    {companies.get.data?.map((company: CompanyResponse) => (
+                        <CompanyRow key={company.publicId} company={company}/>
+                    ))}
                     </tbody>
                 </table>
             </div>
