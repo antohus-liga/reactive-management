@@ -1,6 +1,6 @@
 export const CompanyType = {
     SOLE_PROPRIETORSHIP: "SOLE_PROPRIETORSHIP",
-    PARTNER_SHIP: "PARTNER_SHIP",
+    PARTNERSHIP: "PARTNERSHIP",
     LIMITED_LIABILITY_COMPANY: "LIMITED_LIABILITY_COMPANY",
     CORPORATION: "CORPORATION",
     COOPERATIVE: "COOPERATIVE",
@@ -12,7 +12,7 @@ export type CompanyType =
 
 export const CompanyTypeLabel: Record<CompanyType, string> = {
     SOLE_PROPRIETORSHIP: "Sole Proprietorship",
-    PARTNER_SHIP: "Partnership",
+    PARTNERSHIP: "Partnership",
     LIMITED_LIABILITY_COMPANY: "Limited Liability Company",
     CORPORATION: "Corporation",
     COOPERATIVE: "Cooperative",

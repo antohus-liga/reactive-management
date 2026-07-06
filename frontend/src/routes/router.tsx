@@ -1,13 +1,14 @@
 import { createBrowserRouter } from "react-router-dom";
 import WelcomePage from "@/pages/WelcomePage";
 import NotFoundPage from "@/pages/NotFoundPage";
-import {SignInPage} from "@/features/auth/SignInPage.tsx";
-import {RegisterPage} from "@/features/auth/RegisterPage.tsx";
+import SignInPage from "@/features/auth/SignInPage.tsx";
+import RegisterPage from "@/features/auth/RegisterPage.tsx";
 import PublicOnlyRoute from "@/routes/PublicOnlyRoute.tsx";
 import PublicShell from "@/components/layout/PublicShell.tsx";
 import ProtectedRoute from "@/routes/ProtectedRoute.tsx";
 import AppShell from "@/components/layout/AppShell.tsx";
-import {DashboardPage} from "@/features/dashboard/DashboardPage.tsx";
+import DashboardPage from "@/features/dashboard/DashboardPage.tsx";
+import CompaniesPage from "@/features/companies/CompaniesPage.tsx";
 
 export const router = createBrowserRouter([
     {
@@ -31,6 +32,7 @@ export const router = createBrowserRouter([
                 element: <AppShell/>,
                 children: [
                     { path: "/dashboard", element: <DashboardPage/>, handle: { title: "Dashboard" } },
+                    { path: "/companies", element: <CompaniesPage/>, handle: { title: "Companies" } },
                 ]
             },
         ]

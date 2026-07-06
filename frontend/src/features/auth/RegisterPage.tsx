@@ -5,7 +5,7 @@ import {countryOptions} from "@/features/auth/countryOptions.ts";
 import {useRegisterForm} from "@/features/auth/useRegisterForm.ts";
 import type {Dispatch, SetStateAction} from "react";
 
-export function RegisterPage() {
+export default function RegisterPage() {
     const form = useRegisterForm()
     const fieldErrors = getFieldErrors(form.error)
 

@@ -6,9 +6,9 @@ export default function AppShell() {
     return (
         <>
             <Topbar/>
-            <div className={"flex min-h-screen max-h-full"}>
+            <div className={"flex"}>
                 <Sidebar/>
-                <main className={"flex-1 overflow-y-auto p-8"}>
+                <main className={"ml-40 mt-20 flex-1 overflow-y-auto p-8"}>
                     <Outlet/>
                 </main>
             </div>

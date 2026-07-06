@@ -1,7 +1,7 @@
-export function DashboardPage() {
+export default function DashboardPage() {
     return (
         <>
-            <div className={"ml-40 mt-20 flex flex-col gap-4"}>
+            <div className={"flex flex-col gap-4"}>
                 <div className={"flex flex-col gap-4"}>
                     <h2 className={"text-6xl"}>Summaries</h2>
                     <div>

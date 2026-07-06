@@ -2,7 +2,7 @@ import {useSignInForm} from "@/features/auth/useSignInForm.ts";
 import {getErrorMessage} from "@/lib/getErrorMessage.ts";
 import {Link} from "react-router-dom";
 
-export function SignInPage() {
+export default function SignInPage() {
     const form = useSignInForm();
 
     return (
