@@ -33,7 +33,7 @@ class CategoryServiceTest {
         )
 
         every { userService.getCurrentUser() } returns user
-        every { categoryRepository.findByNameAndTypeAndUser(request.name, request.type, user) } returns null
+        every { categoryRepository.findByNameAndUser(request.name, request.type, user) } returns null
         every { categoryRepository.save(any()) } answers { firstArg() }
 
         val response = categoryService.createCategory(request)
@@ -47,7 +47,7 @@ class CategoryServiceTest {
         val request = CreateCategoryRequest("Food", "", CategoryType.MATERIAL)
 
         every { userService.getCurrentUser() } returns user
-        every { categoryRepository.findByNameAndTypeAndUser(category.name, request.type, user) } returns category
+        every { categoryRepository.findByNameAndUser(category.name, request.type, user) } returns category
 
         assertThrows<AlreadyExistsException> { categoryService.createCategory(request) }
     }
@@ -59,7 +59,7 @@ class CategoryServiceTest {
 
         every { userService.getCurrentUser() } returns user
         every { categoryRepository.findByPublicIdAndUser(category.publicId, user) } returns category
-        every { categoryRepository.findByNameAndTypeAndUser(request.name, request.type, user) } returns null
+        every { categoryRepository.findByNameAndUser(request.name, request.type, user) } returns null
         every { categoryRepository.save(category) } answers { firstArg() }
 
         val response = categoryService.updateCategory(category.publicId, request)
@@ -76,7 +76,7 @@ class CategoryServiceTest {
 
         every { userService.getCurrentUser() } returns user
         every { categoryRepository.findByPublicIdAndUser(category.publicId, user) } returns category
-        every { categoryRepository.findByNameAndTypeAndUser(request.name, request.type, user) } returns category
+        every { categoryRepository.findByNameAndUser(request.name, request.type, user) } returns category
         every { categoryRepository.save(category) } answers { firstArg() }
 
         val response = categoryService.updateCategory(category.publicId, request)
@@ -116,7 +116,7 @@ class CategoryServiceTest {
 
         every { userService.getCurrentUser() } returns user
         every { categoryRepository.findByPublicIdAndUser(category.publicId, user) } returns category
-        every { categoryRepository.findByNameAndTypeAndUser(request.name, request.type, user) } returns conflict
+        every { categoryRepository.findByNameAndUser(request.name, request.type, user) } returns conflict
 
         assertThrows<AlreadyExistsException> { categoryService.updateCategory(category.publicId, request) }
     }

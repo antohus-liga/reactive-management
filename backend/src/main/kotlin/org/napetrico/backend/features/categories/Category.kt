@@ -1,5 +1,8 @@
 package org.napetrico.backend.features.categories
 
+import jakarta.persistence.CollectionTable
+import jakarta.persistence.Column
+import jakarta.persistence.ElementCollection
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
@@ -37,9 +40,15 @@ class Category (
     var name: String,
     var colorHex: String,
 
+    @ElementCollection
+    @CollectionTable(
+        name = "category_types",
+        joinColumns = [JoinColumn(name = "category_id")],
+    )
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-    var type: CategoryType,
+    @Column(name = "category_type")
+    var types: MutableSet<CategoryType> = mutableSetOf(),
 
     var createdAt: LocalDateTime = LocalDateTime.now(),
     var updatedAt: LocalDateTime = LocalDateTime.now(),

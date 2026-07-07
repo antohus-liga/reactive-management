@@ -8,7 +8,7 @@ data class CategoryResponse(
     val publicId: UUID,
     val name: String,
     val colorHex: String,
-    val type: CategoryType,
+    val types: Set<CategoryType>,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime,
 )

@@ -11,7 +11,7 @@ object CategoryMapper {
         publicId = publicId,
         name = name,
         colorHex = colorHex,
-        type = type,
+        types = types,
         createdAt = createdAt,
         updatedAt = updatedAt,
     )
@@ -19,14 +19,14 @@ object CategoryMapper {
     fun CreateCategoryRequest.toEntity(user: User): Category = Category(
         name = name,
         colorHex = colorHex,
-        type = type,
+        types = types.toMutableSet(),
         user = user,
     )
 
     fun Category.applyUpdate(update: UpdateCategoryRequest): Category {
         name = update.name
         colorHex = update.colorHex
-        type = update.type
+        types = update.types.toMutableSet()
 
         updatedAt = LocalDateTime.now()
 

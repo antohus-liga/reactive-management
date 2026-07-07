@@ -13,7 +13,7 @@ import org.napetrico.backend.features.categories.dto.CreateCategoryRequest
 import org.napetrico.backend.features.categories.dto.UpdateCategoryRequest
 import org.napetrico.backend.features.users.UserService
 import org.springframework.stereotype.Service
-import java.util.UUID
+import java.util.*
 
 @Service
 class CategoryService(
@@ -25,7 +25,7 @@ class CategoryService(
 
     fun createCategory(request: CreateCategoryRequest): CategoryResponse {
         val user = userService.getCurrentUser()
-        if (categoryRepository.findByNameAndTypeAndUser(request.name, request.type, user) != null)
+        if (categoryRepository.findByNameAndUser(request.name, user) != null)
             throw AlreadyExistsException("Category with name '${request.name}'")
 
         return categoryRepository.save(request.toEntity(user)).toResponse()
@@ -36,10 +36,10 @@ class CategoryService(
         val category = categoryRepository.findByPublicIdAndUser(publicId, user)
             ?: throw NotFoundException("Category")
 
-        val dependencyCount = when (request.type) {
-            CategoryType.MATERIAL -> category.products.count()
-            CategoryType.PRODUCT -> category.materials.count()
-        }
+        val dependencyCount =
+            if (request.types.contains(CategoryType.PRODUCT)) category.products.count()
+            else if (request.types.contains(CategoryType.MATERIAL)) category.materials.count()
+            else category.products.count() + category.materials.count()
 
         if (dependencyCount > 0) {
             throw CannotEditCategoryTypeException(
@@ -47,7 +47,7 @@ class CategoryService(
             )
         }
 
-        val conflict = categoryRepository.findByNameAndTypeAndUser(request.name, request.type, user)
+        val conflict = categoryRepository.findByNameAndUser(request.name, user)
 
         if (conflict != null && category.id != conflict.id)
             throw AlreadyExistsException("Category with name '${request.name}'")
