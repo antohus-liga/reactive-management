@@ -3,7 +3,6 @@ import {getErrorMessage, getFieldErrors} from "@/lib/getErrorMessage.ts";
 import {CompanyType, CompanyTypeLabel} from "@/types/CompanyType.ts";
 import {countryOptions} from "@/features/auth/countryOptions.ts";
 import {useRegisterForm} from "@/features/auth/useRegisterForm.ts";
-import type {Dispatch, SetStateAction} from "react";
 
 export default function RegisterPage() {
     const form = useRegisterForm()
@@ -37,7 +36,7 @@ export default function RegisterPage() {
                     </label>
                     <label className={"flex flex-col gap-2"}>
                         Company Type
-                        <CompanyTypeSelect value={form.companyType} setValue={form.setCompanyType}/>
+                        <CompanyTypeSelect value={form.companyType} onChange={form.setCompanyType}/>
                         {fieldErrors?.companyType && <p className="text-red-400 text-xl">{fieldErrors.companyType}</p>}
                     </label>
                     <label className={"flex flex-col gap-2"}>
@@ -77,7 +76,7 @@ export default function RegisterPage() {
                     <h2 className={"text-3xl font-mono font-bold"}>Company Localization</h2>
                     <label className={"flex flex-col gap-2"}>
                         Country
-                        <CountrySelect value={form.country} setValue={form.setCountry} />
+                        <CountrySelect value={form.country} setValue={form.setCountry}/>
                         {fieldErrors?.country && <p className="text-red-400 text-xl">{fieldErrors.country}</p>}
                     </label>
                     <label className={"flex flex-col gap-2"}>
@@ -122,16 +121,14 @@ export default function RegisterPage() {
     );
 }
 
-export function CompanyTypeSelect({value, setValue,}: {
+export function CompanyTypeSelect({value, onChange}: {
     value: CompanyType | "",
-    setValue: Dispatch<SetStateAction<CompanyType | "">>
+    onChange: (value: CompanyType) => void,
 }) {
     return (
         <select
             value={value}
-            onChange={(e) =>
-                setValue(e.target.value as CompanyType)
-            }
+            onChange={(e) => onChange(e.target.value as CompanyType)}
             className={"p-2 rounded-lg ring-1 text-xl"}
             required={true}
         >
@@ -148,7 +145,7 @@ export function CompanyTypeSelect({value, setValue,}: {
     );
 }
 
-export function CountrySelect({value, setValue}: {value: string, setValue: Dispatch<SetStateAction<string>>}) {
+export function CountrySelect({value, setValue}: { value: string, setValue: (value: string) => void }) {
     return (
         <select
             value={value}
