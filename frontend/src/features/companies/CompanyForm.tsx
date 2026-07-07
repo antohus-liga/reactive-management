@@ -1,50 +1,19 @@
 import {useCompanyForm} from "@/features/companies/useCompanyForm.ts";
 import {DialogTitle} from "@headlessui/react";
 import {CompanyTypeSelect, CountrySelect} from "@/features/auth/RegisterPage.tsx";
-import {type InputHTMLAttributes, useEffect} from "react";
+import {type InputHTMLAttributes} from "react";
 import type {CompanyType} from "@/types/CompanyType.ts";
 import {CompanyRole} from "@/types/CompanyRole.ts";
 import {getErrorMessage, getFieldErrors} from "@/lib/getErrorMessage.ts";
 import type {CompanyResponse} from "@/features/companies/api.ts";
 
-interface CompanyFormProps {
-    setOpen: (value: boolean) => void,
-    initial?: CompanyResponse,
-    setUpdateTarget: (value: CompanyResponse | undefined) => void,
-}
-
-export default function CompanyForm({setOpen, initial, setUpdateTarget}: CompanyFormProps) {
-    const form = useCompanyForm();
+export default function CompanyForm({initial, onClose}: { initial: CompanyResponse | null, onClose: () => void }) {
+    const form = useCompanyForm(initial);
     const error = form.create.error ?? form.update.error;
     const fieldErrors = getFieldErrors(error);
 
-    useEffect(() => {
-        if (initial)
-            form.setCompany({
-                companyName: initial.companyName,
-                companyType: initial.companyType,
-                taxId: initial.taxId,
-                phoneNumber: initial.phoneNumber,
-                email: initial.email,
-                country: initial.country,
-                address: initial.address,
-                roles: initial.roles,
-            });
-        else
-            form.setCompany({
-                companyName: "",
-                companyType: "",
-                taxId: "",
-                phoneNumber: "",
-                email: "",
-                country: "",
-                address: "",
-                roles: [],
-            })
-    }, [form, initial])
-
     return (
-        <form onSubmit={(e) => form.handleSubmit(e, setOpen, setUpdateTarget, initial)}>
+        <form onSubmit={(e) => form.handleSubmit(e, initial, onClose)}>
             <div className="bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4 w-full">
                 <div className="sm:flex sm:items-start">
                     <div
@@ -75,7 +44,6 @@ export default function CompanyForm({setOpen, initial, setUpdateTarget}: Company
                                                 ...prev,
                                                 companyType: companyType
                                             }));
-                                            console.log(form.company.companyType)
                                         }}/>
                                     {fieldErrors?.companyType &&
                                         <p className="text-red-400 text-xl">{fieldErrors.companyType}</p>}
@@ -99,6 +67,7 @@ export default function CompanyForm({setOpen, initial, setUpdateTarget}: Company
                                     }))
                                 }}/>
                                 <TextField label={"Email"} error={fieldErrors?.email} inputProps={{
+                                    type: "email",
                                     placeholder: "Enter your company email address", value: form.company.email,
                                     onChange: (e) => form.setCompany(prev => ({
                                         ...prev,
@@ -152,11 +121,10 @@ export default function CompanyForm({setOpen, initial, setUpdateTarget}: Company
                     type="submit"
                     className="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white hover:bg-green-500 sm:ml-3 sm:w-auto"
                 >
-                    Create
+                    {initial ? "Update" : "Create"}
                 </button>
                 <button
-                    type="button"
-                    onClick={() => setOpen(false)}
+                    type="button" onClick={onClose}
                     className="mt-3 inline-flex w-full justify-center rounded-md bg-white/10 px-3 py-2 text-sm font-semibold text-white inset-ring inset-ring-white/5 hover:bg-white/20 sm:mt-0 sm:w-auto"
                 >
                     Cancel
@@ -174,7 +142,7 @@ function TextField({label, error, inputProps}: {
     return (
         <label className={"flex flex-col gap-2 text-xl"}>
             {label}
-            <input {...inputProps} required={true} type={"text"}
+            <input type={"text"} {...inputProps} required={true}
                    className={"p-2 rounded-lg ring-1 text-xl placeholder:text-lg"}/>
             {error && <p className="text-red-400 text-xl">{error}</p>}
         </label>

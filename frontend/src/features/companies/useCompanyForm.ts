@@ -3,10 +3,30 @@ import type {CompanyRequest, CompanyResponse} from "@/features/companies/api.ts"
 import type {CompanyRole} from "@/types/CompanyRole.ts";
 import {useCreateCompany, useUpdateCompany} from "@/features/companies/hooks.ts";
 
-export function useCompanyForm() {
-    const [company, setCompany] = useState<CompanyRequest>({
-        address: "", companyType: "", country: "", email: "", phoneNumber: "", roles: [], taxId: "", companyName: ""
-    });
+export function useCompanyForm(initial: CompanyResponse | null) {
+    const [company, setCompany] = useState<CompanyRequest>(() =>
+        initial
+            ? {
+                companyName: initial.companyName,
+                companyType: initial.companyType,
+                taxId: initial.taxId,
+                phoneNumber: initial.phoneNumber,
+                email: initial.email,
+                country: initial.country,
+                address: initial.address,
+                roles: initial.roles,
+            }
+            : {
+                address: "",
+                companyType: "",
+                country: "",
+                email: "",
+                phoneNumber: "",
+                roles: [],
+                taxId: "",
+                companyName: ""
+            }
+    );
 
     const create = useCreateCompany();
     const update = useUpdateCompany();
@@ -18,18 +38,12 @@ export function useCompanyForm() {
         setCompany(prev => ({...prev, roles: roles}))
     }
 
-    function handleSubmit(e: SubmitEvent<HTMLFormElement>, setOpen: (open: boolean) => void, setUpdateTarget: (updateTarget: CompanyResponse | undefined) => void, updateTarget?: CompanyResponse) {
+    function handleSubmit(e: SubmitEvent<HTMLFormElement>, updateTarget: CompanyResponse | null, onClose: () => void) {
         e.preventDefault();
-        if (!updateTarget) {
-            create.mutate(company, {onSuccess: () => setOpen(false)});
-        } else {
-            update.mutate({publicId: updateTarget.publicId, payload: company}, {
-                onSuccess: () => {
-                    setUpdateTarget(undefined);
-                    setOpen(false);
-                }
-            });
-        }
+        if (!updateTarget)
+            create.mutate(company, {onSuccess: onClose});
+        else
+            update.mutate({publicId: updateTarget.publicId, payload: company}, {onSuccess: onClose,});
     }
 
     return {

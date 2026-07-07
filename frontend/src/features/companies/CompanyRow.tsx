@@ -2,12 +2,11 @@ import type {CompanyResponse} from "@/features/companies/api.ts";
 import {CompanyTypeLabel} from "@/types/CompanyType.ts";
 import {countryLabels} from "@/features/auth/countryOptions.ts";
 
-export default function CompanyRow({company, onDelete, setOpen, setUpdateTarget}:
+export default function CompanyRow({company, onDelete, onEdit}:
                                    {
                                        company: CompanyResponse,
                                        onDelete: (publicId: string) => void,
-                                       setOpen: (value: boolean) => void,
-                                       setUpdateTarget: (value: CompanyResponse | undefined) => void,
+                                       onEdit: (company: CompanyResponse) => void,
                                    }) {
     return (
         <>
@@ -24,10 +23,7 @@ export default function CompanyRow({company, onDelete, setOpen, setUpdateTarget}
                 <td className={"p-4"}>
                     <div className={"flex gap-3"}>
                         <button className={"bg-blue-300 hover:bg-blue-400 p-2 rounded-lg transition outline-2"}
-                                onClick={() => {
-                                    setOpen(true);
-                                    setUpdateTarget(company)
-                                }}>
+                                onClick={() => {onEdit(company)}}>
                             <img className={"size-6"} src={"/edit.png"} alt={"Edit"}/>
                         </button>
                         <button className={"bg-red-300 hover:bg-red-400 p-2 rounded-lg transition outline-2"}
