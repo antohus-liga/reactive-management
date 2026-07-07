@@ -21,7 +21,7 @@ class CategoryService(
     private val userService: UserService,
 ) {
     fun getAllByUser(): List<CategoryResponse> =
-        categoryRepository.findAllByUser(userService.getCurrentUser()).map { it.toResponse() }
+        categoryRepository.findAllByUserOrderByCreatedAt(userService.getCurrentUser()).map { it.toResponse() }
 
     fun createCategory(request: CreateCategoryRequest): CategoryResponse {
         val user = userService.getCurrentUser()

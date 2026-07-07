@@ -20,7 +20,7 @@ class CompanyService(
     private val userService: UserService
 ) {
     fun getAllByUser(): List<CompanyResponse> =
-        companyRepository.findAllByUser(
+        companyRepository.findAllByUserOrderByCreatedAt(
             userService.getCurrentUser()
         ).map { it.toResponse() }
 
