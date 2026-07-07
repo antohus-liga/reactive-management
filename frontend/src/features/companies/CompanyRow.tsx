@@ -1,14 +1,13 @@
 import type {CompanyResponse} from "@/features/companies/api.ts";
 import {CompanyTypeLabel} from "@/types/CompanyType.ts";
 import {countryLabels} from "@/features/auth/countryOptions.ts";
-import type {Dispatch, SetStateAction} from "react";
 
 export default function CompanyRow({company, onDelete, setOpen, setUpdateTarget}:
                                    {
                                        company: CompanyResponse,
                                        onDelete: (publicId: string) => void,
-                                       setOpen: Dispatch<SetStateAction<boolean>>,
-                                       setUpdateTarget: Dispatch<SetStateAction<CompanyResponse | null>>,
+                                       setOpen: (value: boolean) => void,
+                                       setUpdateTarget: (value: CompanyResponse | undefined) => void,
                                    }) {
     return (
         <>

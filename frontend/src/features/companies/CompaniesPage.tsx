@@ -11,9 +11,7 @@ export default function CompaniesPage() {
 
     return (
         <>
-            <NewCompanyModal open={companies.state.open} setOpen={companies.state.setOpen} form={companies.state}
-                             handleCreateCompany={companies.handleCreateCompany} createError={companies.create.error}
-                             updateError={companies.update.error} toggleRole={companies.toggleRole}/>
+            <NewCompanyModal open={companies.state.open} setOpen={companies.state.setOpen} setUpdateTarget={companies.state.setUpdateTarget} updateTarget={companies.state.updateTarget} />
             <div
                 className={"relative flex flex-col w-auto max-h-[calc(100vh-25rem)] overflow-y-auto shadow-md shadow-white rounded-xl bg-clip-border"}>
                 <table className={"w-full text-left table-auto"}>
@@ -41,7 +39,7 @@ export default function CompaniesPage() {
                 </table>
             </div>
             <div className={"mt-10"}>
-                <button onClick={() => {companies.state.setOpen(true); companies.update.reset(); companies.create.reset()}}
+                <button onClick={() => companies.state.setOpen(true)}
                         className={"p-3 bg-emerald-700 border-2 border-emerald-700 hover:bg-emerald-500 active:bg-emerald-600 active:scale-95 rounded-xl transition duration-100"}>New
                     Company
                 </button>
