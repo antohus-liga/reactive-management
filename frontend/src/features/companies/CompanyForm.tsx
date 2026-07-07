@@ -1,11 +1,12 @@
 import {useCompanyForm} from "@/features/companies/useCompanyForm.ts";
 import {DialogTitle} from "@headlessui/react";
 import {CompanyTypeSelect, CountrySelect} from "@/features/auth/RegisterPage.tsx";
-import {type InputHTMLAttributes} from "react";
 import type {CompanyType} from "@/types/CompanyType.ts";
 import {CompanyRole} from "@/types/CompanyRole.ts";
 import {getErrorMessage, getFieldErrors} from "@/lib/getErrorMessage.ts";
 import type {CompanyResponse} from "@/features/companies/api.ts";
+import Checkbox from "@/components/Checkbox.tsx";
+import TextField from "@/components/TextField.tsx";
 
 export default function CompanyForm({initial, onClose}: { initial: CompanyResponse | null, onClose: () => void }) {
     const form = useCompanyForm(initial);
@@ -100,13 +101,17 @@ export default function CompanyForm({initial, onClose}: { initial: CompanyRespon
                             </div>
                             <div className={"flex flex-col gap-4"}>
                                 <h2 className={"text-2xl font-mono font-bold"}>Roles</h2>
-                                <RoleCheckbox label={"Client"} checked={form.company.roles.includes(CompanyRole.CLIENT)}
-                                              onChange={(checked) => form.toggleRole(CompanyRole.CLIENT, checked)}
+                                <div className={"bg-[#8b3efe]/80 p-2 rounded-lg max-w-fit"}>
+                                <Checkbox label={"Client"} checked={form.company.roles.includes(CompanyRole.CLIENT)}
+                                          onChange={(checked) => form.toggleRole(CompanyRole.CLIENT, checked)}
                                 />
-                                <RoleCheckbox label={"Supplier"}
-                                              checked={form.company.roles.includes(CompanyRole.SUPPLIER)}
-                                              onChange={(checked) => form.toggleRole(CompanyRole.SUPPLIER, checked)}
+                                </div>
+                                <div className={"bg-[#727272]/80 p-2 rounded-lg max-w-fit"}>
+                                <Checkbox label={"Supplier"}
+                                          checked={form.company.roles.includes(CompanyRole.SUPPLIER)}
+                                          onChange={(checked) => form.toggleRole(CompanyRole.SUPPLIER, checked)}
                                 />
+                                </div>
                                 {fieldErrors?.roles && <p className="text-red-400 text-xl">{fieldErrors.roles}</p>}
                             </div>
                         </div>
@@ -131,39 +136,5 @@ export default function CompanyForm({initial, onClose}: { initial: CompanyRespon
                 </button>
             </div>
         </form>
-    );
-}
-
-function TextField({label, error, inputProps}: {
-    label: string,
-    error?: string,
-    inputProps: InputHTMLAttributes<HTMLInputElement>
-}) {
-    return (
-        <label className={"flex flex-col gap-2 text-xl"}>
-            {label}
-            <input type={"text"} {...inputProps} required={true}
-                   className={"p-2 rounded-lg ring-1 text-xl placeholder:text-lg"}/>
-            {error && <p className="text-red-400 text-xl">{error}</p>}
-        </label>
-    );
-}
-
-function RoleCheckbox({label, checked, onChange}: {
-    label: string,
-    checked: boolean,
-    onChange: (checked: boolean) => void
-}) {
-    return (
-        <label
-            className="flex items-center gap-3 text-xl cursor-pointer">
-            <input
-                type="checkbox"
-                checked={checked}
-                onChange={(e) => onChange(e.target.checked)}
-                className="h-5 w-5 rounded border-gray-500 bg-gray-700 text-sky-500 focus:ring-2 focus:ring-sky-500 focus:ring-offset-0"
-            />
-            <span>{label}</span>
-        </label>
     );
 }
