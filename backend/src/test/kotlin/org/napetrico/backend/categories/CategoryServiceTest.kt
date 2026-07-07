@@ -98,8 +98,8 @@ class CategoryServiceTest {
 
     @Test
     fun `throws when dependencies exist on edit`() {
-        val category = Fixtures.categoryFixture()
-        val request = UpdateCategoryRequest("", "", setOf(CategoryType.PRODUCT, CategoryType.MATERIAL))
+        val category = Fixtures.categoryFixture(types = setOf(CategoryType.PRODUCT))
+        val request = UpdateCategoryRequest("", "", setOf(CategoryType.MATERIAL))
         category.products = mutableSetOf(Fixtures.productFixture())
 
         every { userService.getCurrentUser() } returns user
