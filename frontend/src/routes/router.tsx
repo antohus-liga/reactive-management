@@ -9,6 +9,7 @@ import ProtectedRoute from "@/routes/ProtectedRoute.tsx";
 import AppShell from "@/components/layout/AppShell.tsx";
 import DashboardPage from "@/features/dashboard/DashboardPage.tsx";
 import CompaniesPage from "@/features/companies/CompaniesPage.tsx";
+import CategoriesPage from "@/features/categories/CategoriesPage.tsx";
 
 export const router = createBrowserRouter([
     {
@@ -33,6 +34,7 @@ export const router = createBrowserRouter([
                 children: [
                     { path: "/dashboard", element: <DashboardPage/>, handle: { title: "Dashboard" } },
                     { path: "/companies", element: <CompaniesPage/>, handle: { title: "Companies" } },
+                    { path: "/categories", element: <CategoriesPage/>, handle: { title: "Categories" } },
                 ]
             },
         ]

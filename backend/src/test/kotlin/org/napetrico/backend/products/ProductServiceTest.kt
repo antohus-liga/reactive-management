@@ -49,7 +49,7 @@ class ProductServiceTest {
 
     @Test
     fun `creates product`() {
-        val category = Fixtures.categoryFixture(type = CategoryType.PRODUCT)
+        val category = Fixtures.categoryFixture(types = setOf(CategoryType.PRODUCT))
 
         val request = CreateProductRequest(
             description = "Coffee",
@@ -74,7 +74,7 @@ class ProductServiceTest {
 
     @Test
     fun `throws when product description already exists on create`() {
-        val category = Fixtures.categoryFixture(type = CategoryType.PRODUCT)
+        val category = Fixtures.categoryFixture(types = setOf(CategoryType.PRODUCT))
 
         val request = CreateProductRequest(
             description = "Coffee",
@@ -97,7 +97,7 @@ class ProductServiceTest {
 
     @Test
     fun `throws when both fixed price and selling margin are provided`() {
-        val category = Fixtures.categoryFixture(type = CategoryType.PRODUCT)
+        val category = Fixtures.categoryFixture(types = setOf(CategoryType.PRODUCT))
 
         val request = CreateProductRequest(
             description = "Coffee",
@@ -116,7 +116,7 @@ class ProductServiceTest {
 
     @Test
     fun `throws when no pricing strategy is provided`() {
-        val category = Fixtures.categoryFixture(type = CategoryType.PRODUCT)
+        val category = Fixtures.categoryFixture(types = setOf(CategoryType.PRODUCT))
 
         val request = CreateProductRequest(
             description = "Coffee",
@@ -133,7 +133,7 @@ class ProductServiceTest {
 
     @Test
     fun `throws when category is material`() {
-        val category = Fixtures.categoryFixture(type = CategoryType.MATERIAL)
+        val category = Fixtures.categoryFixture(types = setOf(CategoryType.MATERIAL))
 
         val request = CreateProductRequest(
             description = "Coffee",
@@ -153,7 +153,7 @@ class ProductServiceTest {
 
     @Test
     fun `updates product with fixed price`() {
-        val category = Fixtures.categoryFixture(type = CategoryType.PRODUCT)
+        val category = Fixtures.categoryFixture(types = setOf(CategoryType.PRODUCT))
         val product = Fixtures.productFixture(category = category, fixedPrice = Price.from("1"))
 
         val request = UpdateProductRequest(
@@ -181,7 +181,7 @@ class ProductServiceTest {
 
     @Test
     fun `updates product with same description`() {
-        val category = Fixtures.categoryFixture(type = CategoryType.PRODUCT)
+        val category = Fixtures.categoryFixture(types = setOf(CategoryType.PRODUCT))
         val product = Fixtures.productFixture(fixedPrice = Price.from("1"), description = "Coffee")
 
         val request = UpdateProductRequest(
@@ -208,7 +208,7 @@ class ProductServiceTest {
 
     @Test
     fun `throws when product description already exists on edit`() {
-        val category = Fixtures.categoryFixture(type = CategoryType.PRODUCT)
+        val category = Fixtures.categoryFixture(types = setOf(CategoryType.PRODUCT))
         val product = Fixtures.productFixture(description = "Old")
         val conflict = Fixtures.productFixture(id = 1, description = "Coffee")
 
@@ -232,7 +232,7 @@ class ProductServiceTest {
 
     @Test
     fun `throws when category is material on edit`() {
-        val category = Fixtures.categoryFixture(type = CategoryType.MATERIAL)
+        val category = Fixtures.categoryFixture(types = setOf(CategoryType.MATERIAL))
         val product = Fixtures.productFixture()
 
         val request = UpdateProductRequest(
@@ -253,7 +253,7 @@ class ProductServiceTest {
 
     @Test
     fun `throws when both pricing strategies are provided`() {
-        val category = Fixtures.categoryFixture(type = CategoryType.PRODUCT)
+        val category = Fixtures.categoryFixture(types = setOf(CategoryType.PRODUCT))
         val product = Fixtures.productFixture()
 
         val request = UpdateProductRequest(
@@ -272,7 +272,7 @@ class ProductServiceTest {
 
     @Test
     fun `throws when neither pricing strategy is provided`() {
-        val category = Fixtures.categoryFixture(type = CategoryType.PRODUCT)
+        val category = Fixtures.categoryFixture(types = setOf(CategoryType.PRODUCT))
         val product = Fixtures.productFixture()
 
         val request = UpdateProductRequest(

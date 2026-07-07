@@ -52,7 +52,7 @@ class MaterialServiceTest {
 
     @Test
     fun `creates material`() {
-        val category = Fixtures.categoryFixture(type = CategoryType.MATERIAL)
+        val category = Fixtures.categoryFixture(types = setOf(CategoryType.MATERIAL))
 
         val request = CreateMaterialRequest(
             description = "Flour",
@@ -73,7 +73,7 @@ class MaterialServiceTest {
 
     @Test
     fun `throws when material already exists`() {
-        val category = Fixtures.categoryFixture(type = CategoryType.MATERIAL)
+        val category = Fixtures.categoryFixture(types = setOf(CategoryType.MATERIAL))
 
         val request = CreateMaterialRequest(
             description = "Flour",
@@ -99,7 +99,7 @@ class MaterialServiceTest {
 
     @Test
     fun `throws when category is product type`() {
-        val category = Fixtures.categoryFixture(type = CategoryType.PRODUCT)
+        val category = Fixtures.categoryFixture(types = setOf(CategoryType.PRODUCT))
 
         val request = CreateMaterialRequest(
             description = "Flour",
@@ -119,7 +119,7 @@ class MaterialServiceTest {
 
     @Test
     fun `updates material`() {
-        val category = Fixtures.categoryFixture(type = CategoryType.MATERIAL)
+        val category = Fixtures.categoryFixture(types = setOf(CategoryType.MATERIAL))
         val material = Fixtures.materialFixture()
 
         val request = UpdateMaterialRequest(
@@ -143,7 +143,7 @@ class MaterialServiceTest {
 
     @Test
     fun `throws when updating to existing description`() {
-        val category = Fixtures.categoryFixture(type = CategoryType.MATERIAL)
+        val category = Fixtures.categoryFixture(types = setOf(CategoryType.MATERIAL))
         val material = Fixtures.materialFixture()
         val conflict = Fixtures.materialFixture(id = 1, description = "Flour")
 
@@ -167,7 +167,7 @@ class MaterialServiceTest {
 
     @Test
     fun `throws when category is product`() {
-        val category = Fixtures.categoryFixture(type = CategoryType.PRODUCT)
+        val category = Fixtures.categoryFixture(types = setOf(CategoryType.PRODUCT))
         val material = Fixtures.materialFixture()
 
         val request = UpdateMaterialRequest(

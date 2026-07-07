@@ -68,7 +68,7 @@ class MaterialService(
             )
         }
 
-        if (category.type == CategoryType.PRODUCT)
+        if (!category.types.contains(CategoryType.MATERIAL))
             throw IllegalArgumentException("${category.name} category cannot be used because it's a product category.")
     }
 
