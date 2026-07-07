@@ -59,8 +59,8 @@ export default function CategoryForm({initial, onClose}: {
                                           checked={form.category.types.includes(CategoryType.PRODUCT)}
                                           onChange={(checked) => form.toggleType(CategoryType.PRODUCT, checked)}
                                 />
-                                {fieldErrors?.types && <p className="text-red-400 text-xl">{fieldErrors.types}</p>}
                                 </div>
+                                {fieldErrors?.types && <p className="text-red-400 text-xl">{fieldErrors.types}</p>}
                             </div>
                         </div>
                     </div>
