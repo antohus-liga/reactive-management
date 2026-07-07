@@ -29,11 +29,11 @@ class CategoryServiceTest {
         val request = CreateCategoryRequest(
             name = "Chemical",
             colorHex = "",
-            type = CategoryType.MATERIAL,
+            types = setOf(CategoryType.MATERIAL),
         )
 
         every { userService.getCurrentUser() } returns user
-        every { categoryRepository.findByNameAndUser(request.name, request.type, user) } returns null
+        every { categoryRepository.findByNameAndUser(request.name, user) } returns null
         every { categoryRepository.save(any()) } answers { firstArg() }
 
         val response = categoryService.createCategory(request)
@@ -44,10 +44,10 @@ class CategoryServiceTest {
     @Test
     fun `throws when category already exists on create`() {
         val category = Fixtures.categoryFixture(name = "Food")
-        val request = CreateCategoryRequest("Food", "", CategoryType.MATERIAL)
+        val request = CreateCategoryRequest("Food", "", setOf(CategoryType.MATERIAL))
 
         every { userService.getCurrentUser() } returns user
-        every { categoryRepository.findByNameAndUser(category.name, request.type, user) } returns category
+        every { categoryRepository.findByNameAndUser(category.name, user) } returns category
 
         assertThrows<AlreadyExistsException> { categoryService.createCategory(request) }
     }
@@ -55,40 +55,40 @@ class CategoryServiceTest {
     @Test
     fun `updates category with different name`() {
         val category = Fixtures.categoryFixture()
-        val request = UpdateCategoryRequest("ABC", "123", CategoryType.PRODUCT)
+        val request = UpdateCategoryRequest("ABC", "123", setOf(CategoryType.PRODUCT))
 
         every { userService.getCurrentUser() } returns user
         every { categoryRepository.findByPublicIdAndUser(category.publicId, user) } returns category
-        every { categoryRepository.findByNameAndUser(request.name, request.type, user) } returns null
+        every { categoryRepository.findByNameAndUser(request.name, user) } returns null
         every { categoryRepository.save(category) } answers { firstArg() }
 
         val response = categoryService.updateCategory(category.publicId, request)
 
         assertEquals("ABC", response.name)
         assertEquals("123", response.colorHex)
-        assertEquals(CategoryType.PRODUCT, response.type)
+        assertEquals(setOf(CategoryType.PRODUCT), response.types)
     }
 
     @Test
     fun `updates category with same name`() {
         val category = Fixtures.categoryFixture(name = "ABC")
-        val request = UpdateCategoryRequest("ABC", "123", CategoryType.PRODUCT)
+        val request = UpdateCategoryRequest("ABC", "123", setOf(CategoryType.PRODUCT))
 
         every { userService.getCurrentUser() } returns user
         every { categoryRepository.findByPublicIdAndUser(category.publicId, user) } returns category
-        every { categoryRepository.findByNameAndUser(request.name, request.type, user) } returns category
+        every { categoryRepository.findByNameAndUser(request.name, user) } returns category
         every { categoryRepository.save(category) } answers { firstArg() }
 
         val response = categoryService.updateCategory(category.publicId, request)
 
         assertEquals("ABC", response.name)
         assertEquals("123", response.colorHex)
-        assertEquals(CategoryType.PRODUCT, response.type)
+        assertEquals(setOf(CategoryType.PRODUCT), response.types)
     }
 
     @Test
     fun `throws when category does not exist on edit`() {
-        val request = UpdateCategoryRequest("", "", CategoryType.MATERIAL)
+        val request = UpdateCategoryRequest("", "", setOf(CategoryType.MATERIAL))
 
         every { userService.getCurrentUser() } returns user
         every { categoryRepository.findByPublicIdAndUser(any(), user) } returns null
@@ -99,7 +99,7 @@ class CategoryServiceTest {
     @Test
     fun `throws when dependencies exist on edit`() {
         val category = Fixtures.categoryFixture()
-        val request = UpdateCategoryRequest("", "", CategoryType.MATERIAL)
+        val request = UpdateCategoryRequest("", "", setOf(CategoryType.PRODUCT, CategoryType.MATERIAL))
         category.products = mutableSetOf(Fixtures.productFixture())
 
         every { userService.getCurrentUser() } returns user
@@ -112,11 +112,11 @@ class CategoryServiceTest {
     fun `throws when conflict exists on edit`() {
         val category = Fixtures.categoryFixture()
         val conflict = Fixtures.categoryFixture(id = 1)
-        val request = UpdateCategoryRequest("", "", CategoryType.MATERIAL)
+        val request = UpdateCategoryRequest("", "", setOf(CategoryType.MATERIAL))
 
         every { userService.getCurrentUser() } returns user
         every { categoryRepository.findByPublicIdAndUser(category.publicId, user) } returns category
-        every { categoryRepository.findByNameAndUser(request.name, request.type, user) } returns conflict
+        every { categoryRepository.findByNameAndUser(request.name, user) } returns conflict
 
         assertThrows<AlreadyExistsException> { categoryService.updateCategory(category.publicId, request) }
     }

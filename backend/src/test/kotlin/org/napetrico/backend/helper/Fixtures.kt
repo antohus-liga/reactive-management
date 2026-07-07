@@ -41,14 +41,14 @@ object Fixtures {
     fun categoryFixture(
         id: Long = 0,
         name: String = "",
-        type: CategoryType = CategoryType.MATERIAL,
+        types: Set<CategoryType> = setOf(CategoryType.MATERIAL),
         user: User = userFixture()
     ): Category = Category(
         id = id,
         user = user,
         name = name,
         colorHex = "FFFFFF",
-        type = type,
+        types = types.toMutableSet(),
     )
 
     fun productFixture(
