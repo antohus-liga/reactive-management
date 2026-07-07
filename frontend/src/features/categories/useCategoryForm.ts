@@ -13,7 +13,7 @@ export function useCategoryForm(initial: CategoryResponse | null) {
             }
             : {
                 name: "",
-                colorHex: "#F59E0B",
+                colorHex: "#f59e0b",
                 types: [],
             }
     );
