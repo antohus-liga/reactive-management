@@ -41,7 +41,7 @@ class CategoryService(
             else if (request.types.contains(CategoryType.MATERIAL)) category.materials.count()
             else category.products.count() + category.materials.count()
 
-        if (dependencyCount > 0) {
+        if (dependencyCount > 0 && !request.types.containsAll(category.types)) {
             throw CannotEditCategoryTypeException(
                 "there are $dependencyCount dependencies preventing type change"
             )
