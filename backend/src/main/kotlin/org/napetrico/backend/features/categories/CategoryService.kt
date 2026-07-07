@@ -36,12 +36,16 @@ class CategoryService(
         val category = categoryRepository.findByPublicIdAndUser(publicId, user)
             ?: throw NotFoundException("Category")
 
-        val dependencyCount =
-            if (request.types.contains(CategoryType.PRODUCT)) category.products.count()
-            else if (request.types.contains(CategoryType.MATERIAL)) category.materials.count()
-            else category.products.count() + category.materials.count()
+        val removedTypes = category.types - request.types
 
-        if (dependencyCount > 0 && !request.types.containsAll(category.types)) {
+        val dependencyCount = removedTypes.sumOf { type ->
+            when (type) {
+                CategoryType.PRODUCT -> category.products.count()
+                CategoryType.MATERIAL -> category.materials.count()
+            }
+        }
+
+        if (dependencyCount > 0) {
             throw CannotEditCategoryTypeException(
                 "there are $dependencyCount dependencies preventing type change"
             )
