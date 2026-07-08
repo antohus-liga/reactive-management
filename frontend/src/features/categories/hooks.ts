@@ -19,6 +19,7 @@ export function useCreateCategory() {
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({queryKey: ["categories", "get"]});
+            await queryClient.invalidateQueries({queryKey: ["materials", "get"]});
         }
     });
 }
@@ -32,6 +33,7 @@ export function useUpdateCategory() {
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({queryKey: ["categories", "get"]});
+            await queryClient.invalidateQueries({queryKey: ["materials", "get"]});
         }
     });
 }
