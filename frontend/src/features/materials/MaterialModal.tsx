@@ -1,6 +1,7 @@
 import {Dialog, DialogBackdrop, DialogPanel} from "@headlessui/react";
 import type {MaterialResponse} from "@/features/materials/api.ts";
 import MaterialForm from "@/features/materials/MaterialForm.tsx";
+import {useFetchCategories} from "@/features/categories/hooks.ts";
 
 export default function MaterialModal(
     {open, updateTarget, onClose}: {
@@ -8,6 +9,8 @@ export default function MaterialModal(
         updateTarget: MaterialResponse | null,
         onClose: () => void,
     }) {
+    const getCategories = useFetchCategories();
+    if (getCategories.isLoading) return null;
 
     return (
         <div>
