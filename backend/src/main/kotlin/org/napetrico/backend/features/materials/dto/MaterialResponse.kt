@@ -2,6 +2,7 @@ package org.napetrico.backend.features.materials.dto
 
 import org.napetrico.backend.common.enums.MeasurementType
 import java.math.BigDecimal
+import java.time.LocalDateTime
 import java.util.UUID
 
 data class MaterialResponse(
@@ -12,4 +13,6 @@ data class MaterialResponse(
     val measurement: MeasurementType,
     val unitPrice: BigDecimal,
     val quantity: Int,
+    val createdAt: LocalDateTime,
+    val updatedAt: LocalDateTime,
 )

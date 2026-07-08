@@ -16,6 +16,8 @@ object MaterialMapper {
         measurement = measurement,
         unitPrice = unitPrice.value,
         quantity = quantity,
+        createdAt = createdAt,
+        updatedAt = updatedAt,
     )
 
     fun CreateMaterialRequest.toEntity(category: Category, user: User): Material = Material(
