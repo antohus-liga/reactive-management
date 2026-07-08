@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 import java.util.UUID
 
 interface ProductRepository : JpaRepository<Product, Long> {
-    fun findAllByUser(user: User): List<Product>
+    fun findAllByUserOrderByCreatedAt(user: User): List<Product>
     fun findByPublicIdAndUser(id: UUID, user: User): Product?
     fun deleteByPublicIdAndUser(id: UUID, user: User)
     fun findByDescriptionAndUser(description: String, user: User): Product?

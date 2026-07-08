@@ -40,7 +40,7 @@ class ProductService(
 ) {
 
     fun getAllByUser(): List<ProductResponse> =
-        productRepository.findAllByUser(userService.getCurrentUser()).map { it.toResponse() }
+        productRepository.findAllByUserOrderByCreatedAt(userService.getCurrentUser()).map { it.toResponse() }
 
     fun createProduct(request: CreateProductRequest): ProductResponse {
         val user = userService.getCurrentUser()
