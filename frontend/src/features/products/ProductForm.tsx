@@ -1,18 +1,18 @@
 import {DialogTitle} from "@headlessui/react";
 import {getErrorMessage, getFieldErrors} from "@/lib/getErrorMessage.ts";
 import TextField from "@/components/TextField.tsx";
-import {useMaterialForm} from "@/features/materials/useMaterialForm.ts";
-import type {MaterialResponse} from "@/features/materials/api.ts";
 import CategorySelect from "@/components/CategorySelect.tsx";
 import {CategoryType} from "@/types/CategoryType.ts";
 import {TypeSelect} from "@/components/TypeSelect.tsx";
 import {MeasurementType, MeasurementTypeLabel} from "@/types/MeasurementType.ts";
+import type {ProductResponse} from "@/features/products/api.ts";
+import {useProductForm} from "@/features/products/useProductForm.ts";
 
-export default function MaterialForm({initial, onClose}: {
-    initial: MaterialResponse | null,
+export default function ProductForm({initial, onClose}: {
+    initial: ProductResponse | null,
     onClose: () => void,
 }) {
-    const form = useMaterialForm(initial);
+    const form = useProductForm(initial);
     const error = form.create.error ?? form.update.error;
     const fieldErrors = getFieldErrors(error);
 
@@ -26,14 +26,14 @@ export default function MaterialForm({initial, onClose}: {
                     </div>
                     <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                         <DialogTitle as="h1" className="text-3xl font-semibold text-white">
-                            {initial ? "Update Category" : "Create New Category"}
+                            {initial ? "Update Product" : "Create New Product"}
                         </DialogTitle>
                         <div className="mt-2 flex items-stretch gap-12 text-white">
                             <div className={"flex flex-col gap-4"}>
-                                <h2 className={"text-2xl font-mono font-bold"}>Material</h2>
+                                <h2 className={"text-2xl font-mono font-bold"}>Product</h2>
                                 <TextField label={"Description"} error={fieldErrors?.description} inputProps={{
-                                    placeholder: "Enter your category name", value: form.material.description,
-                                    onChange: (e) => form.setMaterial(prev => ({
+                                    placeholder: "Enter your product description", value: form.product.description,
+                                    onChange: (e) => form.setProduct(prev => ({
                                         ...prev,
                                         description: e.target.value
                                     }))
@@ -42,8 +42,8 @@ export default function MaterialForm({initial, onClose}: {
                                     <label className={"flex flex-col gap-2 text-xl"}>
                                         Measurement Type
                                         <TypeSelect type={MeasurementType} labels={MeasurementTypeLabel}
-                                                    value={form.material.measurement}
-                                                    onChange={value => form.setMaterial(prev => ({
+                                                    value={form.product.measurement}
+                                                    onChange={value => form.setProduct(prev => ({
                                                         ...prev,
                                                         measurement: value
                                                     }))}
@@ -52,31 +52,44 @@ export default function MaterialForm({initial, onClose}: {
                                             <p className="text-red-400 text-xl">{fieldErrors.measurement}</p>}
                                     </label>
                                 </div>
-                                <TextField label={"Unit Price"} error={fieldErrors?.unitPrice} inputProps={{
-                                    type: "number",
-                                    value: form.material.unitPrice,
-                                    onChange: (e) => form.setMaterial(prev => ({
-                                        ...prev,
-                                        unitPrice: Number(e.target.value)
-                                    }))
-                                }}/>
+                                <div className={"flex gap-4"}>
+                                    <TextField label={"Fixed Price"} error={fieldErrors?.fixedPrice} inputProps={{
+                                        disabled: !!form.product.sellingMargin,
+                                        type: "number",
+                                        required: false,
+                                        value: form.product.fixedPrice ?? 0,
+                                        onChange: (e) => form.setProduct(prev => ({
+                                            ...prev,
+                                            fixedPrice: Number(e.target.value)
+                                        }))
+                                    }}/>
+                                    <TextField label={"Selling Margin"} error={fieldErrors?.sellingMargin} inputProps={{
+                                        disabled: !!form.product.fixedPrice,
+                                        value: form.product.sellingMargin ?? "",
+                                        required: false,
+                                        onChange: (e) => form.setProduct(prev => ({
+                                            ...prev,
+                                            sellingMargin: e.target.value
+                                        }))
+                                    }}/>
+                                </div>
                                 <TextField label={"Quantity"} error={fieldErrors?.quantity} inputProps={{
                                     disabled: !initial,
                                     type: "number",
-                                    value: form.material.quantity,
-                                    onChange: (e) => form.setMaterial(prev => ({
+                                    value: form.product.quantity,
+                                    onChange: (e) => form.setProduct(prev => ({
                                         ...prev,
                                         quantity: Number(e.target.value)
                                     }))
                                 }}/>
                                 <h2 className={"text-2xl font-mono font-bold"}>Category</h2>
                                 <div>
-                                    <CategorySelect value={form.material.categoryPublicId}
-                                                    onChange={value => form.setMaterial(prev => ({
+                                    <CategorySelect value={form.product.categoryPublicId}
+                                                    onChange={value => form.setProduct(prev => ({
                                                         ...prev,
                                                         categoryPublicId: value
                                                     }))}
-                                                    type={CategoryType.MATERIAL}
+                                                    type={CategoryType.PRODUCT}
                                     />
                                 </div>
                             </div>

@@ -1,34 +1,36 @@
-import type {MaterialResponse} from "@/features/materials/api.ts";
+import type {ProductResponse} from "@/features/products/api.ts";
 
-export default function MaterialRow({material, onDelete, onEdit}: {
-    material: MaterialResponse,
+export default function ProductRow({product, onDelete, onEdit}: {
+    product: ProductResponse,
     onDelete: (publicId: string) => void,
-    onEdit: (company: MaterialResponse) => void,
+    onEdit: (product: ProductResponse) => void,
 }) {
 
-    const color = material.categoryColor;
+    const color = product.categoryColor;
     return (
         <>
             <tr className={"border-b transition duration-200"} style={{backgroundColor: `${color}90`}}>
-                <td className={"p-4"}>{material.description}</td>
+                <td className={"p-4"}>{product.description}</td>
                 <td className={"p-4 flex items-center gap-4"}>
                     <div className={"p-3 w-10 h-10 outline-1"} style={{backgroundColor: `${color}`}}/>
-                    {material.categoryDescription}
+                    {product.categoryDescription}
                 </td>
-                <td className={"p-4"}>{material.unitPrice}</td>
-                <td className={"p-4"}>{material.quantity}</td>
-                <td className={"p-4"}>{new Date(material.createdAt).toLocaleString()}</td>
-                <td className={"p-4"}>{new Date(material.updatedAt).toLocaleString()}</td>
+                <td className={"p-4"}>{product.fixedPrice ? `(Fixed) ${product.fixedPrice}` : `(Margin) ${product.sellingMargin}`}</td>
+                <td className={"p-4"}>{product.quantity}</td>
+                <td className={"p-4"}>{product.productionCost}</td>
+                <td className={"p-4"}>{product.price}</td>
+                <td className={"p-4"}>{new Date(product.createdAt).toLocaleString()}</td>
+                <td className={"p-4"}>{new Date(product.updatedAt).toLocaleString()}</td>
                 <td className={"p-4"}>
                     <div className={"flex gap-3"}>
                         <button className={"bg-blue-300 hover:bg-blue-400 p-2 rounded-lg transition outline-2"}
                                 onClick={() => {
-                                    onEdit(material)
+                                    onEdit(product)
                                 }}>
                             <img className={"size-6"} src={"/edit.png"} alt={"Edit"}/>
                         </button>
                         <button className={"bg-red-300 hover:bg-red-400 p-2 rounded-lg transition outline-2"}
-                                onClick={() => onDelete(material.publicId)}>
+                                onClick={() => onDelete(product.publicId)}>
                             <img className={"size-6"} src={"/delete.png"} alt={"Delete"}/>
                         </button>
                     </div>

@@ -11,6 +11,7 @@ import DashboardPage from "@/features/dashboard/DashboardPage.tsx";
 import CompaniesPage from "@/features/companies/CompaniesPage.tsx";
 import CategoriesPage from "@/features/categories/CategoriesPage.tsx";
 import MaterialsPage from "@/features/materials/MaterialsPage.tsx";
+import ProductsPage from "@/features/products/ProductsPage.tsx";
 
 export const router = createBrowserRouter([
     {
@@ -37,6 +38,7 @@ export const router = createBrowserRouter([
                     { path: "/companies", element: <CompaniesPage/>, handle: { title: "Companies" } },
                     { path: "/categories", element: <CategoriesPage/>, handle: { title: "Categories" } },
                     { path: "/materials", element: <MaterialsPage/>, handle: { title: "Materials" } },
+                    { path: "/products", element: <ProductsPage/>, handle: { title: "Products" } },
                 ]
             },
         ]

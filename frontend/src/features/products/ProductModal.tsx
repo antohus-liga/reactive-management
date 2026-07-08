@@ -1,13 +1,16 @@
 import {Dialog, DialogBackdrop, DialogPanel} from "@headlessui/react";
-import type {MaterialResponse} from "@/features/materials/api.ts";
-import MaterialForm from "@/features/materials/MaterialForm.tsx";
+import type {ProductResponse} from "@/features/products/api.ts";
+import ProductForm from "@/features/products/ProductForm.tsx";
+import {useFetchCategories} from "@/features/categories/hooks.ts";
 
-export default function MaterialModal(
+export default function ProductModal(
     {open, updateTarget, onClose}: {
         open: boolean,
-        updateTarget: MaterialResponse | null,
+        updateTarget: ProductResponse | null,
         onClose: () => void,
     }) {
+    const getCategories = useFetchCategories();
+    if (getCategories.isLoading) return null;
 
     return (
         <div>
@@ -23,7 +26,8 @@ export default function MaterialModal(
                             transition
                             className="relative transform w-fit overflow-hidden rounded-lg text-left shadow-xl bg-gray-800 outline -outline-offset-1 outline-white/10 transition-all data-closed:translate-y-4 data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in data-closed:sm:translate-y-0 data-closed:sm:scale-95"
                         >
-                            {open && <MaterialForm key={updateTarget?.publicId} initial={updateTarget} onClose={onClose}/>}
+                            {open &&
+                                <ProductForm key={updateTarget?.publicId} initial={updateTarget} onClose={onClose}/>}
                         </DialogPanel>
                     </div>
                 </div>

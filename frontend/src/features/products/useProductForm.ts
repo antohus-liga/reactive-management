@@ -19,8 +19,8 @@ export function useProductForm(initial: ProductResponse | null) {
                 description: "",
                 categoryPublicId: "",
                 measurement: "",
-                fixedPrice: 0,
-                sellingMargin: "",
+                fixedPrice: null,
+                sellingMargin: null,
                 quantity: 0,
             }
     );
@@ -44,5 +44,3 @@ export function useProductForm(initial: ProductResponse | null) {
         update,
     }
 }
-
-
