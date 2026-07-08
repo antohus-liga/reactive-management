@@ -18,7 +18,7 @@ object ProductMapper {
         categoryColor = category.colorHex,
         measurement = measurement,
         fixedPrice = fixedPrice?.value,
-        sellingMargin = sellingMargin?.value,
+        sellingMargin = sellingMargin?.toString(),
         productionCost = productionCost.value,
         price = price.value,
         createdAt = createdAt,

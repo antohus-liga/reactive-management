@@ -18,4 +18,8 @@ value class SellingMargin(val value: BigDecimal) {
             return SellingMargin(value)
         }
     }
+
+    override fun toString(): String {
+        return "${(value.multiply(BigDecimal("100")))}%"
+    }
 }

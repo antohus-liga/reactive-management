@@ -13,7 +13,7 @@ data class ProductResponse(
     val categoryColor: String,
     val measurement: MeasurementType,
     val fixedPrice: BigDecimal? = null,
-    val sellingMargin: BigDecimal? = null,
+    val sellingMargin: String? = null,
     val productionCost: BigDecimal,
     val price: BigDecimal,
     val createdAt: LocalDateTime,
