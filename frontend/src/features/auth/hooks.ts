@@ -23,7 +23,7 @@ export function useCurrentUser() {
         queryKey: ["auth", "me"],
         queryFn: authApi.me,
         retry: false,
-        refetchInterval: 60 * 1000,
+        refetchInterval: 60 * 60 * 1000,
         refetchIntervalInBackground: true,
     });
 }
