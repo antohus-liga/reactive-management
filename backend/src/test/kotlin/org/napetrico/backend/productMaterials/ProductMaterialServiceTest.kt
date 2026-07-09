@@ -120,17 +120,4 @@ class ProductMaterialServiceTest {
 
         assertEquals(BigDecimal("18.75"), result)
     }
-
-    @Test
-    fun `throws when total cost does not exist`() {
-        val product = Fixtures.productFixture()
-
-        every {
-            productMaterialRepository.getTotalCostByProductAndUser(product.id, user.id)
-        } returns null
-
-        assertThrows<NotFoundException> {
-            productMaterialService.getTotalCostForProduct(product, user)
-        }
-    }
 }

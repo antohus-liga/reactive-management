@@ -51,7 +51,7 @@ export default function ProductRow({product, onDelete, onEdit, onRecipeReplace}:
                 </td>
             </tr>
             <tr className={"w-full"}>
-                {!recipe.data ? (
+                {!recipe.data || !(recipe.data.ingredients.length > 0) ? (
                     <td colSpan={9}>
                         <div
                             className={`grid transition-[grid-template-rows] duration-300 ${showInfo ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}>

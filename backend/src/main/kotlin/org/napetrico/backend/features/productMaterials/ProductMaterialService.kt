@@ -1,13 +1,13 @@
 package org.napetrico.backend.features.productMaterials
 
 import jakarta.transaction.Transactional
-import org.napetrico.backend.common.exceptions.NotFoundException
 import org.napetrico.backend.features.products.Product
 import org.napetrico.backend.features.products.dto.MaterialIngredientResponse
 import org.napetrico.backend.features.products.dto.ProductRecipeResponse
 import org.napetrico.backend.features.users.User
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
+import java.time.LocalDateTime
 
 @Service
 class ProductMaterialService(
@@ -17,8 +17,6 @@ class ProductMaterialService(
     @Transactional
     fun getProductRecipeDto(product: Product, user: User): ProductRecipeResponse {
         val productMaterials = productMaterialRepository.findRecipeByProductAndUser(product, user)
-            .let { it.ifEmpty { throw NotFoundException("Product '${product.description}' recipe data") } }
-        val firstProduct = productMaterialRepository.getAllByProductAndUserOrderByCreatedAt(product, user).first()
 
         val ingredients = productMaterials.map { pm ->
             MaterialIngredientResponse(
@@ -34,14 +32,14 @@ class ProductMaterialService(
             productDescription = product.description,
             ingredients = ingredients,
             productionCost = product.productionCost.value,
-            createdAt = firstProduct.createdAt,
-            updatedAt = productMaterials.last().createdAt,
+            createdAt = productMaterials.firstOrNull()?.createdAt ?: LocalDateTime.now(),
+            updatedAt = productMaterials.lastOrNull()?.updatedAt ?: LocalDateTime.now(),
         )
     }
 
     fun getTotalCostForProduct(product: Product, user: User): BigDecimal =
         productMaterialRepository.getTotalCostByProductAndUser(product.id, user.id)
-            ?: throw NotFoundException("Product recipe data")
+            ?: BigDecimal.ZERO
 
     fun createAllProductMaterials(productMaterial: List<ProductMaterial>) =
         productMaterialRepository.saveAll(productMaterial)
@@ -51,5 +49,4 @@ class ProductMaterialService(
     @Transactional
     fun getProductRecipe(product: Product, user: User): List<ProductMaterial> =
         productMaterialRepository.findRecipeByProductAndUser(product, user)
-            .let { it.ifEmpty { throw NotFoundException("Product '${product.description}' recipe data") } }
 }
