@@ -61,5 +61,4 @@ export const productsApi = {
         publicId: string,
         payload: ProductRecipeRequest
     }) => apiClient.post(`/api/products/${publicId}/recipe`, payload),
-    deleteRecipe: (publicId: string) => apiClient.delete(`/api/products/${publicId}/recipe`),
 }

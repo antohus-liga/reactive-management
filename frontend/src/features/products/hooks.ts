@@ -69,15 +69,3 @@ export function useReplaceProductRecipe() {
         }
     })
 }
-
-export function useDeleteProductRecipe() {
-    const queryClient = useQueryClient();
-
-    return useMutation({
-        mutationFn: (publicId: string) => productsApi.deleteRecipe(publicId),
-        onSuccess: async (_, publicId) => {
-            await queryClient.invalidateQueries({queryKey: ["products", "get"]});
-            await queryClient.invalidateQueries({queryKey: ["products", "recipe", publicId]});
-        }
-    })
-}

@@ -60,7 +60,7 @@ export default function ProductForm({initial, onClose}: {
                                         value: form.product.fixedPrice ?? 0,
                                         onChange: (e) => form.setProduct(prev => ({
                                             ...prev,
-                                            fixedPrice: Number(e.target.value)
+                                            fixedPrice: e.target.value ? Number(e.target.value) : null
                                         }))
                                     }}/>
                                     <TextField label={"Selling Margin"} error={fieldErrors?.sellingMargin} inputProps={{
@@ -69,7 +69,7 @@ export default function ProductForm({initial, onClose}: {
                                         required: false,
                                         onChange: (e) => form.setProduct(prev => ({
                                             ...prev,
-                                            sellingMargin: e.target.value
+                                            sellingMargin: e.target.value ? e.target.value : null
                                         }))
                                     }}/>
                                 </div>

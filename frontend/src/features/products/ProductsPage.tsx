@@ -13,7 +13,8 @@ export default function ProductsPage() {
 
     return (
         <>
-            <ProductModal open={modal.open} updateTarget={modal.updateTarget} onClose={modal.close}/>
+            <ProductModal open={modal.open} updateTarget={modal.updateTarget} onClose={modal.close}
+                          productPublicId={modal.productPublicId} recipe={modal.recipe}/>
             <div
                 className={"relative flex flex-col w-auto max-h-[calc(100vh-25rem)] overflow-y-auto shadow-md shadow-white rounded-xl bg-clip-border"}>
                 <table className={"w-full text-left table-auto bg-black"}>
@@ -33,7 +34,7 @@ export default function ProductsPage() {
                     <tbody>
                     {products.get.data?.map((product: ProductResponse) => (
                         <ProductRow key={product.publicId} product={product} onDelete={products.handleDeleteProduct}
-                                    onEdit={modal.openForUpdate}
+                                    onEdit={modal.openForUpdate} onRecipeReplace={modal.openForRecipe}
                         />
                     ))}
                     </tbody>

@@ -1,12 +1,16 @@
-import type {ProductResponse} from "@/features/products/api.ts";
+import type {ProductRecipeResponse, ProductResponse} from "@/features/products/api.ts";
+import {useState} from "react";
+import {useFetchProductRecipe} from "@/features/products/hooks.ts";
 
-export default function ProductRow({product, onDelete, onEdit}: {
+export default function ProductRow({product, onDelete, onEdit, onRecipeReplace}: {
     product: ProductResponse,
     onDelete: (publicId: string) => void,
     onEdit: (product: ProductResponse) => void,
+    onRecipeReplace: (recipe: ProductRecipeResponse | null, productPublicId: string) => void,
 }) {
-
+    const [showInfo, setShowInfo] = useState(false);
     const color = product.categoryColor;
+    const recipe = useFetchProductRecipe(product.publicId)
     return (
         <>
             <tr className={"border-b transition duration-200"} style={{backgroundColor: `${color}90`}}>
@@ -33,8 +37,60 @@ export default function ProductRow({product, onDelete, onEdit}: {
                                 onClick={() => onDelete(product.publicId)}>
                             <img className={"size-6"} src={"/delete.png"} alt={"Delete"}/>
                         </button>
+                        <span/>
+                        <span/>
+                        <button className={"bg-purple-300 hover:bg-purple-400 p-2 rounded-lg transition outline-2"}
+                                onClick={() => setShowInfo(!showInfo)}>
+                            <img className={"size-6"} src={"/show.png"} alt={"Recipe"}/>
+                        </button>
+                        <button className={"bg-green-300 hover:bg-green-400 p-2 rounded-lg transition outline-2"}
+                                onClick={() => onRecipeReplace(recipe.data ?? null, product.publicId)}>
+                            <img className={"size-6"} src={"/recipe.png"} alt={"Recipe"}/>
+                        </button>
                     </div>
                 </td>
+            </tr>
+            <tr className={"w-full"}>
+                {!recipe.data ? (
+                    <td colSpan={9}>
+                        <div
+                            className={`grid transition-[grid-template-rows] duration-300 ${showInfo ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}>
+                            <div
+                                className={"overflow-hidden text-xl transition-all duration-500 w-full"}>
+                                There's no recipe yet
+                            </div>
+                        </div>
+                    </td>
+                ) : (
+                    <>
+                        <td colSpan={9}>
+                            <div
+                                className={`grid transition-[grid-template-rows] duration-300 ${showInfo ? "grid-rows-[1fr]" : "grid-rows-[0fr]"} pl-10 w-full`}>
+                                <div className={"overflow-hidden"}>
+                                    <table
+                                        className={"w-full text-left table-auto bg-amber-700 bg-clip-border"}>
+                                        <thead>
+                                        <tr className={"border-b"}>
+                                            <th className={"p-4"}>Material</th>
+                                            <th className={"p-4"}>Unit Price</th>
+                                            <th className={"p-4"}>Quantity</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody className={"divide-y"}>
+                                        {recipe.data.ingredients.map(ingredient => (
+                                            <tr key={ingredient.materialPublicId}>
+                                                <td className={"p-4"}>{ingredient.materialDescription}</td>
+                                                <td className={"p-4"}>{ingredient.materialUnitPrice}</td>
+                                                <td className={"p-4"}>{ingredient.quantityNeeded}</td>
+                                            </tr>
+                                        ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </td>
+                    </>
+                )}
             </tr>
         </>
     );
