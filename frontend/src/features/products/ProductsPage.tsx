@@ -16,7 +16,7 @@ export default function ProductsPage() {
             <ProductModal open={modal.open} updateTarget={modal.updateTarget} onClose={modal.close}
                           productPublicId={modal.productPublicId} recipe={modal.recipe}/>
             <div
-                className={"relative flex flex-col w-auto max-h-[calc(100vh-25rem)] overflow-y-auto shadow-md shadow-white rounded-xl bg-clip-border"}>
+                className={"relative flex flex-col w-auto max-h-[calc(100vh-18rem)] overflow-y-auto shadow-md shadow-white rounded-xl bg-clip-border"}>
                 <table className={"w-full text-left table-auto bg-black"}>
                     <thead>
                     <tr className={"border-b bg-black"}>
