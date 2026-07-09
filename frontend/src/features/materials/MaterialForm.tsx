@@ -26,7 +26,7 @@ export default function MaterialForm({initial, onClose}: {
                     </div>
                     <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                         <DialogTitle as="h1" className="text-3xl font-semibold text-white">
-                            {initial ? "Update Category" : "Create New Category"}
+                            {initial ? "Update Material" : "Create New Material"}
                         </DialogTitle>
                         <div className="mt-2 flex items-stretch gap-12 text-white">
                             <div className={"flex flex-col gap-4"}>
