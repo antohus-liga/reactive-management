@@ -53,7 +53,4 @@ class ProductController(
         @Valid @RequestBody request: ProductRecipeRequest
     ): ResponseEntity<ProductRecipeResponse> =
         ResponseEntity.ok(productService.replaceRecipe(publicId, request))
-
-    @DeleteMapping("/{publicId}/recipe")
-    fun deleteRecipe(@PathVariable publicId: UUID) = productService.deleteProduct(publicId)
 }

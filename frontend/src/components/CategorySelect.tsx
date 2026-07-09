@@ -1,5 +1,5 @@
-import {useFetchCategories} from "@/features/categories/hooks.ts";
 import type {CategoryType} from "@/types/CategoryType.ts";
+import {useFetchCategories} from "@/features/categories/hooks.ts";
 
 export default function CategorySelect({value, onChange, type}: {
     value: string,

@@ -8,4 +8,5 @@ object SellingMarginParser {
             .removeSuffix("%")
             .toBigDecimal()
             .movePointLeft(2)
+            .stripTrailingZeros()
 }
