@@ -43,7 +43,7 @@ class MaterialServiceTest {
         val material2 = Fixtures.materialFixture(description = "Sugar")
 
         every { userService.getCurrentUser() } returns user
-        every { materialRepository.findAllByUser(user) } returns listOf(material1, material2)
+        every { materialRepository.findAllByUserOrderByCreatedAt(user) } returns listOf(material1, material2)
 
         val result = materialService.getAllByUser()
 

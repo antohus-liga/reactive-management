@@ -28,7 +28,7 @@ class MaterialService(
 ) {
 
     fun getAllByUser(): List<MaterialResponse> =
-        materialRepository.findAllByUser(userService.getCurrentUser()).map { it.toResponse() }
+        materialRepository.findAllByUserOrderByCreatedAt(userService.getCurrentUser()).map { it.toResponse() }
 
     fun createMaterial(request: CreateMaterialRequest): MaterialResponse {
         val user = userService.getCurrentUser()

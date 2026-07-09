@@ -6,6 +6,7 @@ import org.napetrico.backend.features.materials.dto.CreateMaterialRequest
 import org.napetrico.backend.features.materials.dto.MaterialResponse
 import org.napetrico.backend.features.materials.dto.UpdateMaterialRequest
 import org.napetrico.backend.features.users.User
+import java.time.LocalDateTime
 
 object MaterialMapper {
     fun Material.toResponse(): MaterialResponse = MaterialResponse(
@@ -36,6 +37,7 @@ object MaterialMapper {
         quantity = update.quantity
 
         this.category = category
+        this.updatedAt = LocalDateTime.now()
 
         return this
     }
