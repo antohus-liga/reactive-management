@@ -20,6 +20,7 @@ object MovementMapper {
         quantity = quantity,
         totalPrice = totalPrice.value,
         notes = notes,
+        movementType = movementType,
     )
 
     fun CreateMovementRequest.toEntity(
