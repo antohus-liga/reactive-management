@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional
 import org.napetrico.backend.common.enums.CategoryType
 import org.napetrico.backend.common.exceptions.AlreadyExistsException
 import org.napetrico.backend.common.exceptions.NotFoundException
+import org.napetrico.backend.common.parsers.SellingMarginParser
 import org.napetrico.backend.common.values.Price
 import org.napetrico.backend.features.categories.Category
 import org.napetrico.backend.features.categories.CategoryService
@@ -13,22 +14,14 @@ import org.napetrico.backend.features.productMaterials.ProductMaterialService
 import org.napetrico.backend.features.products.ProductMapper.applyUpdate
 import org.napetrico.backend.features.products.ProductMapper.toEntity
 import org.napetrico.backend.features.products.ProductMapper.toResponse
-import org.napetrico.backend.features.products.dto.ProductRecipeRequest
-import org.napetrico.backend.features.products.dto.CreateProductRequest
-import org.napetrico.backend.features.products.dto.MaterialIngredientRequest
-import org.napetrico.backend.features.products.dto.MaterialIngredientResponse
-import org.napetrico.backend.features.products.dto.ProductRecipeResponse
-import org.napetrico.backend.features.products.dto.ProductRequest
-import org.napetrico.backend.features.products.dto.ProductResponse
-import org.napetrico.backend.features.products.dto.UpdateProductRequest
+import org.napetrico.backend.features.products.dto.*
 import org.napetrico.backend.features.users.User
 import org.napetrico.backend.features.users.UserService
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.time.LocalDateTime
-import java.util.UUID
-import kotlin.plus
+import java.util.*
 
 @Service
 class ProductService(
@@ -61,7 +54,11 @@ class ProductService(
         validateRequest(request, user, category, product)
 
         val productionCost = productMaterialService.getTotalCostForProduct(product, user)
-        val price: BigDecimal = getPrice(product, productionCost)
+        val price: BigDecimal = getPrice(
+            request.fixedPrice,
+            SellingMarginParser.parseToBigDecimal(request.sellingMargin ?: "0%"),
+            productionCost
+        )
 
         return productRepository.save(
             product.applyUpdate(
@@ -85,7 +82,14 @@ class ProductService(
 
         val pms = replaceProductMaterials(product, request.ingredients, user)
         product.productionCost = Price.from(productMaterialService.getTotalCostForProduct(product, user))
-        product.price = Price.from(getPrice(product, product.productionCost.value))
+        product.price =
+            Price.from(
+                getPrice(
+                    product.fixedPrice?.value,
+                    product.sellingMargin?.value,
+                    product.productionCost.value
+                )
+            )
         return getProductRecipeResponseFromProductMaterials(product, pms)
     }
 
@@ -174,11 +178,11 @@ class ProductService(
         )
     }
 
-    private fun getPrice(product: Product, productionCost: BigDecimal): BigDecimal =
-        product.fixedPrice?.value
+    private fun getPrice(fixedPrice: BigDecimal?, sellingMargin: BigDecimal?, productionCost: BigDecimal): BigDecimal =
+        fixedPrice
             ?: (
                     productionCost.multiply(
-                        BigDecimal(1).add(product.sellingMargin?.value)
+                        BigDecimal(1).add(sellingMargin)
                     ).setScale(2, RoundingMode.HALF_UP)
                     )
 
