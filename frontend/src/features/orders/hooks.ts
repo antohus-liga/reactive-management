@@ -1,5 +1,6 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {type MovementRequest, type OrderRequest, ordersApi} from "@/features/orders/api.ts";
+import {getErrorMessage} from "@/lib/getErrorMessage.ts";
 
 export function useFetchOrders() {
     return useQuery({
@@ -27,7 +28,8 @@ export function useDeleteOrder() {
         onSuccess: async (_, publicId) => {
             await queryClient.invalidateQueries({queryKey: ["orders", "get"]})
             await queryClient.invalidateQueries({queryKey: ["orders", "movements", publicId]})
-        }
+        },
+        onError: (error) => alert(getErrorMessage(error))
     });
 }
 
@@ -67,7 +69,7 @@ export function useDeleteMovement() {
             await queryClient.invalidateQueries({queryKey: ["orders", "get"]});
             await queryClient.invalidateQueries({queryKey: ["orders", "movements", publicId]});
         }
-    })
+    });
 }
 
 export function useCompleteOrder() {
@@ -78,6 +80,7 @@ export function useCompleteOrder() {
         onSuccess: async (_, publicId) => {
             await queryClient.invalidateQueries({queryKey: ["orders", "get"]});
             await queryClient.invalidateQueries({queryKey: ["orders", "movements", publicId]});
-        }
-    })
+        },
+        onError: (error) => alert(getErrorMessage(error))
+    });
 }

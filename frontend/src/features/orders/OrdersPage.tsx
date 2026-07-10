@@ -2,6 +2,7 @@ import useOrders from "@/features/orders/useOrders.ts";
 import useOrderModal from "@/features/orders/useOrderModal.ts";
 import OrderRow from "@/features/orders/OrderRow.tsx";
 import type {OrderResponse} from "@/features/orders/api.ts";
+import OrderModal from "@/features/orders/OrderModal.tsx";
 
 export default function OrdersPage() {
     const orders = useOrders();
@@ -12,8 +13,8 @@ export default function OrdersPage() {
 
     return (
         <>
-            {/*<ProductModal open={modal.open} onClose={modal.close}*/}
-            {/*              productPublicId={modal.orderPublicId} recipe={modal.recipe}/>*/}
+            <OrderModal open={modal.open} onClose={modal.close}
+                        orderPublicId={modal.orderPublicId}/>
             <div
                 className={"relative flex flex-col w-auto max-h-[calc(100vh-18rem)] overflow-y-auto shadow-md shadow-white rounded-xl bg-clip-border"}>
                 <table className={"w-full text-left table-auto bg-red-500"}>
@@ -28,7 +29,10 @@ export default function OrdersPage() {
                     </thead>
                     <tbody>
                     {orders.get.data?.map((order: OrderResponse) => (
-                        <OrderRow key={order.publicId} order={order} onDelete={orders.handleDeleteOrder}/>
+                        <OrderRow key={order.publicId} order={order} onDelete={orders.handleDeleteOrder}
+                                  onAddMovement={modal.openForMovements} onComplete={orders.handleCompleteOrder}
+                                  onMovementDelete={orders.handleDeleteMovement}
+                        />
                     ))}
                     </tbody>
                 </table>

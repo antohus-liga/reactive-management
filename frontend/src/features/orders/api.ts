@@ -6,6 +6,8 @@ export interface OrderResponse {
     publicId: string;
     companyName: string;
     companyCountry: string;
+    withRole: CompanyRole;
+    isCompleted: boolean;
     createdAt: string;
     updatedAt: string;
 }

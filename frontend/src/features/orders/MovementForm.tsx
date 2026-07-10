@@ -1,18 +1,23 @@
 import {DialogTitle} from "@headlessui/react";
-import {useRecipeForm} from "@/features/products/useRecipeForm.ts";
-import type {ProductRecipeResponse} from "@/features/products/api.ts";
 import {getErrorMessage, getFieldErrors} from "@/lib/getErrorMessage.ts";
+import {useMovementsForm} from "@/features/orders/useMovementsForm.ts";
+import {TypeSelect} from "@/components/TypeSelect.tsx";
+import {MovementType, MovementTypeLabel} from "@/types/MovementType.ts";
+import {useFetchOrders} from "@/features/orders/hooks.ts";
+import {CompanyRole} from "@/types/CompanyRole.ts";
+import ProductSelect from "@/components/ProductSelect.tsx";
 import MaterialSelect from "@/components/MaterialSelect.tsx";
-import TextField from "@/components/TextField";
+import TextField from "@/components/TextField.tsx";
 
-export default function MovementForm({productId, initial, onClose}: {
-    productId: string,
-    initial: ProductRecipeResponse | null,
+export default function MovementForm({orderId, onClose}: {
+    orderId: string,
     onClose: () => void,
 }) {
+    const getOrders = useFetchOrders();
+    const currOrder = getOrders.data?.find(order => order.publicId === orderId);
 
-    const form = useRecipeForm(productId, initial);
-    const error = form.replaceRecipe.error;
+    const form = useMovementsForm(orderId);
+    const error = form.addMovement.error;
     const fieldErrors = getFieldErrors(error);
 
     return (
@@ -28,61 +33,48 @@ export default function MovementForm({productId, initial, onClose}: {
                         </DialogTitle>
                         <div className="mt-2 flex items-stretch gap-12 text-white">
                             <div className={"flex flex-col gap-4"}>
-                                <h2 className={"text-2xl font-mono font-bold"}>Product Recipe</h2>
+                                <h2 className={"text-2xl font-mono font-bold"}>Movement</h2>
                                 <div className={"flex flex-col gap-4"}>
-                                    {form.recipe.ingredients.map((ingredient, index) => (
-                                        <div key={index} className={"flex gap-4 items-end"}>
-                                            <div className={"flex flex-col gap-2"}>
-                                                <h2 className={"text-xl"}>Ingredient</h2>
-                                                <MaterialSelect value={ingredient.materialPublicId}
-                                                                onChange={(value) => form.setRecipe(prev => ({
-                                                                    ...prev,
-                                                                    ingredients: prev.ingredients.map((ing, i) =>
-                                                                        i === index ? {
-                                                                            ...ing,
-                                                                            materialPublicId: value
-                                                                        } : ing
-                                                                    ),
-                                                                }))}
-                                                />
-                                            </div>
-                                            <TextField label={"Quantity"} inputProps={{
-                                                type: "number",
-                                                value: ingredient.quantity,
-                                                onChange: (e) => form.setRecipe(prev => ({
-                                                    ...prev,
-                                                    ingredients: prev.ingredients.map((ing, i) =>
-                                                        i === index ? {...ing, quantity: Number(e.target.value)} : ing
-                                                    ),
-                                                }))
-                                            }}/>
-                                            <button
-                                                className={"hover:cursor-pointer"}
-                                                type="button"
-                                                onClick={() =>
-                                                    form.setRecipe(prev => ({
+                                    <div className={"flex flex-col gap-2"}>
+                                        <h3 className={"text-xl"}>Movement Type</h3>
+                                        <TypeSelect values={Object.values(MovementType)} labels={MovementTypeLabel}
+                                                    value={form.movement.movementType}
+                                                    onChange={value => form.setMovement(prev => ({
                                                         ...prev,
-                                                        ingredients: prev.ingredients.filter((_, i) => i !== index),
-                                                    }))
-                                                }
-                                            >
-                                                <img className={"size-11"} src={"/minus.png"} alt={"Remove"}/>
-                                            </button>
-                                        </div>
-                                    ))}
-                                    <button
-                                        className={"hover:cursor-pointer"}
-                                        type="button"
-                                        onClick={() =>
-                                            form.setRecipe(prev => ({
-                                                ...prev,
-                                                ingredients: [...prev.ingredients, { materialPublicId: "", quantity: 0 }],
-                                            }))
-                                        }
-                                    >
-                                        <img className={"size-10"} src={"/plus.png"} alt={"Plus"} />
-                                    </button>
-                                    <p className={"text-red-400"}>{fieldErrors?.["ingredients[].quantity"]}</p>
+                                                        movementType: value,
+                                                    }))} placeHolder={"Select a movement type"}/>
+                                    </div>
+                                    {currOrder?.withRole === CompanyRole.CLIENT
+                                        ? (
+                                            <div className={"flex flex-col gap-2"}>
+                                                <h3 className={"text-xl"}>Product</h3>
+                                                <ProductSelect value={form.movement.productPublicId ?? ""}
+                                                               onChange={value => form.setMovement(prev => ({
+                                                                   ...prev,
+                                                                   productPublicId: value
+                                                               }))}/>
+                                            </div>
+                                        )
+                                        : (
+                                            <div className={"flex flex-col gap-2"}>
+                                                <h3 className={"text-xl"}>Material</h3>
+                                                <MaterialSelect value={form.movement.materialPublicId ?? ""}
+                                                                onChange={value => form.setMovement(prev => ({
+                                                                    ...prev,
+                                                                    materialPublicId: value
+                                                                }))}/>
+                                            </div>
+                                        )}
+                                    <TextField label={"Quantity"} error={fieldErrors?.quantity} inputProps={{
+                                        type: "number",
+                                        min: 1,
+                                        max: 999999,
+                                        value: form.movement.quantity,
+                                        onChange: e => form.setMovement(prev => ({
+                                            ...prev,
+                                            quantity: Number(e.target.value)
+                                        }))
+                                    }}/>
                                 </div>
                             </div>
                         </div>
@@ -97,7 +89,7 @@ export default function MovementForm({productId, initial, onClose}: {
                     type="submit"
                     className="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white hover:bg-green-500 sm:ml-3 sm:w-auto"
                 >
-                    {initial ? "Update" : "Create"}
+                    Create
                 </button>
                 <button
                     type="button" onClick={onClose}

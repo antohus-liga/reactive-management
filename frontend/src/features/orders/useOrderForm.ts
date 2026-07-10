@@ -1,14 +1,10 @@
 import {type SubmitEvent, useState} from "react";
-import {useFetchProducts} from "@/features/products/hooks.ts";
 import {useFetchCompanies} from "@/features/companies/hooks.ts";
-import {useFetchMaterials} from "@/features/materials/hooks.ts";
 import {useCreateOrder} from "@/features/orders/hooks.ts";
 import type {OrderRequest} from "@/features/orders/api.ts";
 
 export function useOrderForm() {
-    // const getCompanies = useFetchCompanies()
-    // const getMaterials = useFetchMaterials()
-    // const getProducts = useFetchProducts()
+    const getCompanies = useFetchCompanies()
 
     const [order, setOrder] = useState<OrderRequest>({
         companyPublicId: "",
@@ -25,6 +21,7 @@ export function useOrderForm() {
         order,
         setOrder,
         handleSubmit,
+        getCompanies,
         create,
     }
 }

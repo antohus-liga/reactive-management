@@ -1,5 +1,5 @@
-export function TypeSelect<T extends string>({type, labels, value, onChange, placeHolder}: {
-    type: Record<string, T>,
+export function TypeSelect<T extends string>({values, labels, value, onChange, placeHolder}: {
+    values: readonly T[],
     labels: Record<T, string>,
     value: T | "",
     onChange: (value: T) => void,
@@ -15,8 +15,7 @@ export function TypeSelect<T extends string>({type, labels, value, onChange, pla
             <option value="" disabled>
                 {placeHolder}
             </option>
-
-            {Object.values(type).map(v => (
+            {values.map(v => (
                 <option key={v} value={v}>
                     {labels[v]}
                 </option>

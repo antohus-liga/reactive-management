@@ -41,7 +41,7 @@ export default function MaterialForm({initial, onClose}: {
                                 <div>
                                     <label className={"flex flex-col gap-2 text-xl"}>
                                         Measurement Type
-                                        <TypeSelect type={MeasurementType} labels={MeasurementTypeLabel}
+                                        <TypeSelect values={Object.values(MeasurementType)} labels={MeasurementTypeLabel}
                                                     value={form.material.measurement}
                                                     onChange={value => form.setMaterial(prev => ({
                                                         ...prev,
