@@ -1,4 +1,5 @@
 import {apiClient} from "@/lib/apiClient.ts";
+import type {CompanyType} from "@/types/CompanyType.ts";
 
 export interface SignInPayload {
     email: string;
@@ -14,6 +15,16 @@ export interface RegisterPayload {
     country: string;
     address: string;
     password: string;
+}
+
+export interface UserUpdatePayload {
+    companyName: string;
+    companyType: CompanyType;
+    taxId: string;
+    phoneNumber: string;
+    email: string;
+    country: string;
+    address: string;
 }
 
 export interface UserResponse {
@@ -37,4 +48,5 @@ export const authApi = {
     me: () =>
         apiClient.get<UserResponse>("api/auth/me").then((r) => r.data),
     logout: () => apiClient.post("/api/auth/logout"),
+    update: (payload: UserUpdatePayload) => apiClient.post("/api/auth/update", payload),
 }

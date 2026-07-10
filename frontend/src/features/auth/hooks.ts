@@ -1,5 +1,5 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import {authApi, type RegisterPayload} from "@/features/auth/api.ts";
+import {authApi, type RegisterPayload, type UserUpdatePayload} from "@/features/auth/api.ts";
 import {useNavigate} from "react-router-dom";
 
 export function useSignIn() {
@@ -36,4 +36,13 @@ export function useLogout() {
             navigate("/signin")
         }
     });
+}
+
+export function useUpdateUser() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async (payload: UserUpdatePayload) => authApi.update(payload),
+        onSuccess: () => queryClient.invalidateQueries({queryKey: ["auth", "me"]}),
+    })
 }
