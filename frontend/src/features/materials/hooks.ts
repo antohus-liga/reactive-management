@@ -1,5 +1,6 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {materialApi, type MaterialRequest} from "@/features/materials/api.ts";
+import {getErrorMessage} from "@/lib/getErrorMessage.ts";
 
 export function useFetchMaterials() {
     return useQuery({
@@ -36,6 +37,7 @@ export function useDeleteMaterial() {
 
     return useMutation({
         mutationFn: async (publicId: string) => await materialApi.delete(publicId),
-        onSuccess: () => queryClient.invalidateQueries({queryKey: ["materials", "get"]})
+        onSuccess: () => queryClient.invalidateQueries({queryKey: ["materials", "get"]}),
+        onError: (error) => alert(getErrorMessage(error))
     })
 }

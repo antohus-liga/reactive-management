@@ -12,17 +12,13 @@ import org.napetrico.backend.features.movements.Movement
 import org.napetrico.backend.features.movements.MovementService
 import org.napetrico.backend.features.orders.OrderMapper.toEntity
 import org.napetrico.backend.features.orders.OrderMapper.toResponse
-import org.napetrico.backend.features.orders.dto.CreateMovementRequest
-import org.napetrico.backend.features.orders.dto.CreateOrderRequest
-import org.napetrico.backend.features.orders.dto.MovementResponse
-import org.napetrico.backend.features.orders.dto.OrderDetailsResponse
-import org.napetrico.backend.features.orders.dto.OrderResponse
+import org.napetrico.backend.features.orders.dto.*
 import org.napetrico.backend.features.products.ProductService
 import org.napetrico.backend.features.users.User
 import org.napetrico.backend.features.users.UserService
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
-import java.util.UUID
+import java.util.*
 
 @Service
 class OrderService(
@@ -54,14 +50,12 @@ class OrderService(
         val user = userService.getCurrentUser()
         val order = getOrder(publicId, user)
 
-        if (order.isCompleted) {
-            val movements = order.movements
-            if (!movements.isEmpty())
-                movements.forEach {
-                    updateQuantity(it, -it.quantity)
-                    movementService.deleteMovement(it.publicId, user)
-                }
-        }
+        val movements = order.movements
+        if (!movements.isEmpty())
+            movements.forEach {
+                if (order.isCompleted) updateQuantity(it, -it.quantity)
+                movementService.deleteMovement(it.publicId, user)
+            }
 
         orderRepository.delete(order)
     }

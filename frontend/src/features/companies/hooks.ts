@@ -1,5 +1,6 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {companyApi, type CompanyRequest} from "@/features/companies/api.ts";
+import {getErrorMessage} from "@/lib/getErrorMessage.ts";
 
 export function useFetchCompanies() {
     return useQuery({
@@ -40,11 +41,8 @@ export function useDeleteCompany() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async (publicId: string) => {
-            return await companyApi.delete(publicId);
-        },
-        onSuccess: async () => {
-            await queryClient.invalidateQueries({queryKey: ["companies", "get"]});
-        }
+        mutationFn: (publicId: string) => companyApi.delete(publicId),
+        onSuccess: () => queryClient.invalidateQueries({queryKey: ["companies", "get"]}),
+        onError: (error) => alert(getErrorMessage(error))
     });
 }
