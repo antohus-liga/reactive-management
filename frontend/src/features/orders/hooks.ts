@@ -28,6 +28,8 @@ export function useDeleteOrder() {
         onSuccess: async (_, publicId) => {
             await queryClient.invalidateQueries({queryKey: ["orders", "get"]})
             await queryClient.invalidateQueries({queryKey: ["orders", "movements", publicId]})
+            await queryClient.invalidateQueries({queryKey: ["materials", "get"]});
+            await queryClient.invalidateQueries({queryKey: ["products", "get"]});
         },
         onError: (error) => alert(getErrorMessage(error))
     });
@@ -68,8 +70,6 @@ export function useDeleteMovement() {
         onSuccess: async (_, publicId) => {
             await queryClient.invalidateQueries({queryKey: ["orders", "get"]});
             await queryClient.invalidateQueries({queryKey: ["orders", "movements", publicId]});
-            await queryClient.invalidateQueries({queryKey: ["materials", "get"]});
-            await queryClient.invalidateQueries({queryKey: ["products", "get"]});
         }
     });
 }
