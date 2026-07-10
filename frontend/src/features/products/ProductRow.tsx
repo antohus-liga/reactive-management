@@ -1,6 +1,7 @@
 import type {ProductRecipeResponse, ProductResponse} from "@/features/products/api.ts";
 import {useState} from "react";
 import {useFetchProductRecipe} from "@/features/products/hooks.ts";
+import {MeasurementTypeLabel} from "@/types/MeasurementType.ts";
 
 export default function ProductRow({product, onDelete, onEdit, onRecipeReplace}: {
     product: ProductResponse,
@@ -20,7 +21,7 @@ export default function ProductRow({product, onDelete, onEdit, onRecipeReplace}:
                     {product.categoryDescription}
                 </td>
                 <td className={"p-4"}>{product.fixedPrice ? `(Fixed) ${product.fixedPrice}` : `(Margin) ${product.sellingMargin}`}</td>
-                <td className={"p-4"}>{product.quantity}</td>
+                <td className={"p-4"}>{product.quantity + " " + MeasurementTypeLabel[product.measurement]}</td>
                 <td className={"p-4"}>{product.productionCost}</td>
                 <td className={"p-4"}>{product.price}</td>
                 <td className={"p-4"}>{new Date(product.createdAt).toLocaleString()}</td>
@@ -81,7 +82,7 @@ export default function ProductRow({product, onDelete, onEdit, onRecipeReplace}:
                                             <tr key={ingredient.materialPublicId}>
                                                 <td className={"p-4"}>{ingredient.materialDescription}</td>
                                                 <td className={"p-4"}>{ingredient.materialUnitPrice}</td>
-                                                <td className={"p-4"}>{ingredient.quantityNeeded}</td>
+                                                <td className={"p-4"}>{ingredient.quantityNeeded + " " + MeasurementTypeLabel[ingredient.materialMeasurement]}</td>
                                             </tr>
                                         ))}
                                         </tbody>

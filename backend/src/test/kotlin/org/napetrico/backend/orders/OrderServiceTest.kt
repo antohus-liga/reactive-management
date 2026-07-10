@@ -204,7 +204,8 @@ class OrderServiceTest {
         )
 
         val order = Fixtures.orderFixture(
-            movements = mutableSetOf(movement)
+            movements = mutableSetOf(movement),
+            isCompleted = true
         )
 
         every { userService.getCurrentUser() } returns user

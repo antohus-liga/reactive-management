@@ -12,6 +12,7 @@ import CompaniesPage from "@/features/companies/CompaniesPage.tsx";
 import CategoriesPage from "@/features/categories/CategoriesPage.tsx";
 import MaterialsPage from "@/features/materials/MaterialsPage.tsx";
 import ProductsPage from "@/features/products/ProductsPage.tsx";
+import OrdersPage from "@/features/orders/OrdersPage.tsx";
 
 export const router = createBrowserRouter([
     {
@@ -39,6 +40,7 @@ export const router = createBrowserRouter([
                     { path: "/categories", element: <CategoriesPage/>, handle: { title: "Categories" } },
                     { path: "/materials", element: <MaterialsPage/>, handle: { title: "Materials" } },
                     { path: "/products", element: <ProductsPage/>, handle: { title: "Products" } },
+                    { path: "/orders", element: <OrdersPage/>, handle: { title: "Orders" } },
                 ]
             },
         ]

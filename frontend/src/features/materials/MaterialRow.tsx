@@ -1,4 +1,5 @@
 import type {MaterialResponse} from "@/features/materials/api.ts";
+import {MeasurementTypeLabel} from "@/types/MeasurementType.ts";
 
 export default function MaterialRow({material, onDelete, onEdit}: {
     material: MaterialResponse,
@@ -16,7 +17,7 @@ export default function MaterialRow({material, onDelete, onEdit}: {
                     {material.categoryDescription}
                 </td>
                 <td className={"p-4"}>{material.unitPrice}</td>
-                <td className={"p-4"}>{material.quantity}</td>
+                <td className={"p-4"}>{material.quantity + " " + MeasurementTypeLabel[material.measurement]}</td>
                 <td className={"p-4"}>{new Date(material.createdAt).toLocaleString()}</td>
                 <td className={"p-4"}>{new Date(material.updatedAt).toLocaleString()}</td>
                 <td className={"p-4"}>

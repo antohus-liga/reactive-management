@@ -40,6 +40,7 @@ export interface IngredientResponse {
     materialPublicId: string;
     materialDescription: string;
     materialUnitPrice: number;
+    materialMeasurement: MeasurementType;
     quantityNeeded: number;
 }
 

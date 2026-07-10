@@ -11,9 +11,7 @@ export function useSignIn() {
 export function useRegister() {
     return useMutation({
         mutationFn: async (payload: RegisterPayload) => {
-            const result = await authApi.register(payload);
-            await authApi.logout();
-            return result;
+            return await authApi.register(payload);
         },
     });
 }

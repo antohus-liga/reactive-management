@@ -23,6 +23,7 @@ class ProductMaterialService(
                 materialPublicId = pm.material.publicId,
                 materialDescription = pm.material.description,
                 materialUnitPrice = pm.material.unitPrice.value,
+                materialMeasurement = pm.material.measurement,
                 quantityNeeded = pm.quantity,
             )
         }.toSet()

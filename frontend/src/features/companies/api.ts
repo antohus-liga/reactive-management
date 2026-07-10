@@ -28,7 +28,7 @@ export interface CompanyRequest {
 
 export const companyApi = {
     get:
-        () => apiClient.get("/api/companies").then((r) => r.data),
+        () => apiClient.get<CompanyResponse[]>("/api/companies").then((r) => r.data),
     create:
         (payload: CompanyRequest) => apiClient.post("/api/companies", payload).then((r) => r.data),
     update:
