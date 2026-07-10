@@ -138,12 +138,14 @@ object Fixtures {
         company: Company = companyFixture(),
         withRole: CompanyRole = CompanyRole.SUPPLIER,
         movements: MutableSet<Movement> = mutableSetOf(),
+        isCompleted: Boolean = false,
     ): Order = Order(
         id = id,
         user = user,
         company = company,
         movements = movements,
         withRole = withRole,
+        isCompleted = isCompleted,
     )
 
     fun movementFixture(
@@ -181,6 +183,7 @@ object Fixtures {
         notes = null,
         publicId = UUID.randomUUID(),
         discount = discount?.value,
+        movementType = MovementType.INBOUND
     )
 
     fun productionOrderFixture(

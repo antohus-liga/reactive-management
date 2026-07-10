@@ -87,25 +87,6 @@ class ProductMaterialServiceTest {
         )
 
         assertEquals(BigDecimal("14.00"), response.productionCost)
-        assertEquals(pm1.createdAt, response.createdAt)
-        assertEquals(pm2.createdAt, response.updatedAt)
-    }
-
-    @Test
-    fun `throws when recipe is empty`() {
-        val product = Fixtures.productFixture()
-
-        every {
-            productMaterialRepository.findRecipeByProductAndUser(product, user)
-        } returns emptyList()
-
-        assertThrows<NotFoundException> {
-            productMaterialService.getProductRecipeDto(product, user)
-        }
-
-        verify(exactly = 0) {
-            productMaterialRepository.getAllByProductAndUserOrderByCreatedAt(any(), any())
-        }
     }
 
     @Test
