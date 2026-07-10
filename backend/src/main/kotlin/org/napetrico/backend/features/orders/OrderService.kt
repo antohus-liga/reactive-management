@@ -54,14 +54,12 @@ class OrderService(
         val user = userService.getCurrentUser()
         val order = getOrder(publicId, user)
 
-        if (order.isCompleted) {
-            val movements = order.movements
-            if (!movements.isEmpty())
-                movements.forEach {
-                    updateQuantity(it, -it.quantity)
-                    movementService.deleteMovement(it.publicId, user)
-                }
-        }
+        val movements = order.movements
+        if (!movements.isEmpty())
+            movements.forEach {
+                if (order.isCompleted) updateQuantity(it, -it.quantity)
+                movementService.deleteMovement(it.publicId, user)
+            }
 
         orderRepository.delete(order)
     }
