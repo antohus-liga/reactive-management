@@ -162,7 +162,8 @@ class ProductService(
                 materialPublicId = it.material.publicId,
                 materialDescription = it.material.description,
                 materialUnitPrice = it.material.unitPrice.value,
-                quantityNeeded = it.quantity
+                materialMeasurement = it.material.measurement,
+                quantityNeeded = it.quantity,
             )
         }.toSet()
 
