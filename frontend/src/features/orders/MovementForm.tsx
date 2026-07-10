@@ -75,6 +75,15 @@ export default function MovementForm({orderId, onClose}: {
                                             quantity: Number(e.target.value)
                                         }))
                                     }}/>
+
+                                    <TextField label={"Discount (optional)"} error={fieldErrors?.discount} inputProps={{
+                                        value: form.movement.discount ?? "",
+                                        onChange: e => form.setMovement(prev => ({
+                                            ...prev,
+                                            discount: e.target.value === "" ? null : e.target.value,
+                                        })),
+                                        required: false
+                                    }}/>
                                 </div>
                             </div>
                         </div>
