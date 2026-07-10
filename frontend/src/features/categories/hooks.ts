@@ -1,5 +1,6 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {categoryApi, type CategoryRequest} from "@/features/categories/api.ts";
+import {getErrorMessage} from "@/lib/getErrorMessage.ts";
 
 export function useFetchCategories() {
     return useQuery({
@@ -42,11 +43,8 @@ export function useDeleteCategory() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async (publicId: string) => {
-            return await categoryApi.delete(publicId);
-        },
-        onSuccess: async () => {
-            await queryClient.invalidateQueries({queryKey: ["categories", "get"]});
-        }
+        mutationFn: async (publicId: string) => await categoryApi.delete(publicId),
+        onSuccess: async () => await queryClient.invalidateQueries({queryKey: ["categories", "get"]}),
+        onError: (error) => alert(getErrorMessage(error))
     });
 }
