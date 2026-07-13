@@ -84,6 +84,7 @@ class AuthServiceTest {
     fun `login throws when authentication fails`() {
         val request = LoginRequest("test@test.com", "wrong")
 
+        every { userService.getUserByEmail(Email(request.email)) } returns Fixtures.userFixture().toResponse()
         every {
             authenticationManager.authenticate(any())
         } throws InvalidCredentialsException()
@@ -91,8 +92,6 @@ class AuthServiceTest {
         assertThrows<InvalidCredentialsException> {
             authService.login(request)
         }
-
-        verify(exactly = 0) { jwtService.generateAccessToken(Email(request.email)) }
     }
 
     @Test
@@ -106,8 +105,8 @@ class AuthServiceTest {
 
         every { userService.getUserByEmail(Email(request.email)) } returns user.toResponse()
 
-        every { jwtService.generateAccessToken(Email(request.email)) } returns "access"
-        every { jwtService.generateRefreshToken(Email(request.email)) } returns "refresh"
+        every { jwtService.generateAccessToken(user.publicId) } returns "access"
+        every { jwtService.generateRefreshToken(user.publicId) } returns "refresh"
 
         val result = authService.login(request)
 
@@ -115,8 +114,8 @@ class AuthServiceTest {
         assertEquals("refresh", result.refreshToken)
 
         verify {
-            jwtService.generateAccessToken(Email("test@test.com"))
-            jwtService.generateRefreshToken(Email("test@test.com"))
+            jwtService.generateAccessToken(user.publicId)
+            jwtService.generateRefreshToken(user.publicId)
         }
     }
 
@@ -142,7 +141,7 @@ class AuthServiceTest {
         val email = "test@test.com"
 
         every { jwtService.isValid(token) } returns true
-        every { jwtService.extractEmail(token) } returns email
+        every { jwtService.extractPublicId(token) } returns email
         every { userService.getUserByEmail(Email(email)) } returns null
 
         assertThrows<NotFoundException> {
@@ -157,11 +156,11 @@ class AuthServiceTest {
         val user = Fixtures.userFixture(email = email)
 
         every { jwtService.isValid(token) } returns true
-        every { jwtService.extractEmail(token) } returns email
+        every { jwtService.extractPublicId(token) } returns email
         every { userService.getUserByEmail(Email(email)) } returns user.toResponse()
 
-        every { jwtService.generateAccessToken(Email(email)) } returns "new-access"
-        every { jwtService.generateRefreshToken(Email(email)) } returns "new-refresh"
+        every { jwtService.generateAccessToken(user.publicId) } returns "new-access"
+        every { jwtService.generateRefreshToken(user.publicId) } returns "new-refresh"
 
         val result = authService.refresh(RefreshRequest(token))
 

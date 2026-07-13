@@ -3,10 +3,10 @@ package org.napetrico.backend.features.auth
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
-import org.napetrico.backend.common.values.Email
 import org.springframework.stereotype.Service
 import java.time.Duration
 import java.util.Date
+import java.util.UUID
 import javax.crypto.SecretKey
 
 @Service
@@ -20,23 +20,23 @@ class JwtService {
     private val accessTokenExpiry = Duration.ofMinutes(15)
     private val refreshTokenExpiry = Duration.ofDays(7)
 
-    fun generateAccessToken(email: Email): String =
-        buildToken(email, accessTokenExpiry)
+    fun generateAccessToken(publicId: UUID): String =
+        buildToken(publicId, accessTokenExpiry)
 
-    fun generateRefreshToken(email: Email): String =
-        buildToken(email, refreshTokenExpiry)
+    fun generateRefreshToken(publicId: UUID): String =
+        buildToken(publicId, refreshTokenExpiry)
 
     private fun buildToken(
-        email: Email,
+        publicId: UUID,
         expiry: Duration
     ): String = Jwts.builder()
-        .subject(email.toString())
+        .subject(publicId.toString())
         .issuedAt(Date())
         .expiration(Date(System.currentTimeMillis() + expiry.toMillis()))
         .signWith(secretKey)
         .compact()
 
-    fun extractEmail(token: String): String =
+    fun extractPublicId(token: String): String =
         parseClaims(token).subject
 
     fun isValid(token: String): Boolean = runCatching {

@@ -24,8 +24,8 @@ class JwtFilter(
         val token = resolveToken(request)
 
         if (token != null && jwtService.isValid(token) && SecurityContextHolder.getContext().authentication == null) {
-            val email = jwtService.extractEmail(token)
-            val userDetails = userDetailsService.loadUserByUsername(email)
+            val publicId = jwtService.extractPublicId(token)
+            val userDetails = userDetailsService.loadUserByUsername(publicId)
 
             SecurityContextHolder.getContext().authentication =
                 UsernamePasswordAuthenticationToken(

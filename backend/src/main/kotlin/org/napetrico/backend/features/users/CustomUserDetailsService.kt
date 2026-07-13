@@ -5,15 +5,16 @@ import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class CustomUserDetailsService(
     private val userRepository: UserRepository,
 ) : UserDetailsService {
 
-    override fun loadUserByUsername(email: String): UserDetails {
-        val user = userRepository.findByEmail(email)
-            ?: throw UsernameNotFoundException("This email is not registered: $email")
+    override fun loadUserByUsername(publicId: String): UserDetails {
+        val user = userRepository.findByPublicId(UUID.fromString(publicId))
+            ?: throw UsernameNotFoundException("This user is not registered")
         return User(
             user.email.toString(),
             user.password,
