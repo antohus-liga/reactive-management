@@ -50,7 +50,6 @@ class ProductionOrderService(
 
     @Transactional
     fun executeProductionOrder(publicId: UUID) {
-        println("EXECUTING PRODUCTION ORDER")
         val user = userService.getCurrentUser()
 
         val productionOrder = getProductionOrder(publicId, user)

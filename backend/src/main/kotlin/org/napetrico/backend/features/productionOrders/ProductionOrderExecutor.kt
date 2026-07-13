@@ -19,7 +19,6 @@ class ProductionOrderExecutor(
 ) {
     @Transactional
     fun failProductionOrder(publicId: UUID, userPublicId: UUID) {
-        println("FAILING ORDER")
         val user = userService.getUser(userPublicId)
             ?: throw NotFoundException("User")
         val productionOrder = getProductionOrder(publicId, user)
@@ -28,7 +27,6 @@ class ProductionOrderExecutor(
 
     @Transactional
     fun completeProductionOrder(publicId: UUID, userPublicId: UUID) {
-        println("COMPLETING ORDER")
         val user = userService.getUser(userPublicId)
             ?: throw NotFoundException("User")
         val productionOrder = getProductionOrder(publicId, user)
