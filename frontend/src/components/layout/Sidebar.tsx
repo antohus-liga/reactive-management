@@ -15,8 +15,8 @@ export default function Sidebar() {
                     <Link to={"/products"}><li className={`${path === "/products" ? "scale-110 translate-x-1.5" : ""} bg-black border-2 border-black p-3 rounded-2xl transform hover:translate-x-3 hover:scale-120 hover:bg-gray-900 transition duration-200`}>Products</li></Link>
                     <Link to={"/materials"}><li className={`${path === "/materials" ? "scale-110 translate-x-1.5" : ""} bg-amber-700 border-2 border-amber-700 p-3 rounded-2xl transform hover:translate-x-3 hover:scale-120 hover:bg-amber-500 transition duration-200`}>Materials</li></Link>
                     <Link to={"/categories"}><li className={`${path === "/categories" ? "scale-110 translate-x-1.5" : ""} bg-green-800 border-2 border-green-800 p-3 rounded-2xl transform hover:translate-x-3 hover:scale-120 hover:bg-green-600 transition duration-200`}>Categories</li></Link>
-                    <Link to={"/orders"}><li className={"bg-red-700 border-2 border-red-700 p-3 rounded-2xl transform hover:translate-x-3 hover:scale-120 hover:bg-red-500 transition duration-200"}>Orders</li></Link>
-                    <Link to={"/movements"}><li className={"bg-orange-900 border-2 border-orange-900 p-3 rounded-2xl transform hover:translate-x-3 hover:scale-120 hover:bg-orange-700 transition duration-200"}>Production</li></Link>
+                    <Link to={"/orders"}><li className={`${path === "/orders" ? "scale-110 translate-x-1.5" : ""} bg-red-700 border-2 border-red-700 p-3 rounded-2xl transform hover:translate-x-3 hover:scale-120 hover:bg-red-500 transition duration-200`}>Orders</li></Link>
+                    <Link to={"/production-orders"}><li className={`${path === "/production-orders" ? "scale-110 translate-x-1.5" : ""} bg-orange-900 border-2 border-orange-900 p-3 rounded-2xl transform hover:translate-x-3 hover:scale-120 hover:bg-orange-700 transition duration-200`}>Production</li></Link>
                 </ul>
             </aside>
         </>
