@@ -22,7 +22,6 @@ export default function OrderRow({order, onDelete, onAddMovement, onComplete, on
                 <td className={"p-4"}>{order.companyName}</td>
                 <td className={"p-4"}>{countryLabels[order.companyCountry]}</td>
                 <td className={"p-4"}>{new Date(order.createdAt).toLocaleString()}</td>
-                <td className={"p-4"}>{new Date(order.updatedAt).toLocaleString()}</td>
                 <td className={"p-4"}>
                     <div className={"flex gap-3"}>
                         <button className={"bg-red-300 hover:bg-red-400 p-2 rounded-lg transition outline-2"}

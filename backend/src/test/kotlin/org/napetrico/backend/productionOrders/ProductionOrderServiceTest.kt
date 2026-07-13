@@ -13,6 +13,7 @@ import org.napetrico.backend.common.enums.ProductionStatus
 import org.napetrico.backend.common.exceptions.CannotDeleteProductionOrderException
 import org.napetrico.backend.common.exceptions.NotFoundException
 import org.napetrico.backend.features.materials.MaterialService
+import org.napetrico.backend.features.productionOrders.ProductionOrderExecutor
 import org.napetrico.backend.features.productionOrders.ProductionOrderRepository
 import org.napetrico.backend.features.productionOrders.ProductionOrderService
 import org.napetrico.backend.features.productionOrders.dto.CreateProductionOrderRequest
@@ -29,29 +30,31 @@ class ProductionOrderServiceTest {
     private val productionOrderRepository = mockk<ProductionOrderRepository>()
     private val userService = mockk<UserService>()
     private val productService = mockk<ProductService>()
-    private val materialService = mockk<MaterialService>()
     private val taskScheduler = mockk<TaskScheduler>()
+    private val productionOrderExecutor = mockk<ProductionOrderExecutor>()
 
-    private val service = ProductionOrderService(
+    private val productionOrderService = ProductionOrderService(
         productionOrderRepository,
         userService,
         productService,
-        materialService,
-        taskScheduler
+        taskScheduler,
+        productionOrderExecutor
     )
 
     private val user = Fixtures.userFixture()
 
     @Test
     fun `gets production orders`() {
-        val order = Fixtures.productionOrderFixture()
+        val productionOrder = Fixtures.productionOrderFixture()
 
         every { userService.getCurrentUser() } returns user
-        every { productionOrderRepository.findAllByUser(user) } returns listOf(order)
+        every {
+            productionOrderRepository.findAllByUser(user)
+        } returns listOf(productionOrder)
 
-        val result = service.getAll()
+        val response = productionOrderService.getAll()
 
-        assertEquals(1, result.size)
+        assertEquals(1, response.size)
     }
 
     @Test
@@ -60,36 +63,47 @@ class ProductionOrderServiceTest {
 
         val request = CreateProductionOrderRequest(
             productPublicId = product.publicId,
-            quantity = 10,
-            notes = null
+            quantity = 5,
+            null
         )
 
         every { userService.getCurrentUser() } returns user
-        every { productService.getProduct(product.publicId, user) } returns product
-        every { productionOrderRepository.save(any()) } answers { firstArg() }
+        every {
+            productService.getProduct(product.publicId, user)
+        } returns product
 
-        val response = service.createProductionOrder(request)
+        every {
+            productionOrderRepository.save(any())
+        } answers { firstArg() }
+
+        val response = productionOrderService.createProductionOrder(request)
 
         assertEquals(product.description, response.productDescription)
-        assertEquals(10, response.quantity)
+        assertEquals(5, response.quantity)
     }
 
     @Test
     fun `deletes pending production order`() {
-        val order = Fixtures.productionOrderFixture(
+        val productionOrder = Fixtures.productionOrderFixture(
             status = ProductionStatus.PENDING
         )
 
         every { userService.getCurrentUser() } returns user
         every {
-            productionOrderRepository.findByPublicIdAndUser(order.publicId, user)
-        } returns order
-        every { productionOrderRepository.delete(order) } just Runs
+            productionOrderRepository.findByPublicIdAndUser(
+                productionOrder.publicId,
+                user
+            )
+        } returns productionOrder
 
-        service.deleteProductionOrder(order.publicId)
+        every {
+            productionOrderRepository.delete(productionOrder)
+        } just Runs
+
+        productionOrderService.deleteProductionOrder(productionOrder.publicId)
 
         verify {
-            productionOrderRepository.delete(order)
+            productionOrderRepository.delete(productionOrder)
         }
     }
 
@@ -98,18 +112,23 @@ class ProductionOrderServiceTest {
         value = ProductionStatus::class,
         names = ["IN_PROGRESS", "COMPLETED"]
     )
-    fun `cannot delete production order after execution`(
+    fun `throws when deleting production order in invalid state`(
         status: ProductionStatus
     ) {
-        val order = Fixtures.productionOrderFixture(status = status)
+        val productionOrder = Fixtures.productionOrderFixture(
+            status = status
+        )
 
         every { userService.getCurrentUser() } returns user
         every {
-            productionOrderRepository.findByPublicIdAndUser(order.publicId, user)
-        } returns order
+            productionOrderRepository.findByPublicIdAndUser(
+                productionOrder.publicId,
+                user
+            )
+        } returns productionOrder
 
         assertThrows<CannotDeleteProductionOrderException> {
-            service.deleteProductionOrder(order.publicId)
+            productionOrderService.deleteProductionOrder(productionOrder.publicId)
         }
 
         verify(exactly = 0) {
@@ -118,26 +137,37 @@ class ProductionOrderServiceTest {
     }
 
     @Test
-    fun `executes pending production order`() {
-        val order = Fixtures.productionOrderFixture(
+    fun `executes production order`() {
+        val productionOrder = Fixtures.productionOrderFixture(
             status = ProductionStatus.PENDING
         )
 
         every { userService.getCurrentUser() } returns user
+
         every {
-            productionOrderRepository.findByPublicIdAndUser(order.publicId, user)
-        } returns order
-        every { productionOrderRepository.save(order) } returns order
+            productionOrderRepository.findByPublicIdAndUser(
+                productionOrder.publicId,
+                user
+            )
+        } returns productionOrder
+
+        every {
+            productionOrderRepository.save(productionOrder)
+        } returns productionOrder
+
         every {
             taskScheduler.schedule(any<Runnable>(), any<Instant>())
         } returns mockk()
 
-        service.executeProductionOrder(order.publicId)
+        productionOrderService.executeProductionOrder(productionOrder.publicId)
 
-        assertEquals(ProductionStatus.IN_PROGRESS, order.status)
+        assertEquals(
+            ProductionStatus.IN_PROGRESS,
+            productionOrder.status
+        )
 
         verify {
-            productionOrderRepository.save(order)
+            productionOrderRepository.save(productionOrder)
             taskScheduler.schedule(any<Runnable>(), any<Instant>())
         }
     }
@@ -147,94 +177,32 @@ class ProductionOrderServiceTest {
         value = ProductionStatus::class,
         names = ["IN_PROGRESS", "COMPLETED", "FAILED"]
     )
-    fun `cannot execute non pending production order`(
+    fun `throws when executing production order not pending`(
         status: ProductionStatus
     ) {
-        val order = Fixtures.productionOrderFixture(status = status)
+        val productionOrder = Fixtures.productionOrderFixture(
+            status = status
+        )
 
         every { userService.getCurrentUser() } returns user
+
         every {
-            productionOrderRepository.findByPublicIdAndUser(order.publicId, user)
-        } returns order
+            productionOrderRepository.findByPublicIdAndUser(
+                productionOrder.publicId,
+                user
+            )
+        } returns productionOrder
 
         assertThrows<IllegalStateException> {
-            service.executeProductionOrder(order.publicId)
+            productionOrderService.executeProductionOrder(
+                productionOrder.publicId
+            )
         }
 
         verify(exactly = 0) {
             productionOrderRepository.save(any())
             taskScheduler.schedule(any<Runnable>(), any<Instant>())
         }
-    }
-
-    @Test
-    fun `completes production order`() {
-        val product = Fixtures.productFixture(quantity = 5)
-
-        val productionOrder = Fixtures.productionOrderFixture(
-            product = product,
-            quantity = 3,
-            status = ProductionStatus.IN_PROGRESS
-        )
-
-        val recipe = listOf(Fixtures.productMaterialFixture())
-
-        every { userService.getUser(user.publicId) } returns user
-        every {
-            productionOrderRepository.findByPublicIdAndUser(
-                productionOrder.publicId,
-                user
-            )
-        } returns productionOrder
-
-        every {
-            productService.getProductRecipe(product, user)
-        } returns recipe
-
-        every {
-            materialService.consumeMaterials(recipe, 3)
-        } just Runs
-
-        service.completeProductionOrder(
-            productionOrder.publicId,
-            user.publicId
-        )
-
-        assertEquals(8, product.quantity)
-        assertEquals(
-            ProductionStatus.COMPLETED,
-            productionOrder.status
-        )
-
-        verify {
-            materialService.consumeMaterials(recipe, 3)
-        }
-    }
-
-    @Test
-    fun `fails production order`() {
-        val productionOrder = Fixtures.productionOrderFixture(
-            status = ProductionStatus.IN_PROGRESS
-        )
-
-        every { userService.getUser(user.publicId) } returns user
-        every {
-            productionOrderRepository.findByPublicIdAndUser(
-                productionOrder.publicId,
-                user
-            )
-        } returns productionOrder
-
-        service.failProductionOrder(
-            productionOrder.publicId,
-            user.publicId,
-            RuntimeException("boom")
-        )
-
-        assertEquals(
-            ProductionStatus.FAILED,
-            productionOrder.status
-        )
     }
 
     @Test
@@ -248,7 +216,7 @@ class ProductionOrderServiceTest {
             )
         } returns productionOrder
 
-        val result = service.getProductionOrder(
+        val result = productionOrderService.getProductionOrder(
             productionOrder.publicId,
             user
         )
@@ -265,7 +233,7 @@ class ProductionOrderServiceTest {
         } returns null
 
         assertThrows<NotFoundException> {
-            service.getProductionOrder(id, user)
+            productionOrderService.getProductionOrder(id, user)
         }
     }
 }

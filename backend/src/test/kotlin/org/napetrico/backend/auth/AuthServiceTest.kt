@@ -143,7 +143,7 @@ class AuthServiceTest {
 
         every { jwtService.isValid(token) } returns true
         every { jwtService.extractPublicId(token) } returns uuid.toString()
-        every { userService.getUser(uuid) } returns nullt
+        every { userService.getUser(uuid) } returns null
 
         assertThrows<NotFoundException> {
             authService.refresh(RefreshRequest(token))

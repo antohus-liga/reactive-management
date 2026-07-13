@@ -8,7 +8,6 @@ import type {UserUpdatePayload} from "@/features/auth/api.ts";
 import {CompanyType, CompanyTypeLabel} from "@/types/CompanyType.ts";
 import TextField from "@/components/TextField.tsx";
 import {CountrySelect} from "@/features/auth/RegisterPage.tsx";
-import countries from "i18n-iso-countries";
 
 export default function Topbar() {
     const {data: user} = useCurrentUser()
