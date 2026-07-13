@@ -3,8 +3,8 @@ package org.napetrico.backend.features.productionOrders
 import jakarta.transaction.Transactional
 import org.napetrico.backend.common.enums.ProductionStatus
 import org.napetrico.backend.common.exceptions.CannotDeleteProductionOrderException
+import org.napetrico.backend.common.exceptions.InsufficientQuantityException
 import org.napetrico.backend.common.exceptions.NotFoundException
-import org.napetrico.backend.features.materials.MaterialService
 import org.napetrico.backend.features.productionOrders.ProductionOrderMapper.toEntity
 import org.napetrico.backend.features.productionOrders.ProductionOrderMapper.toResponse
 import org.napetrico.backend.features.productionOrders.dto.CreateProductionOrderRequest
@@ -16,16 +16,16 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.scheduling.TaskScheduler
 import org.springframework.stereotype.Service
 import java.time.Instant
-import java.util.UUID
+import java.util.*
 
 @Service
 class ProductionOrderService(
     private val productionOrderRepository: ProductionOrderRepository,
     private val userService: UserService,
     private val productService: ProductService,
-    private val materialService: MaterialService,
     @Qualifier("productionTaskScheduler")
-    private val taskScheduler: TaskScheduler
+    private val taskScheduler: TaskScheduler,
+    private val productionOrderExecutor: ProductionOrderExecutor,
 ) {
     fun getAll(): List<ProductionOrderResponse> =
         productionOrderRepository.findAllByUser(userService.getCurrentUser()).map { it.toResponse() }
@@ -50,6 +50,7 @@ class ProductionOrderService(
 
     @Transactional
     fun executeProductionOrder(publicId: UUID) {
+        println("EXECUTING PRODUCTION ORDER")
         val user = userService.getCurrentUser()
 
         val productionOrder = getProductionOrder(publicId, user)
@@ -62,38 +63,11 @@ class ProductionOrderService(
 
         taskScheduler.schedule({
             try {
-                completeProductionOrder(publicId, user.publicId)
-            } catch (ex: Exception) {
-                failProductionOrder(publicId, user.publicId, ex)
+                productionOrderExecutor.completeProductionOrder(publicId, user.publicId)
+            } catch (_: InsufficientQuantityException) {
+                productionOrderExecutor.failProductionOrder(publicId, user.publicId)
             }
         }, Instant.now().plusSeconds(3))
-    }
-
-    @Transactional
-    fun failProductionOrder(publicId: UUID, userPublicId: UUID, ex: Exception) {
-        val user = userService.getUser(userPublicId)
-            ?: throw NotFoundException("User")
-        val productionOrder = getProductionOrder(publicId, user)
-        println(ex)
-        productionOrder.status = ProductionStatus.FAILED
-    }
-
-    @Transactional
-    fun completeProductionOrder(publicId: UUID, userPublicId: UUID) {
-        val user = userService.getUser(userPublicId)
-            ?: throw NotFoundException("User")
-        val productionOrder = getProductionOrder(publicId, user)
-
-        val recipe = productService.getProductRecipe(productionOrder.product, user)
-
-        materialService.consumeMaterials(
-            recipe,
-            productionOrder.quantity
-        )
-
-        productionOrder.product.quantity += productionOrder.quantity
-
-        productionOrder.status = ProductionStatus.COMPLETED
     }
 
     // Internal function, don't use in controllers
