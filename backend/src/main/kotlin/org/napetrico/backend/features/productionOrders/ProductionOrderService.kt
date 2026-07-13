@@ -72,6 +72,7 @@ class ProductionOrderService(
     @Transactional
     fun failProductionOrder(publicId: UUID, userPublicId: UUID, ex: Exception) {
         val user = userService.getUser(userPublicId)
+            ?: throw NotFoundException("User")
         val productionOrder = getProductionOrder(publicId, user)
         println(ex)
         productionOrder.status = ProductionStatus.FAILED
@@ -80,6 +81,7 @@ class ProductionOrderService(
     @Transactional
     fun completeProductionOrder(publicId: UUID, userPublicId: UUID) {
         val user = userService.getUser(userPublicId)
+            ?: throw NotFoundException("User")
         val productionOrder = getProductionOrder(publicId, user)
 
         val recipe = productService.getProductRecipe(productionOrder.product, user)

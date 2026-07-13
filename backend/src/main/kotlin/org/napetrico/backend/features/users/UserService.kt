@@ -28,9 +28,8 @@ class UserService(
     }
 
     // Internal function, don't use in controllers
-    fun getUser(publicId: UUID): User =
+    fun getUser(publicId: UUID): User? =
         userRepository.findByPublicId(publicId)
-            ?: throw NotFoundException("User")
 
     // Internal function, don't use in controllers
     fun getCurrentUser(): User {

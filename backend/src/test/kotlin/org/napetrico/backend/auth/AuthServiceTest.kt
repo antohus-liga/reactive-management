@@ -20,6 +20,7 @@ import org.napetrico.backend.features.users.UserService
 import org.napetrico.backend.helper.Fixtures
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.crypto.password.PasswordEncoder
+import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -138,11 +139,11 @@ class AuthServiceTest {
     @Test
     fun `refresh throws when user does not exist`() {
         val token = "valid"
-        val email = "test@test.com"
+        val uuid = UUID.randomUUID()
 
         every { jwtService.isValid(token) } returns true
-        every { jwtService.extractPublicId(token) } returns email
-        every { userService.getUserByEmail(Email(email)) } returns null
+        every { jwtService.extractPublicId(token) } returns uuid.toString()
+        every { userService.getUser(uuid) } returns nullt
 
         assertThrows<NotFoundException> {
             authService.refresh(RefreshRequest(token))
@@ -152,12 +153,11 @@ class AuthServiceTest {
     @Test
     fun `refresh returns new tokens`() {
         val token = "valid"
-        val email = "test@test.com"
-        val user = Fixtures.userFixture(email = email)
+        val user = Fixtures.userFixture()
 
         every { jwtService.isValid(token) } returns true
-        every { jwtService.extractPublicId(token) } returns email
-        every { userService.getUserByEmail(Email(email)) } returns user.toResponse()
+        every { jwtService.extractPublicId(token) } returns user.publicId.toString()
+        every { userService.getUser(user.publicId) } returns user
 
         every { jwtService.generateAccessToken(user.publicId) } returns "new-access"
         every { jwtService.generateRefreshToken(user.publicId) } returns "new-refresh"

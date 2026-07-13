@@ -18,6 +18,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class AuthService(
@@ -72,9 +73,9 @@ class AuthService(
             throw InvalidTokenException("Refresh")
         }
 
-        val email = jwtService.extractPublicId(request.refreshToken)
-        val user = userService.getUserByEmail(Email(email))
-            ?: throw NotFoundException("User with email $email")
+        val publicId = jwtService.extractPublicId(request.refreshToken)
+        val user = userService.getUser(UUID.fromString(publicId))
+            ?: throw NotFoundException("User")
 
         return TokenResponse(
             accessToken = jwtService.generateAccessToken(user.publicId),
