@@ -23,7 +23,6 @@ export default function OrdersPage() {
                         <th className={"p-4"}>Company Description</th>
                         <th className={"p-4"}>Company Country</th>
                         <th className={"p-4"}>Created At</th>
-                        <th className={"p-4"}>Updated At</th>
                         <th className={"p-4"}>Actions</th>
                     </tr>
                     </thead>
