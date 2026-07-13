@@ -67,9 +67,9 @@ export function useDeleteMovement() {
             orderPublicId: string,
             movementPublicId: string
         }) => ordersApi.deleteMovement({orderPublicId, movementPublicId}),
-        onSuccess: async (_, publicId) => {
+        onSuccess: async (_, args) => {
             await queryClient.invalidateQueries({queryKey: ["orders", "get"]});
-            await queryClient.invalidateQueries({queryKey: ["orders", "movements", publicId]});
+            await queryClient.invalidateQueries({queryKey: ["orders", "movements", args.orderPublicId]});
         }
     });
 }
@@ -79,9 +79,8 @@ export function useCompleteOrder() {
 
     return useMutation({
         mutationFn: (publicId: string) => ordersApi.completeOrder(publicId),
-        onSuccess: async (_, publicId) => {
+        onSuccess: async () => {
             await queryClient.invalidateQueries({queryKey: ["orders", "get"]});
-            await queryClient.invalidateQueries({queryKey: ["orders", "movements", publicId]});
             await queryClient.invalidateQueries({queryKey: ["materials", "get"]});
             await queryClient.invalidateQueries({queryKey: ["products", "get"]});
         },
