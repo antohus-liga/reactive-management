@@ -1,51 +1,103 @@
 import type {CompanyResponse} from "@/features/companies/api.ts";
 import {CompanyTypeLabel} from "@/types/CompanyType.ts";
 import {countryLabels} from "@/features/auth/countryOptions.ts";
+import Button from "@/components/Button.tsx";
+import Badge from "@/components/Badge.tsx";
 import {CompanyRole} from "@/types/CompanyRole.ts";
 
-export default function CompanyRow({company, onDelete, onEdit}: {
-    company: CompanyResponse,
-    onDelete: (publicId: string) => void,
-    onEdit: (company: CompanyResponse) => void,
+export default function CompanyRow({
+                                       company,
+                                       onDelete,
+                                       onEdit,
+                                   }: {
+    company: CompanyResponse;
+    onDelete: (publicId: string) => void;
+    onEdit: (company: CompanyResponse) => void;
 }) {
-
-    const supplierColor = "#727272"
-    const clientColor = "#8b3efe"
-    const bothColor = "#4b4b78"
-
-    const color =
-        company.roles.includes(CompanyRole.SUPPLIER) && company.roles.includes(CompanyRole.CLIENT)
-            ? bothColor
-            : company.roles.includes(CompanyRole.CLIENT)
-                ? clientColor
-                : supplierColor
     return (
-        <>
-            <tr className={"border-b transition duration-200"} style={{backgroundColor: color}}>
-                <td className={"p-4"}>{company.companyName}</td>
-                <td className={"p-4"}>{CompanyTypeLabel[company.companyType]}</td>
-                <td className={"p-4"}>{company.taxId}</td>
-                <td className={"p-4"}>{company.phoneNumber}</td>
-                <td className={"p-4"}>{company.email}</td>
-                <td className={"p-4"}>{countryLabels[company.country] ?? company.country}</td>
-                <td className={"p-4"}>{company.address}</td>
-                <td className={"p-4"}>{new Date(company.createdAt).toLocaleString()}</td>
-                <td className={"p-4"}>{new Date(company.updatedAt).toLocaleString()}</td>
-                <td className={"p-4"}>
-                    <div className={"flex gap-3"}>
-                        <button className={"bg-blue-300 hover:bg-blue-400 p-2 rounded-lg transition outline-2"}
-                                onClick={() => {
-                                    onEdit(company)
-                                }}>
-                            <img className={"size-6"} src={"/edit.png"} alt={"Edit"}/>
-                        </button>
-                        <button className={"bg-red-300 hover:bg-red-400 p-2 rounded-lg transition outline-2"}
-                                onClick={() => onDelete(company.publicId)}>
-                            <img className={"size-6"} src={"/delete.png"} alt={"Delete"}/>
-                        </button>
-                    </div>
-                </td>
-            </tr>
-        </>
+        <tr
+            className="
+                border-b
+                border-zinc-200
+                transition-colors
+                duration-150
+                hover:bg-zinc-50
+                dark:border-zinc-800
+                dark:hover:bg-zinc-800/50
+            "
+        >
+            <td className="px-5 py-4 font-medium text-zinc-900 dark:text-zinc-100">
+                {company.companyName}
+            </td>
+
+            <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300">
+                {CompanyTypeLabel[company.companyType]}
+            </td>
+
+            <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300">
+                {company.taxId}
+            </td>
+
+            <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300">
+                {company.phoneNumber}
+            </td>
+
+            <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300">
+                {company.email}
+            </td>
+
+            <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300">
+                {countryLabels[company.country] ?? company.country}
+            </td>
+
+            <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300">
+                {company.address}
+            </td>
+
+            <td className="px-5 py-4 text-sm text-zinc-500 dark:text-zinc-400">
+                {new Date(company.createdAt).toLocaleString()}
+            </td>
+
+            <td className="px-5 py-4 text-sm text-zinc-500 dark:text-zinc-400">
+                {new Date(company.updatedAt).toLocaleString()}
+            </td>
+
+            <td className="px-5 py-4">
+                {company.roles.includes(CompanyRole.SUPPLIER) &&
+                company.roles.includes(CompanyRole.CLIENT) ? (
+                    <Badge variant="indigo">
+                        Supplier & Client
+                    </Badge>
+                ) : company.roles.includes(CompanyRole.CLIENT) ? (
+                    <Badge variant="info">
+                        Client
+                    </Badge>
+                ) : (
+                    <Badge variant="neutral">
+                        Supplier
+                    </Badge>
+                )}
+            </td>
+
+            <td className="px-5 py-4">
+                <div className="flex items-center gap-2">
+                    <Button
+                        variant="secondary"
+                        className="px-3 py-2"
+                        onClick={() => onEdit(company)}
+                    >
+                        Edit
+                    </Button>
+
+                    <Button
+                        variant="danger"
+                        className="px-3 py-2"
+                        onClick={() => onDelete(company.publicId)}
+                    >
+                        Delete
+                    </Button>
+                </div>
+            </td>
+        </tr>
     );
 }

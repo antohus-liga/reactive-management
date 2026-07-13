@@ -1,24 +1,75 @@
 import {Link, useLocation} from "react-router-dom";
 
+import {
+    LayoutDashboard,
+    Building2,
+    Package,
+    Boxes,
+    Tags,
+    ClipboardList,
+    Factory,
+    PanelLeftClose,
+    PanelLeftOpen,
+} from "lucide-react";
+import {useSidebarCollapsed} from "@/hooks/useSidebarCollapsed.ts";
+
 export default function Sidebar() {
     const location = useLocation();
     const path = location.pathname;
+    const { isCollapsed, toggle } = useSidebarCollapsed();
+
+    const navItems = [
+        {to: "/dashboard", label: "Dashboard", icon: LayoutDashboard},
+        {to: "/companies", label: "Companies", icon: Building2},
+        {to: "/products", label: "Products", icon: Package},
+        {to: "/materials", label: "Materials", icon: Boxes},
+        {to: "/categories", label: "Categories", icon: Tags},
+        {to: "/orders", label: "Orders", icon: ClipboardList},
+        {to: "/production-orders", label: "Production", icon: Factory},
+    ];
 
     return (
-        <>
-            <aside
-                className={"bg-gray-800 fixed top-20 left-0 w-40 bottom-0 border-r border-gray-500 z-50 flex flex-col items-center"}
-            >
-                <ul className={"flex flex-col gap-8 text-center mt-8 text-xl"}>
-                    <Link to={"/dashboard"}><li className={`${path === "/dashboard" ? "scale-110 translate-x-1.5" : ""} bg-slate-400 border-2 border-slate-400 p-3 rounded-2xl transform hover:translate-x-3 hover:scale-120 hover:bg-slate-300 transition duration-200`}>Dashboard</li></Link>
-                    <Link to={"/companies"}><li className={`${path === "/companies" ? "scale-110 translate-x-1.5" : ""} bg-sky-700 border-2 border-sky-700 p-3 rounded-2xl transform hover:translate-x-3 hover:scale-120 hover:bg-sky-500 transition duration-200`}>Companies</li></Link>
-                    <Link to={"/products"}><li className={`${path === "/products" ? "scale-110 translate-x-1.5" : ""} bg-black border-2 border-black p-3 rounded-2xl transform hover:translate-x-3 hover:scale-120 hover:bg-gray-900 transition duration-200`}>Products</li></Link>
-                    <Link to={"/materials"}><li className={`${path === "/materials" ? "scale-110 translate-x-1.5" : ""} bg-amber-700 border-2 border-amber-700 p-3 rounded-2xl transform hover:translate-x-3 hover:scale-120 hover:bg-amber-500 transition duration-200`}>Materials</li></Link>
-                    <Link to={"/categories"}><li className={`${path === "/categories" ? "scale-110 translate-x-1.5" : ""} bg-green-800 border-2 border-green-800 p-3 rounded-2xl transform hover:translate-x-3 hover:scale-120 hover:bg-green-600 transition duration-200`}>Categories</li></Link>
-                    <Link to={"/orders"}><li className={`${path === "/orders" ? "scale-110 translate-x-1.5" : ""} bg-red-700 border-2 border-red-700 p-3 rounded-2xl transform hover:translate-x-3 hover:scale-120 hover:bg-red-500 transition duration-200`}>Orders</li></Link>
-                    <Link to={"/production-orders"}><li className={`${path === "/production-orders" ? "scale-110 translate-x-1.5" : ""} bg-orange-900 border-2 border-orange-900 p-3 rounded-2xl transform hover:translate-x-3 hover:scale-120 hover:bg-orange-700 transition duration-200`}>Production</li></Link>
-                </ul>
-            </aside>
-        </>
+        <aside
+            className={`bg-white dark:bg-zinc-900 fixed top-16 left-0 bottom-0 border-r border-zinc-200 dark:border-zinc-800 z-40 flex flex-col items-stretch py-6 overflow-y-auto transition-all duration-200 ${
+                isCollapsed ? "w-16" : "w-40"
+            }`}
+        >
+            <ul className="flex flex-col gap-1 px-3 text-sm">
+                {navItems.map(({to, label, icon: Icon}) => {
+                    const isActive = path === to;
+                    return (
+                        <li key={to}>
+                            <Link
+                                to={to}
+                                title={isCollapsed ? label : undefined}
+                                className={`flex items-center gap-3 px-3 py-2.5 rounded-md font-medium border-l-2 transition-colors duration-150 ${
+                                    isCollapsed ? "justify-center" : ""
+                                } ${
+                                    isActive
+                                        ? "bg-blue-50 dark:bg-blue-950/40 border-blue-600 text-blue-700 dark:text-blue-400"
+                                        : "border-transparent text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-100"
+                                }`}
+                            >
+                                <Icon className="size-4.5 shrink-0" strokeWidth={2}/>
+                                {!isCollapsed && <span className="truncate">{label}</span>}
+                            </Link>
+                        </li>
+                    );
+                })}
+            </ul>
+
+            <div className="mt-auto px-3 pt-3 border-t border-zinc-200 dark:border-zinc-800">
+                <button
+                    onClick={toggle}
+                    className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-md text-sm font-medium text-zinc-500 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors duration-150 ${
+                        isCollapsed ? "justify-center" : ""
+                    }`}
+                    aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+                >
+                    {isCollapsed ? <PanelLeftOpen className="size-4.5 shrink-0"/> : <PanelLeftClose className="size-4.5 shrink-0"/>}
+                    {!isCollapsed && <span>Collapse</span>}
+                </button>
+            </div>
+        </aside>
     );
 }

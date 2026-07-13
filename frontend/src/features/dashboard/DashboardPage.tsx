@@ -7,16 +7,16 @@ import RecentActivity from "@/features/dashboard/RecentActivity.tsx";
 export default function Dashboard() {
     return (
         <div className="space-y-8">
-            <DashboardStats />
+            <DashboardStats/>
 
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-                <RevenueChart />
-                <ProductionOverview />
+                <RevenueChart/>
+                <ProductionOverview/>
             </div>
 
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 items-start">
-                <InventoryAlerts />
-                <RecentActivity />
+                <InventoryAlerts/>
+                <RecentActivity/>
             </div>
         </div>
     );

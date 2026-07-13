@@ -1,6 +1,6 @@
-import { useQueries } from "@tanstack/react-query";
+import {useQueries} from "@tanstack/react-query";
 
-import { useFetchOrders} from "@/features/orders/hooks.ts";
+import {useFetchOrders} from "@/features/orders/hooks.ts";
 import {ordersApi} from "@/features/orders/api.ts";
 
 export function useDashboardSales() {

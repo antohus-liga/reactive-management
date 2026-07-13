@@ -8,6 +8,7 @@ import type {UserUpdatePayload} from "@/features/auth/api.ts";
 import {CompanyType, CompanyTypeLabel} from "@/types/CompanyType.ts";
 import TextField from "@/components/TextField.tsx";
 import {CountrySelect} from "@/features/auth/RegisterPage.tsx";
+import ThemeToggle from "@/components/ThemeToggle.tsx";
 
 export default function Topbar() {
     const {data: user} = useCurrentUser()
@@ -22,23 +23,29 @@ export default function Topbar() {
         <>
             <UserModal open={open} setOpen={setOpen}/>
             <header
-                className="fixed top-0 left-0 right-0 h-20 bg-gray-700 border-b border-gray-500 z-50 px-6 flex items-center">
-                <div className={"mr-auto"}>
-                    <h1 className={"text-4xl"}>{title}</h1>
+                className="fixed top-0 left-0 right-0 h-16 bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 z-50 px-6 flex items-center shadow-sm">
+                <div className="mr-auto">
+                    <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">{title}</h1>
                 </div>
-                <div className={"flex items-center gap-4"}>
-                    <h2>{user?.companyName}</h2>
-                    <div className={"w-px bg-white h-12"}/>
-                    <h2>{user?.email}</h2>
-                    <div className={"w-px bg-white h-12"}/>
+                <div className="flex items-center gap-4">
+                    <div className="flex flex-col items-end text-sm leading-tight">
+                        <span className="font-medium text-zinc-700 dark:text-zinc-200">{user?.companyName}</span>
+                        <span className="text-zinc-400 dark:text-zinc-500">{user?.email}</span>
+                    </div>
+
+                    <div className="w-px bg-zinc-200 dark:bg-zinc-700 h-8"/>
+
+                    <ThemeToggle/>
+
                     <button
-                        className={"bg-gray-500 hover:bg-gray-400 border-2 border-gray-300 rounded-lg transition duration-200 p-2 text-xl cursor-pointer"}
+                        className="bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 border border-zinc-200 dark:border-zinc-700 rounded-md transition-colors duration-150 p-2 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50"
                         onClick={() => setOpen(true)}
+                        aria-label="Settings"
                     >
-                        <img className={"size-9"} src={"/settings.png"} alt={"Settings"}/>
+                        <img className="dark:invert size-5" src="/settings.png" alt="Settings"/>
                     </button>
                     <button
-                        className={"bg-red-700 hover:bg-red-600 border-2 border-red-500 rounded-lg transition duration-200 p-3 text-xl cursor-pointer"}
+                        className="bg-red-50 hover:bg-red-100 dark:bg-red-950/40 dark:hover:bg-red-950/60 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900 rounded-md transition-colors duration-150 px-3 py-2 text-sm font-medium cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500/50"
                         onClick={() => logout.mutate()}
                     >
                         Sign Out
@@ -52,17 +59,17 @@ export default function Topbar() {
 function UserModal({open, setOpen}: { open: boolean, setOpen: (value: boolean) => void }) {
     return (
         <div>
-            <Dialog open={open} onClose={() => setOpen(false)} className="relative w-10 z-10">
+            <Dialog open={open} onClose={() => setOpen(false)} className="relative z-50">
                 <DialogBackdrop
                     transition
-                    className="fixed inset-0 bg-gray-900/50 transition-opacity data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in"
+                    className="fixed inset-0 bg-zinc-900/40 backdrop-blur-sm transition-opacity data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in"
                 />
 
-                <div className="ml-20 mt-10 fixed inset-0 z-10 w-screen overflow-hidden">
-                    <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                <div className="fixed inset-0 z-50 w-screen overflow-y-auto">
+                    <div className="flex min-h-full items-center justify-center p-4">
                         <DialogPanel
                             transition
-                            className="relative transform w-fit overflow-hidden rounded-lg text-left shadow-xl bg-gray-800 outline -outline-offset-1 outline-white/10 transition-all data-closed:translate-y-4 data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in data-closed:sm:translate-y-0 data-closed:sm:scale-95"
+                            className="relative transform w-full max-w-2xl overflow-hidden rounded-lg text-left shadow-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 transition-all data-closed:translate-y-4 data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in data-closed:sm:translate-y-0 data-closed:sm:scale-95"
                         >
                             <UserForm onClose={() => setOpen(false)}/>
                         </DialogPanel>
@@ -100,10 +107,11 @@ function UserForm({onClose}: { onClose: () => void }) {
     return (
         <form
             onSubmit={handleSubmit}
-            className={"bg-gray-700 text-white drop-shadow-xl drop-shadow-emerald-200 rounded-lg p-8 gap-6 flex flex-col text-2xl"}>
-            <div className={"flex gap-4"}>
-                <div className={"flex flex-col gap-4"}>
-                    <h2 className={"text-2xl font-mono font-bold"}>Company Information</h2>
+            className="bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 rounded-lg p-8 gap-6 flex flex-col">
+            <div className="flex flex-col sm:flex-row gap-8">
+                <div className="flex flex-col gap-4 flex-1">
+                    <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Company
+                        Information</h2>
                     <TextField label={"Company Name"} error={fieldErrors?.companyName} inputProps={{
                         placeholder: "Enter your company name",
                         value: update.companyName,
@@ -112,7 +120,7 @@ function UserForm({onClose}: { onClose: () => void }) {
                             companyName: e.target.value
                         })),
                     }}/>
-                    <label className={"flex flex-col gap-2"}>
+                    <label className="flex flex-col gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300">
                         Company Type
                         <TypeSelect values={Object.values(CompanyType)} labels={CompanyTypeLabel}
                                     value={update.companyType}
@@ -121,7 +129,8 @@ function UserForm({onClose}: { onClose: () => void }) {
                                         companyType: value
                                     }))}
                                     placeHolder={"Select your company type"}/>
-                        {fieldErrors?.companyType && <p className="text-red-400 text-xl">{fieldErrors.companyType}</p>}
+                        {fieldErrors?.companyType &&
+                            <p className="text-red-500 text-xs font-normal">{fieldErrors.companyType}</p>}
                     </label>
                     <TextField label={"Tax ID"} error={fieldErrors?.taxId} inputProps={{
                         placeholder: "Enter your company tax ID",
@@ -132,8 +141,10 @@ function UserForm({onClose}: { onClose: () => void }) {
                         })),
                     }}/>
                 </div>
-                <div className={"flex flex-col gap-4"}>
-                    <h2 className={"text-2xl font-mono font-bold"}>Company Contacts</h2>
+                <div className="hidden sm:block w-px bg-zinc-200 dark:bg-zinc-800"/>
+                <div className="flex flex-col gap-4 flex-1">
+                    <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Company
+                        Contacts</h2>
                     <TextField label={"Phone Number"} error={fieldErrors?.phoneNumber} inputProps={{
                         placeholder: "Enter your company phone number",
                         value: update.phoneNumber,
@@ -153,16 +164,17 @@ function UserForm({onClose}: { onClose: () => void }) {
                     }}/>
                 </div>
             </div>
-            <hr className={"w-full"}/>
-            <div className={"flex flex-col gap-4"}>
-                <h2 className={"text-2xl font-mono font-bold"}>Company Localization</h2>
-                <label className={"flex flex-col gap-2"}>
+            <hr className="border-zinc-200 dark:border-zinc-800"/>
+            <div className="flex flex-col gap-4">
+                <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Company
+                    Localization</h2>
+                <label className="flex flex-col gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300">
                     Country
                     <CountrySelect value={update.country} setValue={value => setUpdate(prev => ({
                         ...prev,
                         country: value
                     }))}/>
-                    {fieldErrors?.country && <p className="text-red-400 text-xl">{fieldErrors.country}</p>}
+                    {fieldErrors?.country && <p className="text-red-500 text-xs font-normal">{fieldErrors.country}</p>}
                 </label>
                 <TextField label={"Address"} error={fieldErrors?.address} inputProps={{
                     placeholder: "Enter your company address",
@@ -173,22 +185,22 @@ function UserForm({onClose}: { onClose: () => void }) {
                     })),
                 }}/>
             </div>
-            <div className={"flex flex-col justify-center items-center gap-4"}>
-                <p className={`text-red-400 text-xl ${!fieldErrors && error ? "visible" : "invisible"}`}>
+            <div className="flex flex-col justify-center items-center gap-3">
+                <p className={`text-red-500 text-sm ${!fieldErrors && error ? "visible" : "invisible"}`}>
                     {!fieldErrors && error ? getErrorMessage(error) : "Placeholder"}
                 </p>
-                <div className={"flex gap-2"}>
+                <div className="flex gap-2">
                     <button
-                        type={"button"}
-                        className={"mt-2 w-fit disabled:blur-xs bg-gray-400 p-2 text-lg border-2 border-gray-500 rounded-xl hover:bg-gray-600 transition duration-200"}
+                        type="button"
+                        className="w-fit disabled:opacity-50 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-200 px-4 py-2 text-sm font-medium border border-zinc-200 dark:border-zinc-700 rounded-md transition-colors duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50"
                         onClick={onClose}
                     >
                         Cancel
                     </button>
                     <button
                         disabled={editUser.isPending}
-                        type={"submit"}
-                        className={"mt-2 w-fit disabled:blur-xs bg-green-500 p-2 text-lg border-2 border-green-600 rounded-xl hover:bg-green-700 transition duration-200"}
+                        type="submit"
+                        className="w-fit disabled:opacity-50 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm font-medium border border-blue-600 rounded-md transition-colors duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50"
                     >
                         Confirm
                     </button>
