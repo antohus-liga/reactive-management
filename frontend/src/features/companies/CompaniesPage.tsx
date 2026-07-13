@@ -1,4 +1,3 @@
-import NewCompanyModal from "./NewCompanyModal";
 import CompanyRow from "@/features/companies/CompanyRow.tsx";
 import type {CompanyResponse} from "@/features/companies/api.ts";
 import useCompanies from "@/features/companies/useCompanies.ts";
@@ -7,6 +6,8 @@ import DataTable from "@/components/table/DataTable.tsx";
 import {DataTableHeader} from "@/components/table/DataTableHeader.tsx";
 import {DataTableHead} from "@/components/table/DataTableHead";
 import Button from "@/components/Button.tsx";
+import CompanyForm from "@/features/companies/CompanyForm.tsx";
+import Modal from "@/components/Modal.tsx";
 
 export default function CompaniesPage() {
     const companies = useCompanies();
@@ -14,11 +15,9 @@ export default function CompaniesPage() {
 
     return (
         <>
-            <NewCompanyModal
-                open={modal.open}
-                updateTarget={modal.updateTarget}
-                onClose={modal.close}
-            />
+            <Modal open={modal.open} onClose={modal.close}>
+                <CompanyForm initial={modal.updateTarget} onClose={modal.close}/>
+            </Modal>
 
             <DataTable
                 loading={companies.get.isLoading}
@@ -33,9 +32,9 @@ export default function CompaniesPage() {
                     <DataTableHeader>Email</DataTableHeader>
                     <DataTableHeader>Country</DataTableHeader>
                     <DataTableHeader>Address</DataTableHeader>
+                    <DataTableHeader>Role</DataTableHeader>
                     <DataTableHeader>Created At</DataTableHeader>
                     <DataTableHeader>Updated At</DataTableHeader>
-                    <DataTableHeader>Role</DataTableHeader>
                     <DataTableHeader className="text-right">Actions</DataTableHeader>
                 </DataTableHead>
 
@@ -50,12 +49,11 @@ export default function CompaniesPage() {
                 ))}
                 </tbody>
             </DataTable>
-            <Button className={"mt-5"}>
-                <button
-                    onClick={modal.openForCreate}
-                >
-                    New Company
-                </button>
+            <Button
+                className={"mt-5"}
+                onClick={modal.openForCreate}
+            >
+                New Company
             </Button>
         </>
     );

@@ -1,16 +1,15 @@
 import {Dialog, DialogBackdrop, DialogPanel} from "@headlessui/react";
-import CompanyForm from "@/features/companies/CompanyForm.tsx";
-import type {CompanyResponse} from "@/features/companies/api.ts";
+import type {ReactNode} from "react";
 
-export default function NewCompanyModal(
+export default function Modal(
     {
         open,
-        updateTarget,
         onClose,
+        children,
     }: {
         open: boolean;
-        updateTarget: CompanyResponse | null;
         onClose: () => void;
+        children: ReactNode;
     }
 ) {
     return (
@@ -81,15 +80,7 @@ export default function NewCompanyModal(
                         data-closed:sm:scale-95
                     "
                 >
-
-                    {open && (
-                        <CompanyForm
-                            key={updateTarget?.publicId}
-                            initial={updateTarget}
-                            onClose={onClose}
-                        />
-                    )}
-
+                    {open && children}
                 </DialogPanel>
 
             </div>
