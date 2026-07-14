@@ -50,7 +50,7 @@ class AuthService(
     fun updateUser(request: UpdateUserRequest) = userService.updateUser(request)
 
     fun login(request: LoginRequest): TokenResponse {
-        val user = userService.getUserByEmail(Email(request.email))!!
+        val user = userService.getUserByEmail(Email(request.email)) ?: throw InvalidCredentialsException()
 
         try {
             authenticationManager.authenticate(
