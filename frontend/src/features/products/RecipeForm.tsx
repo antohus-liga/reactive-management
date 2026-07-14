@@ -26,10 +26,10 @@ export default function RecipeForm(
     return (
         <form onSubmit={(e) => form.handleSubmit(e, onClose)}>
             <div className="px-6 py-5">
-                <div className="flex items-start gap-4">
+                <div className="flex items-start gap-2">
                     <div
-                        className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-500/10">
-                        <BookOpen size={18}/>
+                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-500/10">
+                        <BookOpen className={"dark:invert"} size={18}/>
                     </div>
 
                     <div className="flex-1">
