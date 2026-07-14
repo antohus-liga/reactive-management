@@ -1,0 +1,23 @@
+[
+  {
+    "companies": {
+      "title": "Companies",
+      "newCompany": "New Company",
+      "filterPlaceholder": "Filter by company name...",
+      "noResults": "No companies found.",
+      "columns": {
+        "companyName": "Company Name",
+        "companyType": "Company Type",
+        "taxId": "Tax ID",
+        "phone": "Phone Number",
+        "email": "Email",
+        "country": "Country",
+        "address": "Address",
+        "role": "Role",
+        "createdAt": "Created At",
+        "updatedAt": "Updated At",
+        "actions": "Actions"
+      }
+    }
+  }
+]
