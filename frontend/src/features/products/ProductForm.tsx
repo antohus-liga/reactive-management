@@ -45,7 +45,7 @@ export default function ProductForm({
                             dark:bg-blue-500/10
                         "
                     >
-                        <Package size={18}/>
+                        <Package className={"dark:invert"} size={18}/>
                     </div>
 
                     <div className="flex-1">
