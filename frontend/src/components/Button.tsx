@@ -5,7 +5,7 @@ type ButtonProps = {
     children: ReactNode;
     onClick?: () => void;
     type?: "button" | "submit" | "reset";
-    variant?: "primary" | "secondary" | "danger";
+    variant?: "primary" | "secondary" | "danger" | "success";
     className?: string;
     disabled?: boolean;
     icon?: ReactNode;
@@ -27,6 +27,9 @@ export default function Button({
 
         danger:
             "bg-red-600 hover:bg-red-700 text-white",
+
+        success:
+            "bg-green-600 hover:bg-green-700 text-white",
     };
 
     return (
