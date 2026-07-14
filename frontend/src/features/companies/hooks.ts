@@ -1,6 +1,5 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {companyApi, type CompanyRequest} from "@/features/companies/api.ts";
-import {getErrorMessage} from "@/lib/getErrorMessage.ts";
 
 export function useFetchCompanies() {
     return useQuery({
@@ -28,7 +27,7 @@ export function useUpdateCompany() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async ({publicId, payload}: {publicId: string, payload: CompanyRequest}) => {
+        mutationFn: async ({publicId, payload}: { publicId: string, payload: CompanyRequest }) => {
             return await companyApi.update(publicId, payload)
         },
         onSuccess: async () => {
@@ -43,6 +42,6 @@ export function useDeleteCompany() {
     return useMutation({
         mutationFn: (publicId: string) => companyApi.delete(publicId),
         onSuccess: () => queryClient.invalidateQueries({queryKey: ["companies", "get"]}),
-        onError: (error) => alert(getErrorMessage(error))
+        onError: () => alert("Some orders depend on this company.")
     });
 }

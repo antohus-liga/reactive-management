@@ -4,10 +4,11 @@ import {Factory, Package, ShoppingCart} from "lucide-react";
 import DashboardCard from "./DashboardCard";
 
 import {useRecentActivity} from "@/features/dashboard/useRecentActivity";
+
 const icons = {
-    ORDER: <ShoppingCart size={18} />,
-    PRODUCTION: <Factory size={18} />,
-    MOVEMENT: <Package size={18} />,
+    ORDER: <ShoppingCart size={18}/>,
+    PRODUCTION: <Factory size={18}/>,
+    MOVEMENT: <Package size={18}/>,
 };
 
 export default function RecentActivity() {
@@ -19,7 +20,7 @@ export default function RecentActivity() {
     if (isLoading) {
         return (
             <DashboardCard title="Recent Activity">
-                <div className="h-72 animate-pulse rounded-xl bg-zinc-100 dark:bg-zinc-800" />
+                <div className="h-72 animate-pulse rounded-xl bg-zinc-100 dark:bg-zinc-800"/>
             </DashboardCard>
         );
     }
@@ -28,39 +29,11 @@ export default function RecentActivity() {
         <DashboardCard title="Recent Activity">
             <div className="space-y-3">
                 {data.map((activity) => (
-                    <div
-                        key={activity.id}
-                        className="
-                            flex
-                            gap-4
-                            rounded-xl
-                            border
-                            border-zinc-200
-                            bg-zinc-50
-                            p-4
-                            transition-colors
-                            duration-150
-                            hover:bg-zinc-100
-                            dark:border-zinc-800
-                            dark:bg-zinc-900/60
-                            dark:hover:bg-zinc-800/80
-                        "
+                    <div key={activity.id}
+                         className="flex gap-4 rounded-xl border border-zinc-200 bg-zinc-50 p-4 transition-colors duration-150 hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900/60 dark:hover:bg-zinc-800/80"
                     >
                         <div
-                            className="
-                                flex
-                                h-10
-                                w-10
-                                shrink-0
-                                items-center
-                                justify-center
-                                rounded-full
-                                bg-zinc-100
-                                text-zinc-600
-                                dark:bg-zinc-800
-                                dark:text-zinc-300
-                            "
-                        >
+                            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300">
                             {icons[activity.type]}
                         </div>
 

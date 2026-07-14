@@ -11,9 +11,8 @@ export default function AppShell() {
             <Topbar/>
             <div className="flex">
                 <Sidebar/>
-                <main className={`mt-16 flex-1 overflow-y-auto p-8 transition-all duration-200 ${
-                    isCollapsed ? "ml-16" : "ml-40"
-                }`}>
+                <main
+                    className={`mt-16 flex-1 overflow-y-auto p-8 transition-all duration-200 ${isCollapsed ? "ml-16" : "ml-40"}`}>
                     <Outlet/>
                 </main>
             </div>

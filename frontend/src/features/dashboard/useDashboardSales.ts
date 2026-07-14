@@ -9,7 +9,6 @@ export function useDashboardSales() {
         isLoading: ordersLoading,
     } = useFetchOrders();
 
-
     const movementQueries = useQueries({
         queries: orders.map(order => ({
             queryKey: [
@@ -26,13 +25,11 @@ export function useDashboardSales() {
         })),
     });
 
-
     const isLoading =
         ordersLoading ||
         movementQueries.some(
             query => query.isLoading
         );
-
 
     const sales =
         movementQueries
@@ -50,7 +47,6 @@ export function useDashboardSales() {
                     sum + movement.totalPrice,
                 0
             );
-
 
     return {
         sales,

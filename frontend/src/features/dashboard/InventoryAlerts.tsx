@@ -60,34 +60,23 @@ export default function InventoryAlerts() {
 }
 
 
-function InventorySection({
-                              title,
-                              items,
-                          }: {
-    title: string;
-    items: {
-        name: string;
-        quantity: number;
-        measurement: string;
-    }[];
-}) {
+function InventorySection(
+    {
+        title,
+        items,
+    }: {
+        title: string;
+        items: {
+            name: string;
+            quantity: number;
+            measurement: string;
+        }[];
+    }) {
     return (
         <section>
             <div className="mb-4 flex items-center gap-2">
                 <div
-                    className="
-                        flex
-                        h-8
-                        w-8
-                        items-center
-                        justify-center
-                        rounded-full
-                        bg-amber-100
-                        text-amber-600
-                        dark:bg-amber-500/10
-                        dark:text-amber-400
-                    "
-                >
+                    className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-100 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400">
                     <AlertTriangle size={16}/>
                 </div>
 
@@ -98,21 +87,7 @@ function InventorySection({
 
             {items.length === 0 ? (
                 <div
-                    className="
-                        rounded-lg
-                        border
-                        border-dashed
-                        border-zinc-300
-                        bg-zinc-50
-                        px-4
-                        py-5
-                        text-sm
-                        text-zinc-500
-                        dark:border-zinc-700
-                        dark:bg-zinc-900/40
-                        dark:text-zinc-400
-                    "
-                >
+                    className="rounded-lg border border-dashed border-zinc-300 bg-zinc-50 px-4 py-5 text-sm text-zinc-500 dark:border-zinc-700 dark:bg-zinc-900/40 dark:text-zinc-400">
                     No low-stock items.
                 </div>
             ) : (
@@ -120,31 +95,9 @@ function InventorySection({
                     {items.map((item) => (
                         <div
                             key={item.name}
-                            className="
-                                flex
-                                items-center
-                                justify-between
-                                rounded-lg
-                                border
-                                border-zinc-200
-                                bg-zinc-50
-                                px-4
-                                py-3
-                                transition-colors
-                                hover:bg-zinc-100
-                                dark:border-zinc-800
-                                dark:bg-zinc-900/60
-                                dark:hover:bg-zinc-800/70
-                            "
+                            className="flex items-center justify-between rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-3 transition-colors hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900/60 dark:hover:bg-zinc-800/70"
                         >
-                            <span
-                                className="
-                                    text-sm
-                                    font-medium
-                                    text-zinc-800
-                                    dark:text-zinc-200
-                                "
-                            >
+                            <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200">
                                 {item.name}
                             </span>
 

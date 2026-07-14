@@ -41,7 +41,7 @@ export default function ProductionOrdersPage() {
             <DataTable
                 loading={productionOrders.get.isLoading}
                 empty={!productionOrders.get.isLoading && productionOrders.get.data?.length === 0}
-                emptyMessage="No orders found."
+                emptyMessage="No production orders found."
             >
                 <DataTableHead>
                     <DataTableHeader>Product</DataTableHeader>
@@ -64,11 +64,7 @@ export default function ProductionOrdersPage() {
                 ))}
                 </tbody>
             </DataTable>
-            <Button
-                className={"mt-5"}
-                onClick={modal.openForCreate}
-                icon={<Plus size={16}/>}
-            >
+            <Button className={"mt-5"} onClick={modal.openForCreate} icon={<Plus size={16}/>}>
                 New Production Order
             </Button>
         </>

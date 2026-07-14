@@ -10,13 +10,15 @@ interface StatCardProps {
         positive?: boolean;
     };
 }
-export default function StatCard({
-                                     title,
-                                     value,
-                                     icon,
-                                     description,
-                                     trend,
-                                 }: StatCardProps) {
+
+export default function StatCard(
+    {
+        title,
+        value,
+        icon,
+        description,
+        trend,
+    }: StatCardProps) {
     return (
         <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5 shadow-sm">
             <div className="flex items-start justify-between">

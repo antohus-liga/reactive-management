@@ -11,25 +11,19 @@ type ButtonProps = {
     icon?: ReactNode;
 };
 
-export default function Button({
-                                   children,
-                                   icon,
-                                   variant = "primary",
-                                   className = "",
-                                   ...props
-                               }: ButtonProps) {
+export default function Button(
+    {
+        children,
+        icon,
+        variant = "primary",
+        className = "",
+        ...props
+    }: ButtonProps) {
     const variants = {
-        primary:
-            "bg-blue-600 hover:bg-blue-700 text-white shadow-sm",
-
-        secondary:
-            "border border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800",
-
-        danger:
-            "bg-red-600 hover:bg-red-700 text-white",
-
-        success:
-            "bg-green-600 hover:bg-green-700 text-white",
+        primary: "bg-blue-600 hover:bg-blue-700 text-white shadow-sm",
+        secondary: "border border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800",
+        danger: "bg-red-600 hover:bg-red-700 text-white",
+        success: "bg-green-600 hover:bg-green-700 text-white",
     };
 
     return (
@@ -41,12 +35,7 @@ export default function Button({
                 className
             )}
         >
-            {icon && (
-                <span className="shrink-0 [&>svg]:h-4 [&>svg]:w-4">
-            {icon}
-        </span>
-            )}
-
+            {icon && (<span className="shrink-0 [&>svg]:h-4 [&>svg]:w-4"> {icon} </span>)}
             {children}
         </button>
     );

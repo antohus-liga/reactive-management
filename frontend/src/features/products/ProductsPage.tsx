@@ -26,7 +26,7 @@ export default function ProductsPage() {
             <DataTable
                 loading={products.get.isLoading}
                 empty={!products.get.isLoading && products.get.data?.length === 0}
-                emptyMessage="No companies found."
+                emptyMessage="No products found."
             >
                 <DataTableHead>
                     <DataTableHeader>Description</DataTableHeader>

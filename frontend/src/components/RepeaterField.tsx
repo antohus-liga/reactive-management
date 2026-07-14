@@ -20,45 +20,27 @@ export default function RepeaterField(
         addLabel = "Add Item",
         onAdd,
         children,
-    }: RepeaterFieldProps) {
+    }:
+    RepeaterFieldProps) {
     const hasChildren = Array.isArray(children)
         ? children.length > 0
         : !!children;
 
     return (
-        <FormSection
-            title={title}
-            description={description}
-        >
+        <FormSection title={title} description={description}>
             <div className="space-y-4">
+                {hasChildren
+                    ? (children)
+                    : (
+                        <div
+                            className="rounded-xl border border-dashed border-zinc-300 px-6 py-10 text-center dark:border-zinc-700">
+                            <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                                {emptyText}
+                            </p>
+                        </div>
+                    )}
 
-                {hasChildren ? (
-                    children
-                ) : (
-                    <div
-                        className="
-                            rounded-xl
-                            border
-                            border-dashed
-                            border-zinc-300
-                            px-6
-                            py-10
-                            text-center
-                            dark:border-zinc-700
-                        "
-                    >
-                        <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                            {emptyText}
-                        </p>
-                    </div>
-                )}
-
-                <Button
-                    type="button"
-                    variant="secondary"
-                    icon={<Plus/>}
-                    onClick={onAdd}
-                >
+                <Button type="button" variant="secondary" icon={<Plus/>} onClick={onAdd}>
                     {addLabel}
                 </Button>
 

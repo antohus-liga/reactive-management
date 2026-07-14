@@ -60,11 +60,8 @@ export default function ProductionOrderForm(
                     </div>
                 </div>
 
-                <p className={`mt-4 text-sm text-red-500 ${!fieldErrors && error ? "visible" : "invisible"}`}
-                >
-                    {!fieldErrors && error
-                        ? getErrorMessage(error)
-                        : "Placeholder"}
+                <p className={`mt-4 text-sm text-red-500 ${!fieldErrors && error ? "visible" : "invisible"}`}>
+                    {!fieldErrors && error ? getErrorMessage(error) : "Placeholder"}
                 </p>
             </div>
 

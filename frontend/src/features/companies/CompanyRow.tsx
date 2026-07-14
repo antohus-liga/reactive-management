@@ -6,27 +6,18 @@ import Badge from "@/components/Badge.tsx";
 import {CompanyRole} from "@/types/CompanyRole.ts";
 import {Pencil, Trash2} from "lucide-react";
 
-export default function CompanyRow({
-                                       company,
-                                       onDelete,
-                                       onEdit,
-                                   }: {
-    company: CompanyResponse;
-    onDelete: (publicId: string) => void;
-    onEdit: (company: CompanyResponse) => void;
-}) {
+export default function CompanyRow(
+    {
+        company,
+        onDelete,
+        onEdit,
+    }: {
+        company: CompanyResponse;
+        onDelete: (publicId: string) => void;
+        onEdit: (company: CompanyResponse) => void;
+    }) {
     return (
-        <tr
-            className="
-                border-b
-                border-zinc-200
-                transition-colors
-                duration-150
-                hover:bg-zinc-50
-                dark:border-zinc-800
-                dark:hover:bg-zinc-800/50
-            "
-        >
+        <tr className="border-b border-zinc-200 transition-colors duration-150 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-800/50">
             <td className="px-5 py-4 font-medium text-zinc-900 dark:text-zinc-100">
                 {company.companyName}
             </td>
@@ -55,14 +46,6 @@ export default function CompanyRow({
                 {company.address}
             </td>
 
-            <td className="px-5 py-4 text-sm text-zinc-500 dark:text-zinc-400">
-                {new Date(company.createdAt).toLocaleString()}
-            </td>
-
-            <td className="px-5 py-4 text-sm text-zinc-500 dark:text-zinc-400">
-                {new Date(company.updatedAt).toLocaleString()}
-            </td>
-
             <td className="px-5 py-4">
                 {company.roles.includes(CompanyRole.SUPPLIER) &&
                 company.roles.includes(CompanyRole.CLIENT) ? (
@@ -80,21 +63,21 @@ export default function CompanyRow({
                 )}
             </td>
 
+            <td className="px-5 py-4 text-sm text-zinc-500 dark:text-zinc-400">
+                {new Date(company.createdAt).toLocaleString()}
+            </td>
+
+            <td className="px-5 py-4 text-sm text-zinc-500 dark:text-zinc-400">
+                {new Date(company.updatedAt).toLocaleString()}
+            </td>
+
             <td className="px-5 py-4">
                 <div className="flex items-center gap-2">
-                    <Button
-                        variant="secondary"
-                        onClick={() => onEdit(company)}
-                        icon={<Pencil size={16}/>}
-                    >
+                    <Button variant="secondary" onClick={() => onEdit(company)} icon={<Pencil size={16}/>}>
                         Edit
                     </Button>
 
-                    <Button
-                        variant="danger"
-                        onClick={() => onDelete(company.publicId)}
-                        icon={<Trash2 size={16}/>}
-                    >
+                    <Button variant="danger" onClick={() => onDelete(company.publicId)} icon={<Trash2 size={16}/>}>
                         Delete
                     </Button>
                 </div>

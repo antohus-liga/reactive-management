@@ -22,7 +22,7 @@ export default function CategoriesPage() {
             <DataTable
                 loading={categories.get.isLoading}
                 empty={!categories.get.isLoading && categories.get.data?.length === 0}
-                emptyMessage="No companies found."
+                emptyMessage="No categories found."
             >
                 <DataTableHead>
                     <DataTableHeader>Name</DataTableHeader>
@@ -35,20 +35,13 @@ export default function CategoriesPage() {
 
                 <tbody>
                 {categories.get.data?.map((category: CategoryResponse) => (
-                    <CategoryRow
-                        key={category.publicId}
-                        category={category}
-                        onDelete={categories.handleDeleteCategory}
-                        onEdit={modal.openForUpdate}
+                    <CategoryRow key={category.publicId} category={category} onDelete={categories.handleDeleteCategory}
+                                 onEdit={modal.openForUpdate}
                     />
                 ))}
                 </tbody>
             </DataTable>
-            <Button
-                className={"mt-5"}
-                onClick={modal.openForCreate}
-                icon={<Plus size={16}/>}
-            >
+            <Button className={"mt-5"} onClick={modal.openForCreate} icon={<Plus size={16}/>}>
                 New Category
             </Button>
         </>

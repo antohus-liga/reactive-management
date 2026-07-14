@@ -41,20 +41,13 @@ export default function CompaniesPage() {
 
                 <tbody>
                 {companies.get.data?.map((company: CompanyResponse) => (
-                    <CompanyRow
-                        key={company.publicId}
-                        company={company}
-                        onDelete={companies.handleDeleteCompany}
-                        onEdit={modal.openForUpdate}
+                    <CompanyRow key={company.publicId} company={company} onDelete={companies.handleDeleteCompany}
+                                onEdit={modal.openForUpdate}
                     />
                 ))}
                 </tbody>
             </DataTable>
-            <Button
-                className={"mt-5"}
-                onClick={modal.openForCreate}
-                icon={<Plus size={16}/>}
-            >
+            <Button className={"mt-5"} onClick={modal.openForCreate} icon={<Plus size={16}/>}>
                 New Company
             </Button>
         </>

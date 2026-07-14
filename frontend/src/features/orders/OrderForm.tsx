@@ -44,10 +44,8 @@ export default function OrderForm({
                         </DialogTitle>
 
                         <div className="mt-6">
-                            <FormSection
-                                title="Order Details"
-                                icon={<Building2 size={16}/>}
-                                description="Select the company and the role associated with this order."
+                            <FormSection title="Order Details" icon={<Building2 size={16}/>}
+                                         description="Select the company and the role associated with this order."
                             >
                                 <CompanySelect
                                     value={form.order.companyPublicId}
@@ -86,9 +84,7 @@ export default function OrderForm({
                     </div>
                 </div>
                 <p className={`mt-6 text-sm text-red-500 ${!fieldErrors && error ? "visible" : "invisible"}`}>
-                    {!fieldErrors && error
-                        ? getErrorMessage(error)
-                        : "Placeholder"}
+                    {!fieldErrors && error ? getErrorMessage(error) : "Placeholder"}
                 </p>
             </div>
 

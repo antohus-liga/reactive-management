@@ -64,13 +64,8 @@ export default function ProductionOverview() {
                 <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
 
-                        <Pie
-                            data={data}
-                            dataKey="value"
-                            nameKey="name"
-                            innerRadius={60}
-                            outerRadius={90}
-                            paddingAngle={4}
+                        <Pie data={data} dataKey="value" nameKey="name" innerRadius={60} outerRadius={90}
+                             paddingAngle={4}
                         >
                             {data.map((entry) => (
                                 <Cell
@@ -81,7 +76,6 @@ export default function ProductionOverview() {
                                 />
                             ))}
                         </Pie>
-
 
                         <Tooltip
                             formatter={(value) => [
@@ -115,62 +109,29 @@ export default function ProductionOverview() {
                                     : "#18181b",
                             }}
                         />
-
                     </PieChart>
                 </ResponsiveContainer>
             </div>
 
-
             <div className="mt-4 grid grid-cols-2 gap-3">
                 {data.map((entry) => (
-                    <div
-                        key={entry.name}
-                        className="
-                            flex
-                            items-center
-                            justify-between
-                            rounded-lg
-                            border
-                            border-zinc-200
-                            bg-zinc-50
-                            px-3
-                            py-2.5
-                            dark:border-zinc-800
-                            dark:bg-zinc-900/60
-                        "
+                    <div key={entry.name}
+                         className="flex items-center justify-between rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2.5 dark:border-zinc-800 dark:bg-zinc-900/60"
                     >
                         <Badge variant={STATUS_BADGES[entry.name]}>
                             {entry.name.replace("_", " ")}
                         </Badge>
 
-                        <span
-                            className="
-                                text-sm
-                                font-semibold
-                                text-zinc-700
-                                dark:text-zinc-300
-                            "
-                        >
+                        <span className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
                             {entry.value}
                         </span>
                     </div>
                 ))}
             </div>
 
-
             <div className="mt-6 grid grid-cols-2 gap-4">
-
                 <div
-                    className="
-                        rounded-lg
-                        border
-                        border-zinc-200
-                        bg-zinc-50
-                        p-4
-                        dark:border-zinc-800
-                        dark:bg-zinc-900/60
-                    "
-                >
+                    className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/60">
                     <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
                         Total Orders
                     </p>
@@ -180,32 +141,21 @@ export default function ProductionOverview() {
                     </p>
                 </div>
 
-
                 <div
-                    className="
-                        rounded-lg
-                        border
-                        border-zinc-200
-                        bg-zinc-50
-                        p-4
-                        dark:border-zinc-800
-                        dark:bg-zinc-900/60
-                    "
-                >
+                    className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/60">
                     <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
                         Production Cost
                     </p>
 
                     <p className="mt-1 text-2xl font-semibold text-zinc-900 dark:text-zinc-100">
-                        {new Intl.NumberFormat("pt-PT", {
-                            style: "currency",
-                            currency: "EUR",
-                        }).format(totalCost)}
+                        {new Intl.NumberFormat("en-US",
+                            {
+                                notation: "compact",
+                                maximumFractionDigits: 2,
+                            }).format(totalCost)} €
                     </p>
                 </div>
-
             </div>
-
         </DashboardCard>
     );
 }

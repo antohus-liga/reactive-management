@@ -9,7 +9,6 @@ export function useRevenueChart() {
         isLoading: ordersLoading,
     } = useFetchOrders();
 
-
     const movementQueries = useQueries({
         queries: orders.map(order => ({
             queryKey: [
@@ -26,7 +25,6 @@ export function useRevenueChart() {
         }))
     });
 
-
     const dailyRevenue =
         orders.reduce(
             (acc, order, index) => {
@@ -35,7 +33,6 @@ export function useRevenueChart() {
                     movementQueries[index]
                         ?.data
                         ?.movements ?? [];
-
 
                 const orderRevenue =
                     movements
@@ -50,27 +47,21 @@ export function useRevenueChart() {
                             0
                         );
 
-
                 if (orderRevenue <= 0)
                     return acc;
-
 
                 const date =
                     new Date(order.createdAt)
                         .toISOString()
                         .split("T")[0];
 
-
                 acc[date] =
                     (acc[date] ?? 0) + orderRevenue;
 
-
                 return acc;
-
             },
             {} as Record<string, number>
         );
-
 
     const data =
         Object.entries(dailyRevenue)
@@ -84,7 +75,6 @@ export function useRevenueChart() {
                 (a, b) =>
                     a.date.localeCompare(b.date)
             );
-
 
     return {
         data,

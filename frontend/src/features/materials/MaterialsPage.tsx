@@ -20,10 +20,9 @@ export default function MaterialsPage() {
                 <MaterialForm initial={modal.updateTarget} onClose={modal.close}/>
             </Modal>
 
-            <DataTable
-                loading={materials.get.isLoading}
-                empty={!materials.get.isLoading && materials.get.data?.length === 0}
-                emptyMessage="No companies found."
+            <DataTable loading={materials.get.isLoading}
+                       empty={!materials.get.isLoading && materials.get.data?.length === 0}
+                       emptyMessage="No materials found."
             >
                 <DataTableHead>
                     <DataTableHeader>Description</DataTableHeader>
@@ -37,20 +36,13 @@ export default function MaterialsPage() {
 
                 <tbody>
                 {materials.get.data?.map((material: MaterialResponse) => (
-                    <MaterialRow
-                        key={material.publicId}
-                        material={material}
-                        onDelete={materials.handleDeleteMaterial}
-                        onEdit={modal.openForUpdate}
+                    <MaterialRow key={material.publicId} material={material} onDelete={materials.handleDeleteMaterial}
+                                 onEdit={modal.openForUpdate}
                     />
                 ))}
                 </tbody>
             </DataTable>
-            <Button
-                className={"mt-5"}
-                onClick={modal.openForCreate}
-                icon={<Plus size={16}/>}
-            >
+            <Button className={"mt-5"} onClick={modal.openForCreate} icon={<Plus size={16}/>}>
                 New Material
             </Button>
         </>

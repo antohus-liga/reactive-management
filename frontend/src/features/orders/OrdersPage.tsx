@@ -23,10 +23,8 @@ export default function OrdersPage() {
                     : <MovementForm orderId={modal.orderPublicId} onClose={modal.close}/>}
             </Modal>
 
-            <DataTable
-                loading={orders.get.isLoading}
-                empty={!orders.get.isLoading && orders.get.data?.length === 0}
-                emptyMessage="No orders found."
+            <DataTable loading={orders.get.isLoading} empty={!orders.get.isLoading && orders.get.data?.length === 0}
+                       emptyMessage="No orders found."
             >
                 <DataTableHead>
                     <DataTableHeader>Company Description</DataTableHeader>
@@ -38,22 +36,14 @@ export default function OrdersPage() {
 
                 <tbody>
                 {orders.get.data?.map((order: OrderResponse) => (
-                    <OrderRow
-                        key={order.publicId}
-                        order={order}
-                        onDelete={orders.handleDeleteOrder}
-                        onMovementDelete={orders.handleDeleteMovement}
-                        onComplete={orders.handleCompleteOrder}
-                        onAddMovement={modal.openForMovements}
+                    <OrderRow key={order.publicId} order={order} onDelete={orders.handleDeleteOrder}
+                              onMovementDelete={orders.handleDeleteMovement} onComplete={orders.handleCompleteOrder}
+                              onAddMovement={modal.openForMovements}
                     />
                 ))}
                 </tbody>
             </DataTable>
-            <Button
-                className={"mt-5"}
-                onClick={modal.openForCreate}
-                icon={<Plus size={16}/>}
-            >
+            <Button className={"mt-5"} onClick={modal.openForCreate} icon={<Plus size={16}/>}>
                 New Order
             </Button>
         </>

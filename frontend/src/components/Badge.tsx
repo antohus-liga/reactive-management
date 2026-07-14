@@ -16,8 +16,8 @@ interface BadgeProps {
 const variants: Record<BadgeVariant, string> = {
     neutral: `
         bg-zinc-100
-        text-zinc-700
-
+        text-zinc-700 
+        
         dark:bg-zinc-800
         dark:text-zinc-300
     `,
@@ -63,24 +63,13 @@ const variants: Record<BadgeVariant, string> = {
     `,
 };
 
-export default function Badge({
-                                  children,
-                                  variant = "neutral",
-                              }: BadgeProps) {
+export default function Badge(
+    {
+        children,
+        variant = "neutral",
+    }: BadgeProps) {
     return (
-        <span
-            className={`
-                inline-flex
-                items-center
-                rounded-full
-                px-2.5
-                py-1
-                text-xs
-                font-medium
-
-                ${variants[variant]}
-            `}
-        >
+        <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ${variants[variant]}`}>
             {children}
         </span>
     );

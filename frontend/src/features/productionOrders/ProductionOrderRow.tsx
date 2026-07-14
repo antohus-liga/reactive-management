@@ -30,10 +30,10 @@ export default function ProductionOrderRow(
             </td>
 
             <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300">
-                {new Intl.NumberFormat("pt-PT", {
-                    style: "currency",
-                    currency: "EUR",
-                }).format(productionOrder.productProductionCost)}
+                {new Intl.NumberFormat("en-US", {
+                    notation: "compact",
+                    maximumFractionDigits: 2,
+                }).format(productionOrder.productProductionCost)} €
             </td>
 
             <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300">
@@ -41,10 +41,10 @@ export default function ProductionOrderRow(
             </td>
 
             <td className="px-5 py-4 font-medium text-zinc-900 dark:text-zinc-100">
-                {new Intl.NumberFormat("pt-PT", {
-                    style: "currency",
-                    currency: "EUR",
-                }).format(productionOrder.totalCost)}
+                {new Intl.NumberFormat("en-US", {
+                    notation: "compact",
+                    maximumFractionDigits: 2,
+                }).format(productionOrder.totalCost)} €
             </td>
 
             <td className="px-5 py-4">
@@ -60,7 +60,8 @@ export default function ProductionOrderRow(
             <td className="px-5 py-4">
                 <div className="flex items-center gap-2">
                     <Button variant="danger" icon={<Trash2 size={16}/>}
-                            onClick={() => onDelete(productionOrder.publicId)}>
+                            onClick={() => onDelete(productionOrder.publicId)}
+                    >
                         Delete
                     </Button>
 

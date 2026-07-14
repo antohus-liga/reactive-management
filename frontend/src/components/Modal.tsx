@@ -18,89 +18,23 @@ export default function Modal(
             onClose={onClose}
             className="relative z-50"
         >
-
             <DialogBackdrop
                 transition
-                className="
-                    fixed
-                    inset-0
-                    bg-zinc-950/40
-                    backdrop-blur-sm
-                    transition-opacity
+                className="fixed inset-0 bg-zinc-950/40 backdrop-blur-sm transition-opacity data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in"/>
 
-                    data-closed:opacity-0
-                    data-enter:duration-200
-                    data-enter:ease-out
-                    data-leave:duration-150
-                    data-leave:ease-in
-                "
-            />
-
-
-            <div
-                className="
-                    fixed
-                    inset-0
-                    z-50
-                    flex
-                    items-center
-                    justify-center
-                    p-4
-                "
-            >
-
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
                 <DialogPanel
                     transition
-                    className="
-                        flex
-                        max-h-[90vh]
-                        w-full
-                        max-w-2xl
-                        flex-col
-
-                        overflow-hidden
-
-                        rounded-xl
-                        border
-                        border-zinc-200
-
-                        bg-white
-                        shadow-xl
-
-                        transition-all
-
-                        dark:border-zinc-800
-                        dark:bg-zinc-900
-
-                        data-closed:translate-y-4
-                        data-closed:opacity-0
-
-                        data-enter:duration-200
-                        data-enter:ease-out
-
-                        data-leave:duration-150
-                        data-leave:ease-in
-
-                        data-closed:sm:translate-y-0
-                        data-closed:sm:scale-95
-                    "
-                >
+                    className="flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-xl transition-all dark:border-zinc-800 dark:bg-zinc-900 data-closed:translate-y-4 data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in data-closed:sm:translate-y-0 data-closed:sm:scale-95">
 
                     {open && (
-                        <div
-                            className="
-                                overflow-y-auto
-                                overscroll-contain
-                            "
-                        >
+                        <div className="overflow-y-auto overscroll-contain">
                             {children}
                         </div>
                     )}
 
                 </DialogPanel>
-
             </div>
-
         </Dialog>
     );
 }

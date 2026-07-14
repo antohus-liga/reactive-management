@@ -61,11 +61,9 @@ export default function MovementForm(
                         )}
 
                         <div className="mt-6">
-
                             <FormSection title="Movement Details" icon={<Package size={16}/>}
                                          description="Add the item and quantity transferred in this movement."
                             >
-
                                 <label
                                     className="flex flex-col gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300">
                                     Company Role
@@ -79,9 +77,7 @@ export default function MovementForm(
                                                 }))}
                                                 placeHolder="Select movement type"
                                     />
-
                                 </label>
-
 
                                 <label
                                     className="flex flex-col gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300">
@@ -89,24 +85,26 @@ export default function MovementForm(
                                         ? (
                                             <>
                                                 Product
-                                                <ProductSelect value={form.movement.productPublicId ?? ""}
-                                                               onChange={(value) => form.setMovement(prev => ({
-                                                                   ...prev,
-                                                                   productPublicId:
-                                                                   value,
-                                                               }))}
+                                                <ProductSelect
+                                                    value={form.movement.productPublicId ?? ""}
+                                                    onChange={(value) => form.setMovement(prev => ({
+                                                        ...prev,
+                                                        productPublicId:
+                                                        value,
+                                                    }))}
                                                 />
                                             </>
                                         )
                                         : (
                                             <>
                                                 Material
-                                                <MaterialSelect value={form.movement.materialPublicId ?? ""}
-                                                                onChange={(value) => form.setMovement(prev => ({
-                                                                    ...prev,
-                                                                    materialPublicId:
-                                                                    value,
-                                                                }))}
+                                                <MaterialSelect
+                                                    value={form.movement.materialPublicId ?? ""}
+                                                    onChange={(value) => form.setMovement(prev => ({
+                                                        ...prev,
+                                                        materialPublicId:
+                                                        value,
+                                                    }))}
                                                 />
                                             </>
                                         )}
@@ -129,9 +127,7 @@ export default function MovementForm(
                                         onChange: e => form.setMovement(prev => ({
                                             ...prev,
                                             discount:
-                                                e.target.value === ""
-                                                    ? null
-                                                    : e.target.value,
+                                                e.target.value === "" ? null : e.target.value,
                                         }))
                                     }}
                                 />
@@ -141,9 +137,7 @@ export default function MovementForm(
                 </div>
 
                 <p className={`mt-6 text-sm text-red-500 ${!fieldErrors && error ? "visible" : "invisible"}`}>
-                    {!fieldErrors && error
-                        ? getErrorMessage(error)
-                        : "Placeholder"}
+                    {!fieldErrors && error ? getErrorMessage(error) : "Placeholder"}
                 </p>
 
             </div>

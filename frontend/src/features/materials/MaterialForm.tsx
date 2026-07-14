@@ -9,7 +9,7 @@ import {MeasurementType, MeasurementTypeLabel} from "@/types/MeasurementType.ts"
 import FormSectionTitle from "@/components/FormSectionTitle";
 import Button from "@/components/Button";
 import {CategoryType} from "@/types/CategoryType.ts";
-import {Check, X} from "lucide-react";
+import {Boxes, Check, X} from "lucide-react";
 
 export default function MaterialForm({initial, onClose}: {
     initial: MaterialResponse | null,
@@ -22,109 +22,61 @@ export default function MaterialForm({initial, onClose}: {
 
     return (
         <form onSubmit={(e) => form.handleSubmit(e, onClose)}>
-
             <div className="px-6 py-5">
-
                 <div className="flex items-start gap-4">
-
                     <div
-                        className="
-                            flex
-                            h-10
-                            w-10
-                            shrink-0
-                            items-center
-                            justify-center
-                            rounded-full
-                            bg-blue-100
-                            dark:bg-blue-500/10
-                        "
-                    >
-                        <img
-                            className="size-5"
-                            src="/plus.png"
-                            alt="Create company"
-                        />
+                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-500/10">
+                        <Boxes className={"dark:invert"} size={18}/>
                     </div>
 
-
                     <div className="flex-1">
-
-                        <DialogTitle
-                            as="h1"
-                            className="
-                                text-xl
-                                font-semibold
-                                text-zinc-900
-                                dark:text-zinc-100
-                            "
-                        >
-                            {initial
-                                ? "Update Material"
-                                : "Create New Material"}
+                        <DialogTitle as="h1" className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
+                            {initial ? "Update Material" : "Create New Material"}
                         </DialogTitle>
-
-                        <div
-                            className="
-                                mt-6
-                                grid
-                                grid-cols-1
-                                gap-8
-                                lg:grid-cols-2
-                            "
-                        >
+                        <div className="mt-6 grid grid-cols-1 gap-8 lg:grid-cols-2">
                             <section className="space-y-4">
                                 <FormSectionTitle>
                                     Material Information
                                 </FormSectionTitle>
 
                                 <TextField
-                                    label="Description"
-                                    error={fieldErrors?.description}
-                                    inputProps={{
-                                        placeholder:
-                                            "Enter the description",
-                                        value:
-                                        form.material.description,
-                                        onChange: (e) =>
-                                            form.setMaterial(prev => ({
-                                                ...prev,
-                                                description: e.target.value
-                                            })),
-                                    }}
+                                    label="Description" error={fieldErrors?.description} inputProps={{
+                                    placeholder: "Enter the description",
+                                    value: form.material.description,
+                                    onChange: (e) => form.setMaterial(prev => ({
+                                        ...prev,
+                                        description: e.target.value
+                                    })),
+                                }}
                                 />
 
                                 <TextField
-                                    label="Unit Price"
-                                    error={fieldErrors?.unitPrice}
+                                    label="Unit Price" error={fieldErrors?.unitPrice}
                                     inputProps={{
                                         type: "number",
                                         value: form.material.unitPrice,
-                                        onChange: (e) =>
-                                            form.setMaterial(prev => ({
-                                                ...prev,
-                                                unitPrice: Number(e.target.value)
-                                            })),
+                                        onChange: (e) => form.setMaterial(prev => ({
+                                            ...prev,
+                                            unitPrice: Number(e.target.value)
+                                        })),
                                     }}
                                 />
 
                                 <TextField
-                                    label="Quantity"
-                                    error={fieldErrors?.quantity}
+                                    label="Quantity" error={fieldErrors?.quantity}
                                     inputProps={{
-                                        disabled: !initial,
-                                        type: "number",
+                                        disabled: !initial, type: "number",
                                         value: form.material.quantity,
-                                        onChange: (e) =>
-                                            form.setMaterial(prev => ({
-                                                ...prev,
-                                                quantity: Number(e.target.value)
-                                            })),
+                                        onChange: (e) => form.setMaterial(prev => ({
+                                            ...prev,
+                                            quantity: Number(e.target.value)
+                                        })),
                                     }}
                                 />
 
 
-                                <label className="flex flex-col gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                                <label
+                                    className="flex flex-col gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300">
                                     Measurement Type
                                     <TypeSelect values={Object.values(MeasurementType)} labels={MeasurementTypeLabel}
                                                 value={form.material.measurement}
@@ -160,45 +112,17 @@ export default function MaterialForm({initial, onClose}: {
                     </div>
                 </div>
 
-                <p
-                    className={`
-                        mt-4
-                        text-sm
-                        text-red-500
-                        ${!fieldErrors && error ? "visible" : "invisible"}
-                    `}
-                >
-                    {!fieldErrors && error
-                        ? getErrorMessage(error)
-                        : "Placeholder"}
+                <p className={`mt-4 text-sm text-red-500 ${!fieldErrors && error ? "visible" : "invisible"}`}>
+                    {!fieldErrors && error ? getErrorMessage(error) : "Placeholder"}
                 </p>
             </div>
 
-            <div
-                className="
-                    flex
-                    justify-end
-                    gap-3
-                    border-t
-                    border-zinc-200
-                    px-6
-                    py-4
-                    dark:border-zinc-800
-                "
-            >
-                <Button
-                    type="button"
-                    variant="secondary"
-                    icon={<X/>}
-                    onClick={onClose}
-                >
+            <div className="flex justify-end gap-3 border-t border-zinc-200 px-6 py-4 dark:border-zinc-800">
+                <Button type="button" variant="secondary" icon={<X/>} onClick={onClose}>
                     Cancel
                 </Button>
 
-                <Button
-                    type="submit"
-                    icon={<Check/>}
-                >
+                <Button type="submit" icon={<Check/>}>
                     {initial ? "Update" : "Create"}
                 </Button>
             </div>

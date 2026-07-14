@@ -13,18 +13,17 @@ export default function RegisterPage() {
     return (
         <>
             <div className="rounded-full relative w-40 h-40 flex items-center justify-center">
-                <img
-                    src="/favicon.png"
-                    alt="logo"
-                    className="absolute inset-0 w-full h-full object-contain opacity-35 dark:opacity-45"
-                />
+                <img src="/favicon.png" alt="logo"
+                     className="absolute inset-0 w-full h-full object-contain opacity-35 dark:opacity-45"/>
             </div>
             <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100 -mt-4 mb-2">Register</h1>
             <form
                 onSubmit={form.handleSubmit}
                 className="w-full max-w-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm rounded-2xl p-8 gap-6 flex flex-col">
                 <div className="flex flex-col gap-4">
-                    <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Company Information</h2>
+                    <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                        Company Information
+                    </h2>
                     <TextField label={"Company Name"} error={fieldErrors?.companyName} inputProps={{
                         placeholder: "Enter your company name",
                         value: form.companyName,
@@ -32,9 +31,11 @@ export default function RegisterPage() {
                     }}/>
                     <label className="flex flex-col gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300">
                         Company Type
-                        <TypeSelect value={form.companyType} onChange={form.setCompanyType} values={Object.values(CompanyType)}
+                        <TypeSelect value={form.companyType} onChange={form.setCompanyType}
+                                    values={Object.values(CompanyType)}
                                     labels={CompanyTypeLabel} placeHolder={"Select a company type"}/>
-                        {fieldErrors?.companyType && <p className="text-red-500 text-xs font-normal">{fieldErrors.companyType}</p>}
+                        {fieldErrors?.companyType &&
+                            <p className="text-red-500 text-xs font-normal">{fieldErrors.companyType}</p>}
                     </label>
                     <TextField label={"Tax ID"} error={fieldErrors?.taxId} inputProps={{
                         placeholder: "Enter your company tax ID",
@@ -44,7 +45,8 @@ export default function RegisterPage() {
                 </div>
                 <hr className="border-zinc-200 dark:border-zinc-800"/>
                 <div className="flex flex-col gap-4">
-                    <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Company Contacts</h2>
+                    <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Company
+                        Contacts</h2>
                     <TextField label={"Phone number"} error={fieldErrors?.phoneNumber} inputProps={{
                         placeholder: "Enter your company phone number",
                         value: form.phoneNumber,
@@ -60,11 +62,13 @@ export default function RegisterPage() {
                 </div>
                 <hr className="border-zinc-200 dark:border-zinc-800"/>
                 <div className="flex flex-col gap-4">
-                    <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Company Localization</h2>
+                    <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Company
+                        Localization</h2>
                     <label className="flex flex-col gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300">
                         Country
                         <CountrySelect value={form.country} setValue={form.setCountry}/>
-                        {fieldErrors?.country && <p className="text-red-500 text-xs font-normal">{fieldErrors.country}</p>}
+                        {fieldErrors?.country &&
+                            <p className="text-red-500 text-xs font-normal">{fieldErrors.country}</p>}
                     </label>
                     <TextField label={"Address"} error={fieldErrors?.address} inputProps={{
                         placeholder: "Enter your company address",
@@ -105,7 +109,11 @@ export default function RegisterPage() {
     );
 }
 
-export function CountrySelect({value, setValue, error}: { value: string, setValue: (value: string) => void, error?: string }) {
+export function CountrySelect({value, setValue, error}: {
+    value: string,
+    setValue: (value: string) => void,
+    error?: string
+}) {
     return (
         <select
             value={value}

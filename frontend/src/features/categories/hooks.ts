@@ -1,6 +1,5 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {categoryApi, type CategoryRequest} from "@/features/categories/api.ts";
-import {getErrorMessage} from "@/lib/getErrorMessage.ts";
 
 export function useFetchCategories() {
     return useQuery({
@@ -29,7 +28,7 @@ export function useUpdateCategory() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async ({publicId, payload}: {publicId: string, payload: CategoryRequest}) => {
+        mutationFn: async ({publicId, payload}: { publicId: string, payload: CategoryRequest }) => {
             return await categoryApi.update(publicId, payload)
         },
         onSuccess: async () => {
@@ -45,6 +44,6 @@ export function useDeleteCategory() {
     return useMutation({
         mutationFn: async (publicId: string) => await categoryApi.delete(publicId),
         onSuccess: async () => await queryClient.invalidateQueries({queryKey: ["categories", "get"]}),
-        onError: (error) => alert(getErrorMessage(error))
+        onError: () => alert("Some products or materials depend on this category.")
     });
 }

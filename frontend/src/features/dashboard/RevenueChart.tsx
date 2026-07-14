@@ -35,49 +35,23 @@ export default function RevenueChart() {
                     <AreaChart data={formatted}>
                         <defs>
                             <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
-                                <stop
-                                    offset="5%"
-                                    stopColor="#2563eb"
-                                    stopOpacity={0.22}
-                                />
-                                <stop
-                                    offset="95%"
-                                    stopColor="#2563eb"
-                                    stopOpacity={0}
-                                />
+                                <stop offset="5%" stopColor="#2563eb" stopOpacity={0.22}/>
+                                <stop offset="95%" stopColor="#2563eb" stopOpacity={0}/>
                             </linearGradient>
                         </defs>
 
-                        <CartesianGrid
-                            stroke="#e4e4e7"
-                            strokeDasharray="4 4"
-                            vertical={false}
-                        />
+                        <CartesianGrid stroke="#e4e4e7" strokeDasharray="4 4" vertical={false}/>
 
-                        <XAxis
-                            dataKey="date"
-                            axisLine={false}
-                            tickLine={false}
-                            tick={{
-                                fill: "#71717a",
-                                fontSize: 12,
-                            }}
-                        />
+                        <XAxis dataKey="date" axisLine={false} tickLine={false}
+                               tick={{fill: "#71717a", fontSize: 12,}}/>
 
-                        <YAxis
-                            axisLine={false}
-                            tickLine={false}
-                            tick={{
-                                fill: "#71717a",
-                                fontSize: 12,
-                            }}
-                        />
+                        <YAxis axisLine={false} tickLine={false} tick={{fill: "#71717a", fontSize: 12,}}/>
 
                         <Tooltip
-                            formatter={(value) => ` ${new Intl.NumberFormat("pt-PT", {
-                                style: "currency",
-                                currency: "EUR",
-                            }).format(Number(value ?? 0))}
+                            formatter={(value) => ` ${new Intl.NumberFormat("en-US", {
+                                notation: "compact",
+                                maximumFractionDigits: 2,
+                            }).format(Number(value ?? 0))} €
                             `}
                             contentStyle={{
                                 borderRadius: "12px",
@@ -100,16 +74,8 @@ export default function RevenueChart() {
                             }}
                         />
 
-                        <Area
-                            type="monotone"
-                            dataKey="revenue"
-                            stroke="#2563eb"
-                            strokeWidth={2.5}
-                            fill="url(#revenueGradient)"
-                            activeDot={{
-                                r: 4,
-                            }}
-                        />
+                        <Area type="monotone" dataKey="revenue" stroke="#2563eb" strokeWidth={2.5}
+                              fill="url(#revenueGradient)" activeDot={{r: 4,}}/>
                     </AreaChart>
                 </ResponsiveContainer>
             </div>
