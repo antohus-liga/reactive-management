@@ -8,112 +8,296 @@ import {MeasurementType, MeasurementTypeLabel} from "@/types/MeasurementType.ts"
 import type {ProductResponse} from "@/features/products/api.ts";
 import {useProductForm} from "@/features/products/useProductForm.ts";
 
-export default function ProductForm({initial, onClose}: {
-    initial: ProductResponse | null,
-    onClose: () => void,
+import {Check, CircleDollarSign, Package, Tag, X,} from "lucide-react";
+import FormSection from "@/components/FormSection.tsx";
+import Button from "@/components/Button.tsx";
+import Badge from "@/components/Badge.tsx";
+
+export default function ProductForm({
+                                        initial,
+                                        onClose,
+                                    }: {
+    initial: ProductResponse | null;
+    onClose: () => void;
 }) {
     const form = useProductForm(initial);
+
     const error = form.create.error ?? form.update.error;
     const fieldErrors = getFieldErrors(error);
 
     return (
         <form onSubmit={(e) => form.handleSubmit(e, onClose)}>
-            <div className="bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4 w-full">
-                <div className="sm:flex sm:items-start">
+
+            <div className="px-6 py-5">
+
+                <div className="flex items-start gap-4">
+
                     <div
-                        className="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-red-500/10 sm:mx-0 sm:size-10">
-                        <img className={"size-2/3"} src={"/plus.png"} alt={"Plus"}/>
+                        className="
+                            flex
+                            h-10
+                            w-10
+                            shrink-0
+                            items-center
+                            justify-center
+                            rounded-full
+                            bg-blue-100
+                            dark:bg-blue-500/10
+                        "
+                    >
+                        <Package size={18}/>
                     </div>
-                    <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                        <DialogTitle as="h1" className="text-3xl font-semibold text-white">
-                            {initial ? "Update Product" : "Create New Product"}
+
+                    <div className="flex-1">
+
+                        <DialogTitle
+                            as="h1"
+                            className="
+                                text-xl
+                                font-semibold
+                                text-zinc-900
+                                dark:text-zinc-100
+                            "
+                        >
+                            {initial
+                                ? "Update Product"
+                                : "Create Product"}
                         </DialogTitle>
-                        <div className="mt-2 flex items-stretch gap-12 text-white">
-                            <div className={"flex flex-col gap-4"}>
-                                <h2 className={"text-2xl font-mono font-bold"}>Product</h2>
-                                <TextField label={"Description"} error={fieldErrors?.description} inputProps={{
-                                    placeholder: "Enter your product description", value: form.product.description,
-                                    onChange: (e) => form.setProduct(prev => ({
-                                        ...prev,
-                                        description: e.target.value
-                                    }))
-                                }}/>
-                                <div>
-                                    <label className={"flex flex-col gap-2 text-xl"}>
-                                        Measurement Type
-                                        <TypeSelect values={Object.values(MeasurementType)} labels={MeasurementTypeLabel}
-                                                    value={form.product.measurement}
-                                                    onChange={value => form.setProduct(prev => ({
-                                                        ...prev,
-                                                        measurement: value
-                                                    }))}
-                                                    placeHolder={"Select a measurement type"}/>
-                                        {fieldErrors?.measurement &&
-                                            <p className="text-red-400 text-xl">{fieldErrors.measurement}</p>}
-                                    </label>
-                                </div>
-                                <div className={"flex gap-4"}>
-                                    <TextField label={"Fixed Price"} error={fieldErrors?.fixedPrice} inputProps={{
-                                        disabled: !!form.product.sellingMargin,
-                                        type: "number",
-                                        required: false,
-                                        value: form.product.fixedPrice ?? 0,
-                                        onChange: (e) => form.setProduct(prev => ({
-                                            ...prev,
-                                            fixedPrice: e.target.value ? Number(e.target.value) : null
-                                        }))
-                                    }}/>
-                                    <TextField label={"Selling Margin"} error={fieldErrors?.sellingMargin} inputProps={{
-                                        disabled: !!form.product.fixedPrice,
-                                        value: form.product.sellingMargin ?? "",
-                                        required: false,
-                                        onChange: (e) => form.setProduct(prev => ({
-                                            ...prev,
-                                            sellingMargin: e.target.value ? e.target.value : null
-                                        }))
-                                    }}/>
-                                </div>
-                                <TextField label={"Quantity"} error={fieldErrors?.quantity} inputProps={{
-                                    disabled: !initial,
-                                    type: "number",
-                                    value: form.product.quantity,
-                                    onChange: (e) => form.setProduct(prev => ({
-                                        ...prev,
-                                        quantity: Number(e.target.value)
-                                    }))
-                                }}/>
-                                <h2 className={"text-2xl font-mono font-bold"}>Category</h2>
-                                <div>
-                                    <CategorySelect value={form.product.categoryPublicId}
-                                                    onChange={value => form.setProduct(prev => ({
-                                                        ...prev,
-                                                        categoryPublicId: value
-                                                    }))}
-                                                    type={CategoryType.PRODUCT}
+
+                        <div className="mt-6 space-y-8">
+
+                            <FormSection
+                                title="Product Information"
+                                icon={<Package size={16}/>}
+                            >
+
+                                <TextField
+                                    label="Description"
+                                    error={fieldErrors?.description}
+                                    inputProps={{
+                                        placeholder:
+                                            "Enter product description",
+                                        value:
+                                        form.product.description,
+                                        onChange: (e) =>
+                                            form.setProduct(prev => ({
+                                                ...prev,
+                                                description:
+                                                e.target.value,
+                                            })),
+                                    }}
+                                />
+
+                                <label
+                                    className="flex flex-col gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300">
+
+                                    Measurement
+
+                                    <TypeSelect
+                                        values={Object.values(
+                                            MeasurementType
+                                        )}
+                                        labels={
+                                            MeasurementTypeLabel
+                                        }
+                                        value={
+                                            form.product.measurement
+                                        }
+                                        onChange={(value) =>
+                                            form.setProduct(prev => ({
+                                                ...prev,
+                                                measurement:
+                                                value,
+                                            }))
+                                        }
+                                        placeHolder="Select measurement"
                                     />
+
+                                    {fieldErrors?.measurement && (
+                                        <p className="text-xs text-red-500">
+                                            {fieldErrors.measurement}
+                                        </p>
+                                    )}
+
+                                </label>
+
+                            </FormSection>
+
+                            <FormSection
+                                title="Pricing"
+                                icon={<CircleDollarSign size={16} />}
+                                description="Choose either a fixed selling price or a percentage margin."
+                            >
+
+                                {form.product.fixedPrice && (
+                                    <Badge variant="success">
+                                        Fixed Pricing
+                                    </Badge>
+                                )}
+
+                                {form.product.sellingMargin && (
+                                    <Badge variant="warning">
+                                        Margin Pricing
+                                    </Badge>
+                                )}
+
+                                <div className="grid grid-cols-2 gap-4">
+
+                                    <TextField
+                                        label="Fixed Price"
+                                        error={fieldErrors?.fixedPrice}
+                                        inputProps={{
+                                            disabled:
+                                                !!form.product
+                                                    .sellingMargin,
+                                            type: "number",
+                                            required: false,
+                                            value:
+                                                form.product
+                                                    .fixedPrice ?? "",
+                                            onChange: (e) =>
+                                                form.setProduct(prev => ({
+                                                    ...prev,
+                                                    fixedPrice:
+                                                        e.target.value
+                                                            ? Number(
+                                                                e.target
+                                                                    .value
+                                                            )
+                                                            : null,
+                                                })),
+                                        }}
+                                    />
+
+                                    <TextField
+                                        label="Selling Margin (%)"
+                                        error={
+                                            fieldErrors?.sellingMargin
+                                        }
+                                        inputProps={{
+                                            disabled:
+                                                !!form.product
+                                                    .fixedPrice,
+                                            required: false,
+                                            value:
+                                                form.product
+                                                    .sellingMargin ??
+                                                "",
+                                            onChange: (e) =>
+                                                form.setProduct(prev => ({
+                                                    ...prev,
+                                                    sellingMargin:
+                                                        e.target.value ||
+                                                        null,
+                                                })),
+                                        }}
+                                    />
+
                                 </div>
-                            </div>
+
+                            </FormSection>
+
+                            <FormSection
+                                title="Category & Inventory"
+                                icon={<Tag size={16}/>}
+                            >
+
+                                <CategorySelect
+                                    value={
+                                        form.product
+                                            .categoryPublicId
+                                    }
+                                    onChange={(value) =>
+                                        form.setProduct(prev => ({
+                                            ...prev,
+                                            categoryPublicId:
+                                            value,
+                                        }))
+                                    }
+                                    type={CategoryType.PRODUCT}
+                                />
+
+                                <TextField
+                                    label="Quantity"
+                                    error={fieldErrors?.quantity}
+                                    inputProps={{
+                                        disabled: !initial,
+                                        type: "number",
+                                        value:
+                                        form.product.quantity,
+                                        onChange: (e) =>
+                                            form.setProduct(prev => ({
+                                                ...prev,
+                                                quantity:
+                                                    Number(
+                                                        e.target.value
+                                                    ),
+                                            })),
+                                    }}
+                                />
+
+                                {!initial && (
+                                    <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                                        Initial stock is managed through inventory movements.
+                                    </p>
+                                )}
+
+                            </FormSection>
+
                         </div>
+
                     </div>
+
                 </div>
-                <p className={`text-red-400 text-xl ${!fieldErrors && error ? "visible" : "invisible"}`}>
-                    {!fieldErrors && error ? (getErrorMessage(error)) : "Placeholder"}
-                </p>
-            </div>
-            <div className="bg-gray-700/25 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                <button
-                    type="submit"
-                    className="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white hover:bg-green-500 sm:ml-3 sm:w-auto"
+
+                <p
+                    className={`
+                        mt-6
+                        text-sm
+                        text-red-500
+                        ${
+                        !fieldErrors && error
+                            ? "visible"
+                            : "invisible"
+                    }
+                    `}
                 >
-                    {initial ? "Update" : "Create"}
-                </button>
-                <button
-                    type="button" onClick={onClose}
-                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white/10 px-3 py-2 text-sm font-semibold text-white inset-ring inset-ring-white/5 hover:bg-white/20 sm:mt-0 sm:w-auto"
+                    {!fieldErrors && error
+                        ? getErrorMessage(error)
+                        : "Placeholder"}
+                </p>
+
+            </div>
+
+            <div
+                className="
+                    flex
+                    justify-end
+                    gap-3
+                    border-t
+                    border-zinc-200
+                    px-6
+                    py-4
+                    dark:border-zinc-800
+                "
+            >
+                <Button
+                    type="button"
+                    variant="secondary"
+                    icon={<X/>}
+                    onClick={onClose}
                 >
                     Cancel
-                </button>
+                </Button>
+
+                <Button
+                    type="submit"
+                    icon={<Check/>}
+                >
+                    {initial ? "Update" : "Create"}
+                </Button>
             </div>
+
         </form>
     );
 }
