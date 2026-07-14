@@ -1,139 +1,218 @@
 import {useCompanyForm} from "@/features/companies/useCompanyForm.ts";
 import {DialogTitle} from "@headlessui/react";
-import {CompanyTypeSelect, CountrySelect} from "@/features/auth/RegisterPage.tsx";
-import type {CompanyType} from "@/types/CompanyType.ts";
+import {CountrySelect} from "@/features/auth/RegisterPage.tsx";
+import {CompanyType, CompanyTypeLabel} from "@/types/CompanyType.ts";
 import {CompanyRole} from "@/types/CompanyRole.ts";
 import {getErrorMessage, getFieldErrors} from "@/lib/getErrorMessage.ts";
 import type {CompanyResponse} from "@/features/companies/api.ts";
 import Checkbox from "@/components/Checkbox.tsx";
 import TextField from "@/components/TextField.tsx";
+import {TypeSelect} from "@/components/TypeSelect.tsx";
+import FormSectionTitle from "@/components/FormSectionTitle.tsx";
+import Button from "@/components/Button";
+import Badge from "@/components/Badge.tsx";
+import {Building2, Check, X} from "lucide-react";
 
-export default function CompanyForm({initial, onClose}: { initial: CompanyResponse | null, onClose: () => void }) {
+export default function CompanyForm(
+    {
+        initial,
+        onClose,
+    }: {
+        initial: CompanyResponse | null;
+        onClose: () => void;
+    }) {
     const form = useCompanyForm(initial);
+
     const error = form.create.error ?? form.update.error;
     const fieldErrors = getFieldErrors(error);
 
     return (
         <form onSubmit={(e) => form.handleSubmit(e, initial, onClose)}>
-            <div className="bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4 w-full">
-                <div className="sm:flex sm:items-start">
+            <div className="px-6 py-5">
+                <div className="flex items-start gap-4">
                     <div
-                        className="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-red-500/10 sm:mx-0 sm:size-10">
-                        <img className={"size-2/3"} src={"/plus.png"} alt={"Plus"}/>
+                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-500/10">
+                        <Building2 className="dark:invert" size={16}/>
                     </div>
-                    <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                        <DialogTitle as="h1" className="text-3xl font-semibold text-white">
+
+                    <div className="flex-1">
+                        <DialogTitle as="h1" className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
                             {initial ? "Update Company" : "Create New Company"}
                         </DialogTitle>
-                        <div className="mt-2 grid grid-cols-2 items-stretch gap-12 text-white">
-                            <div className={"flex flex-col gap-4"}>
-                                <h2 className={"text-2xl font-mono font-bold"}>Company
-                                    Information</h2>
-                                <TextField label={"Company Name"} error={fieldErrors?.companyName} inputProps={{
-                                    placeholder: "Enter your company name", value: form.company.companyName,
-                                    onChange: (e) => form.setCompany(prev => ({
-                                        ...prev,
-                                        companyName: e.target.value
-                                    }))
-                                }}/>
-                                <label className={"flex flex-col gap-2 text-xl"}>
-                                    Company Type
-                                    <CompanyTypeSelect
-                                        value={form.company.companyType as CompanyType}
-                                        onChange={(companyType) => {
+
+                        <div className="mt-6 grid grid-cols-1 gap-8 lg:grid-cols-2">
+                            <section className="space-y-4">
+                                <FormSectionTitle>
+                                    Company Information
+                                </FormSectionTitle>
+
+                                <TextField
+                                    label="Company Name" error={fieldErrors?.companyName}
+                                    inputProps={{
+                                        placeholder: "Enter your company name",
+                                        value: form.company.companyName,
+                                        onChange: (e) =>
                                             form.setCompany(prev => ({
                                                 ...prev,
-                                                companyType: companyType
-                                            }));
-                                        }}/>
-                                    {fieldErrors?.companyType &&
-                                        <p className="text-red-400 text-xl">{fieldErrors.companyType}</p>}
+                                                companyName: e.target.value
+                                            })),
+                                    }}
+                                />
+
+                                <label
+                                    className="flex flex-col gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                                    Company Type
+                                    <TypeSelect
+                                        value={form.company.companyType as CompanyType}
+                                        onChange={(companyType) =>
+                                            form.setCompany(prev => ({
+                                                ...prev,
+                                                companyType,
+                                            }))
+                                        }
+                                        values={Object.values(CompanyType)}
+                                        labels={CompanyTypeLabel} placeHolder="Select a company type"
+                                    />
+
+                                    {fieldErrors?.companyType && (
+                                        <p className="text-xs text-red-500">
+                                            {fieldErrors.companyType}
+                                        </p>
+                                    )}
                                 </label>
-                                <TextField label={"Tax ID"} error={fieldErrors?.taxId} inputProps={{
-                                    placeholder: "Enter your company tax ID", value: form.company.taxId,
-                                    onChange: (e) => form.setCompany(prev => ({
-                                        ...prev,
-                                        taxId: e.target.value
-                                    }))
-                                }}/>
-                            </div>
-                            <div className={"flex flex-col gap-4"}>
-                                <h2 className={"text-2xl font-mono font-bold"}>Company
-                                    Contacts</h2>
-                                <TextField label={"Phone number"} error={fieldErrors?.phoneNumber} inputProps={{
-                                    placeholder: "Enter your company phone number", value: form.company.phoneNumber,
-                                    onChange: (e) => form.setCompany(prev => ({
-                                        ...prev,
-                                        phoneNumber: e.target.value
-                                    }))
-                                }}/>
-                                <TextField label={"Email"} error={fieldErrors?.email} inputProps={{
-                                    type: "email",
-                                    placeholder: "Enter your company email address", value: form.company.email,
-                                    onChange: (e) => form.setCompany(prev => ({
-                                        ...prev,
-                                        email: e.target.value
-                                    }))
-                                }}/>
-                            </div>
-                            <div className={"flex flex-col gap-4"}>
-                                <h2 className={"text-2xl font-mono font-bold"}>Company
-                                    Localization</h2>
-                                <label className={"flex flex-col gap-2 text-xl"}>
+
+                                <TextField
+                                    label="Tax ID" error={fieldErrors?.taxId}
+                                    inputProps={{
+                                        placeholder: "Enter company tax ID",
+                                        value: form.company.taxId,
+                                        onChange: (e) =>
+                                            form.setCompany(prev => ({
+                                                ...prev,
+                                                taxId: e.target.value
+                                            })),
+                                    }}
+                                />
+                            </section>
+
+                            <section className="space-y-4">
+                                <FormSectionTitle>
+                                    Company Contacts
+                                </FormSectionTitle>
+
+                                <TextField
+                                    label="Phone Number" error={fieldErrors?.phoneNumber}
+                                    inputProps={{
+                                        placeholder: "Enter phone number",
+                                        value: form.company.phoneNumber,
+                                        onChange: (e) =>
+                                            form.setCompany(prev => ({
+                                                ...prev,
+                                                phoneNumber: e.target.value
+                                            })),
+                                    }}
+                                />
+
+                                <TextField
+                                    label="Email" error={fieldErrors?.email}
+                                    inputProps={{
+                                        type: "email", placeholder: "Enter email address",
+                                        value: form.company.email,
+                                        onChange: (e) =>
+                                            form.setCompany(prev => ({
+                                                ...prev,
+                                                email: e.target.value
+                                            })),
+                                    }}
+                                />
+                            </section>
+
+                            <section className="space-y-4">
+                                <FormSectionTitle>
+                                    Company Localization
+                                </FormSectionTitle>
+
+                                <label
+                                    className="flex flex-col gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300">
                                     Country
                                     <CountrySelect
                                         value={form.company.country}
                                         setValue={(country) => form.setCompany(prev => ({
                                             ...prev,
-                                            country: country,
-                                        }))}
+                                            country,
+                                        }))
+                                        }
                                     />
-                                    {fieldErrors?.country &&
-                                        <p className="text-red-400 text-xl">{fieldErrors.country}</p>}
+
+                                    {fieldErrors?.country && (
+                                        <p className="text-xs text-red-500">
+                                            {fieldErrors.country}
+                                        </p>
+                                    )}
                                 </label>
-                                <TextField label={"Address"} error={fieldErrors?.address} inputProps={{
-                                    placeholder: "Enter your company address", value: form.company.address,
-                                    onChange: (e) => form.setCompany(prev => ({
-                                        ...prev,
-                                        address: e.target.value
-                                    }))
-                                }}/>
-                            </div>
-                            <div className={"flex flex-col gap-4"}>
-                                <h2 className={"text-2xl font-mono font-bold"}>Roles</h2>
-                                <div className={"bg-[#8b3efe]/80 p-2 rounded-lg max-w-fit"}>
-                                <Checkbox label={"Client"} checked={form.company.roles.includes(CompanyRole.CLIENT)}
-                                          onChange={(checked) => form.toggleRole(CompanyRole.CLIENT, checked)}
+
+                                <TextField
+                                    label="Address" error={fieldErrors?.address}
+                                    inputProps={{
+                                        placeholder: "Enter company address",
+                                        value: form.company.address,
+                                        onChange: (e) => form.setCompany(prev => ({
+                                            ...prev,
+                                            address: e.target.value
+                                        })),
+                                    }}
                                 />
+                            </section>
+
+                            <section className="space-y-4">
+                                <FormSectionTitle>
+                                    Roles
+                                </FormSectionTitle>
+
+                                <div className="space-y-2">
+                                    <label
+                                        className="flex items-center gap-3 rounded-lg border border-zinc-200 px-3 py-2 dark:border-zinc-800">
+                                        <Checkbox
+                                            label="Client"
+                                            checked={form.company.roles.includes(CompanyRole.CLIENT)}
+                                            onChange={(checked) => form.toggleRole(CompanyRole.CLIENT, checked)}
+                                        />
+
+                                        <Badge variant="info">
+                                            Client
+                                        </Badge>
+                                    </label>
+
+                                    <label
+                                        className="flex items-center gap-3 rounded-lg border border-zinc-200 px-3 py-2 dark:border-zinc-800">
+                                        <Checkbox
+                                            label="Supplier"
+                                            checked={form.company.roles.includes(CompanyRole.SUPPLIER)}
+                                            onChange={(checked) => form.toggleRole(CompanyRole.SUPPLIER, checked)}
+                                        />
+                                        <Badge>
+                                            Supplier
+                                        </Badge>
+                                    </label>
                                 </div>
-                                <div className={"bg-[#727272]/80 p-2 rounded-lg max-w-fit"}>
-                                <Checkbox label={"Supplier"}
-                                          checked={form.company.roles.includes(CompanyRole.SUPPLIER)}
-                                          onChange={(checked) => form.toggleRole(CompanyRole.SUPPLIER, checked)}
-                                />
-                                </div>
-                                {fieldErrors?.roles && <p className="text-red-400 text-xl">{fieldErrors.roles}</p>}
-                            </div>
+                            </section>
                         </div>
                     </div>
                 </div>
-                <p className={`text-red-400 text-xl ${!fieldErrors && error ? "visible" : "invisible"}`}>
-                    {!fieldErrors && error ? (getErrorMessage(error)) : "Placeholder"}
+
+                <p className={`mt-4 text-sm text-red-500 ${!fieldErrors && error ? "visible" : "invisible"}`}>
+                    {!fieldErrors && error ? getErrorMessage(error) : "Placeholder"}
                 </p>
             </div>
-            <div className="bg-gray-700/25 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                <button
-                    type="submit"
-                    className="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white hover:bg-green-500 sm:ml-3 sm:w-auto"
-                >
-                    {initial ? "Update" : "Create"}
-                </button>
-                <button
-                    type="button" onClick={onClose}
-                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white/10 px-3 py-2 text-sm font-semibold text-white inset-ring inset-ring-white/5 hover:bg-white/20 sm:mt-0 sm:w-auto"
-                >
+
+            <div className="flex justify-end gap-3 border-t border-zinc-200 px-6 py-4 dark:border-zinc-800">
+                <Button type="button" variant="secondary" icon={<X/>} onClick={onClose}>
                     Cancel
-                </button>
+                </Button>
+
+                <Button type="submit" icon={<Check/>}>
+                    {initial ? "Update" : "Create"}
+                </Button>
             </div>
         </form>
     );

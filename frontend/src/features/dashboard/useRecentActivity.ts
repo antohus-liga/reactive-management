@@ -14,7 +14,6 @@ export type Activity = {
     date: Date;
 };
 
-
 export function useRecentActivity() {
 
     const {
@@ -22,12 +21,10 @@ export function useRecentActivity() {
         isLoading: ordersLoading,
     } = useFetchOrders();
 
-
     const {
         data: productions = [],
         isLoading: productionLoading,
     } = useFetchProductionOrders();
-
 
     const movementQueries = useQueries({
         queries: orders.map(order => ({
@@ -46,9 +43,7 @@ export function useRecentActivity() {
         }))
     });
 
-
     const activities: Activity[] = [];
-
 
     orders.forEach(order => {
 
@@ -62,7 +57,6 @@ export function useRecentActivity() {
         });
 
     });
-
 
     productions.forEach(order => {
 
@@ -78,7 +72,6 @@ export function useRecentActivity() {
         });
 
     });
-
 
     movementQueries.forEach((query, index) => {
 
@@ -109,14 +102,12 @@ export function useRecentActivity() {
 
     });
 
-
     activities.sort(
         (a, b) =>
             b.date.getTime()
             -
             a.date.getTime()
     );
-
 
     return {
         data: activities.slice(0, 10),

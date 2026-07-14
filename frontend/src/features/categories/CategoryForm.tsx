@@ -5,83 +5,125 @@ import {useCategoryForm} from "./useCategoryForm";
 import {CategoryType} from "@/types/CategoryType.ts";
 import TextField from "@/components/TextField.tsx";
 import Checkbox from "@/components/Checkbox.tsx";
+import FormSectionTitle from "@/components/FormSectionTitle.tsx";
+import Badge from "@/components/Badge";
+import Button from "@/components/Button.tsx";
+import {Check, Tags, X} from "lucide-react";
 
-export default function CategoryForm({initial, onClose}: {
-    initial: CategoryResponse | null,
-    onClose: () => void,
-}) {
+export default function CategoryForm(
+    {
+        initial,
+        onClose,
+    }: {
+        initial: CategoryResponse | null;
+        onClose: () => void;
+    }) {
     const form = useCategoryForm(initial);
+
     const error = form.create.error ?? form.update.error;
     const fieldErrors = getFieldErrors(error);
 
     return (
         <form onSubmit={(e) => form.handleSubmit(e, onClose)}>
-            <div className="bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4 w-full">
-                <div className="sm:flex sm:items-start">
+            <div className="px-6 py-5">
+                <div className="flex items-start gap-4">
                     <div
-                        className="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-red-500/10 sm:mx-0 sm:size-10">
-                        <img className={"size-2/3"} src={"/plus.png"} alt={"Plus"}/>
+                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-500/10">
+                        <Tags className={"dark:invert"} size={18}/>
                     </div>
-                    <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                        <DialogTitle as="h1" className="text-3xl font-semibold text-white">
+                    <div className="flex-1">
+                        <DialogTitle as="h1" className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
                             {initial ? "Update Category" : "Create New Category"}
                         </DialogTitle>
-                        <div className="mt-2 flex items-stretch gap-12 text-white">
-                            <div className={"flex flex-col gap-4"}>
-                                <h2 className={"text-2xl font-mono font-bold"}>Category</h2>
-                                <TextField label={"Name"} error={fieldErrors?.name} inputProps={{
-                                    placeholder: "Enter your category name", value: form.category.name,
+                        <div className="mt-6 space-y-6">
+                            <section className="space-y-4">
+                                <FormSectionTitle>
+                                    Category Information
+                                </FormSectionTitle>
+                                <TextField label="Name" error={fieldErrors?.name} inputProps={{
+                                    placeholder: "Enter category name",
+                                    value: form.category.name,
                                     onChange: (e) => form.setCategory(prev => ({
                                         ...prev,
-                                        name: e.target.value
-                                    }))
-                                }}/>
-                                <label className={"flex flex-col gap-2 text-xl"}>
-                                    Color
-                                    <input type={"color"} required={true} value={form.category.colorHex}
-                                           onChange={(e) => form.setCategory(prev => ({
-                                               ...prev,
-                                               colorHex: e.target.value
-                                           }))}
-                                           className={"p-2 rounded-lg ring-1 w-22 h-11 text-xl placeholder:text-lg"}/>
-                                    {fieldErrors?.colorHex &&
-                                        <p className="text-red-400 text-xl">{fieldErrors.colorHex}</p>}
-                                </label>
-                                <h2 className={"text-2xl font-mono font-bold"}>Types</h2>
-                                <div className={"bg-[#ff6f00]/80 p-2 rounded-lg max-w-fit"}>
-                                    <Checkbox label={"Material"}
-                                              checked={form.category.types.includes(CategoryType.MATERIAL)}
-                                              onChange={(checked) => form.toggleType(CategoryType.MATERIAL, checked)}
-                                    />
-                                </div>
-                                <div className={"bg-[#000000]/80 p-2 rounded-lg max-w-fit"}>
-                                <Checkbox label={"Product"}
-                                          checked={form.category.types.includes(CategoryType.PRODUCT)}
-                                          onChange={(checked) => form.toggleType(CategoryType.PRODUCT, checked)}
+                                        name:
+                                        e.target.value,
+                                    })),
+                                }}
                                 />
+
+                                <label
+                                    className="flex flex-col gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                                    Color
+                                    <div className="flex items-center gap-3">
+                                        <input type="color" required value={form.category.colorHex}
+                                               onChange={(e) =>
+                                                   form.setCategory(prev => ({
+                                                       ...prev,
+                                                       colorHex:
+                                                       e.target.value,
+                                                   }))
+                                               }
+                                               className="h-10 w-14 cursor-pointer rounded-lg border border-zinc-300 bg-transparent p-1 dark:border-zinc-700"
+                                        />
+
+                                        <span
+                                            className="rounded-md bg-zinc-100 px-3 py-2 text-sm font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+                                            {form.category.colorHex}
+                                        </span>
+                                    </div>
+
+                                    {fieldErrors?.colorHex && (
+                                        <p className="text-xs text-red-500">{fieldErrors.colorHex}</p>
+                                    )}
+                                </label>
+                            </section>
+
+                            <section className="space-y-3">
+                                <FormSectionTitle>
+                                    Category Types
+                                </FormSectionTitle>
+
+                                <div className="space-y-2">
+                                    <label
+                                        className="flex items-center justify-between rounded-lg border border-zinc-200 px-3 py-2 dark:border-zinc-800">
+                                        <Checkbox label="Material"
+                                                  checked={form.category.types.includes(CategoryType.MATERIAL)}
+                                                  onChange={(checked) => form.toggleType(CategoryType.MATERIAL, checked)}
+                                        />
+
+                                        <Badge variant="info">Material</Badge>
+                                    </label>
+
+                                    <label
+                                        className="flex items-center justify-between rounded-lg border border-zinc-200 px-3 py-2 dark:border-zinc-800">
+                                        <Checkbox label="Product"
+                                                  checked={form.category.types.includes(CategoryType.PRODUCT)}
+                                                  onChange={(checked) => form.toggleType(CategoryType.PRODUCT, checked)}
+                                        />
+                                        <Badge variant="neutral">Product</Badge>
+                                    </label>
                                 </div>
-                                {fieldErrors?.types && <p className="text-red-400 text-xl">{fieldErrors.types}</p>}
-                            </div>
+                                {fieldErrors?.types && (
+                                    <p className="text-xs text-red-500">{fieldErrors.types}</p>
+                                )}
+                            </section>
                         </div>
                     </div>
                 </div>
-                <p className={`text-red-400 text-xl ${!fieldErrors && error ? "visible" : "invisible"}`}>
-                    {!fieldErrors && error ? (getErrorMessage(error)) : "Placeholder"}
+
+                <p className={`mt-4 text-sm text-red-500 ${!fieldErrors && error ? "visible" : "invisible"}`}>
+                    {!fieldErrors && error ? getErrorMessage(error) : "Placeholder"}
                 </p>
             </div>
-            <div className="bg-gray-700/25 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                <button
-                    type="submit"
-                    className="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white hover:bg-green-500 sm:ml-3 sm:w-auto"
-                >
-                    {initial ? "Update" : "Create"}
-                </button>
-                <button
-                    type="button" onClick={onClose}
-                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white/10 px-3 py-2 text-sm font-semibold text-white inset-ring inset-ring-white/5 hover:bg-white/20 sm:mt-0 sm:w-auto"
-                >
+
+            <div className="flex justify-end gap-3 border-t border-zinc-200 px-6 py-4 dark:border-zinc-800">
+                <Button type="button" variant="secondary" icon={<X/>} onClick={onClose}>
                     Cancel
-                </button>
+                </Button>
+
+                <Button type="submit" icon={<Check/>}>
+                    {initial ? "Update" : "Create"}
+                </Button>
             </div>
         </form>
     );

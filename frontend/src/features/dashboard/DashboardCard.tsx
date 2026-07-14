@@ -6,7 +6,6 @@ interface DashboardCardProps {
     className?: string;
     headerAction?: ReactNode;
 }
-
 export default function DashboardCard(
     {
         title,
@@ -16,27 +15,18 @@ export default function DashboardCard(
     }: DashboardCardProps) {
     return (
         <section
-            className={`
-                rounded-xl
-                border border-gray-700
-                bg-gray-800/80
-                shadow-lg
-                p-6
-                ${className}
-            `}
+            className={`rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm p-6 ${className}`}
         >
             {(title || headerAction) && (
                 <div className="mb-5 flex items-center justify-between">
                     {title && (
-                        <h2 className="text-lg font-semibold text-gray-100">
+                        <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
                             {title}
                         </h2>
                     )}
-
                     {headerAction}
                 </div>
             )}
-
             {children}
         </section>
     );

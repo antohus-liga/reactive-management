@@ -1,6 +1,6 @@
-import { useQueries } from "@tanstack/react-query";
+import {useQueries} from "@tanstack/react-query";
 
-import { useFetchOrders} from "@/features/orders/hooks.ts";
+import {useFetchOrders} from "@/features/orders/hooks.ts";
 import {ordersApi} from "@/features/orders/api.ts";
 
 export function useDashboardSales() {
@@ -8,7 +8,6 @@ export function useDashboardSales() {
         data: orders = [],
         isLoading: ordersLoading,
     } = useFetchOrders();
-
 
     const movementQueries = useQueries({
         queries: orders.map(order => ({
@@ -26,13 +25,11 @@ export function useDashboardSales() {
         })),
     });
 
-
     const isLoading =
         ordersLoading ||
         movementQueries.some(
             query => query.isLoading
         );
-
 
     const sales =
         movementQueries
@@ -50,7 +47,6 @@ export function useDashboardSales() {
                     sum + movement.totalPrice,
                 0
             );
-
 
     return {
         sales,

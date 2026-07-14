@@ -1,6 +1,5 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {type ProductRecipeRequest, type ProductRequest, productsApi} from "@/features/products/api.ts";
-import {getErrorMessage} from "@/lib/getErrorMessage.ts";
 
 export function useFetchProducts() {
     return useQuery({
@@ -44,7 +43,7 @@ export function useDeleteProduct() {
             await queryClient.invalidateQueries({queryKey: ["products", "get"]})
             await queryClient.invalidateQueries({queryKey: ["products", "recipe", publicId]})
         },
-        onError: (error) => alert(getErrorMessage(error))
+        onError: () => alert("Some orders depend on this product.")
     })
 }
 

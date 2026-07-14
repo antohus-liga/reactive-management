@@ -1,17 +1,11 @@
-import {
-    DollarSign,
-    Package,
-    Boxes,
-    ClipboardList,
-    Factory
-} from "lucide-react";
+import {Boxes, ClipboardList, DollarSign, Factory, Package} from "lucide-react";
 
 import StatCard from "./StatCard";
 
-import { useFetchProducts } from "@/features/products/hooks.ts";
-import { useFetchMaterials } from "@/features/materials/hooks.ts";
-import { useFetchOrders } from "@/features/orders/hooks.ts";
-import { useFetchProductionOrders } from "@/features/productionOrders/hooks.ts";
+import {useFetchProducts} from "@/features/products/hooks.ts";
+import {useFetchMaterials} from "@/features/materials/hooks.ts";
+import {useFetchOrders} from "@/features/orders/hooks.ts";
+import {useFetchProductionOrders} from "@/features/productionOrders/hooks.ts";
 import {useDashboardSales} from "@/features/dashboard/useDashboardSales.ts";
 
 export default function DashboardStats() {
@@ -59,12 +53,10 @@ export default function DashboardStats() {
         );
 
 
-
     const openOrders =
         orders.filter(
             order => !order.isCompleted
         ).length;
-
 
 
     const runningProduction =
@@ -73,53 +65,48 @@ export default function DashboardStats() {
         ).length;
 
 
-
-    const formatCurrency = (value:number) =>
-        new Intl.NumberFormat(
-            "en-US",
-            {
-                style:"currency",
-                currency:"EUR"
-            }
-        ).format(value);
-
+    const formatCurrency = (value: number) => {
+        return `${new Intl.NumberFormat("en-US", {
+            notation: "compact",
+            maximumFractionDigits: 2,
+        }).format(value)} €`;
+    }
 
 
     const stats = [
         {
-            title:"Total Sales",
+            title: "Total Sales",
             value: formatCurrency(sales),
-            icon:<DollarSign size={22}/>,
-            description:"Product sales"
+            icon: <DollarSign size={22}/>,
+            description: "Product sales"
         },
         {
-            title:"Inventory Value",
-            value:formatCurrency(inventoryValue),
-            icon:<Package size={22}/>,
+            title: "Inventory Value",
+            value: formatCurrency(inventoryValue),
+            icon: <Package size={22}/>,
         },
         {
-            title:"Products",
-            value:products.length,
-            icon:<Boxes size={22}/>,
+            title: "Products",
+            value: products.length,
+            icon: <Boxes size={22}/>,
         },
         {
-            title:"Materials",
-            value:materials.length,
-            icon:<Package size={22}/>,
+            title: "Materials",
+            value: materials.length,
+            icon: <Package size={22}/>,
         },
         {
-            title:"Open Orders",
-            value:openOrders,
-            icon:<ClipboardList size={22}/>,
+            title: "Open Orders",
+            value: openOrders,
+            icon: <ClipboardList size={22}/>,
         },
         {
-            title:"Production",
-            value:runningProduction,
-            icon:<Factory size={22}/>,
-            description:"Currently running"
+            title: "Production",
+            value: runningProduction,
+            icon: <Factory size={22}/>,
+            description: "Currently running"
         }
     ];
-
 
 
     const isLoading =
@@ -130,8 +117,7 @@ export default function DashboardStats() {
         salesLoading;
 
 
-
-    if(isLoading){
+    if (isLoading) {
         return (
             <div
                 className="
@@ -143,8 +129,8 @@ export default function DashboardStats() {
                 "
             >
                 {
-                    Array.from({length:6})
-                        .map((_,index)=>(
+                    Array.from({length: 6})
+                        .map((_, index) => (
                             <div
                                 key={index}
                                 className="
@@ -161,7 +147,6 @@ export default function DashboardStats() {
     }
 
 
-
     return (
         <div
             className="
@@ -173,7 +158,7 @@ export default function DashboardStats() {
             "
         >
             {
-                stats.map(stat=>(
+                stats.map(stat => (
                     <StatCard
                         key={stat.title}
                         {...stat}

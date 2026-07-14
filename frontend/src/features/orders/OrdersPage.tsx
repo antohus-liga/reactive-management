@@ -2,46 +2,50 @@ import useOrders from "@/features/orders/useOrders.ts";
 import useOrderModal from "@/features/orders/useOrderModal.ts";
 import OrderRow from "@/features/orders/OrderRow.tsx";
 import type {OrderResponse} from "@/features/orders/api.ts";
-import OrderModal from "@/features/orders/OrderModal.tsx";
+import Modal from "@/components/Modal.tsx";
+import OrderForm from "@/features/orders/OrderForm.tsx";
+import MovementForm from "@/features/orders/MovementForm.tsx";
+import DataTable from "@/components/table/DataTable.tsx";
+import {DataTableHead} from "@/components/table/DataTableHead.tsx";
+import {DataTableHeader} from "@/components/table/DataTableHeader.tsx";
+import Button from "@/components/Button.tsx";
+import {Plus} from "lucide-react";
 
 export default function OrdersPage() {
     const orders = useOrders();
     const modal = useOrderModal();
 
-    if (orders.get.isLoading) return null;
-    if (orders.get.isError) return null;
-
     return (
         <>
-            <OrderModal open={modal.open} onClose={modal.close}
-                        orderPublicId={modal.orderPublicId}/>
-            <div
-                className={"relative flex flex-col w-auto max-h-[calc(100vh-18rem)] overflow-y-auto shadow-md shadow-white rounded-xl bg-clip-border"}>
-                <table className={"w-full text-left table-auto bg-red-500"}>
-                    <thead>
-                    <tr className={"border-b bg-red-500"}>
-                        <th className={"p-4"}>Company Description</th>
-                        <th className={"p-4"}>Company Country</th>
-                        <th className={"p-4"}>Created At</th>
-                        <th className={"p-4"}>Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {orders.get.data?.map((order: OrderResponse) => (
-                        <OrderRow key={order.publicId} order={order} onDelete={orders.handleDeleteOrder}
-                                  onAddMovement={modal.openForMovements} onComplete={orders.handleCompleteOrder}
-                                  onMovementDelete={orders.handleDeleteMovement}
-                        />
-                    ))}
-                    </tbody>
-                </table>
-            </div>
-            <div className={"mt-10"}>
-                <button onClick={() => modal.openForCreate()}
-                        className={"p-3 bg-emerald-700 border-2 border-emerald-700 hover:bg-emerald-500 active:bg-emerald-600 active:scale-95 rounded-xl transition duration-100"}>New
-                    Order
-                </button>
-            </div>
+            <Modal open={modal.open} onClose={modal.close}>
+                {!modal.orderPublicId
+                    ? <OrderForm onClose={modal.close}/>
+                    : <MovementForm orderId={modal.orderPublicId} onClose={modal.close}/>}
+            </Modal>
+
+            <DataTable loading={orders.get.isLoading} empty={!orders.get.isLoading && orders.get.data?.length === 0}
+                       emptyMessage="No orders found."
+            >
+                <DataTableHead>
+                    <DataTableHeader>Company Description</DataTableHeader>
+                    <DataTableHeader>Company Country</DataTableHeader>
+                    <DataTableHeader>Role</DataTableHeader>
+                    <DataTableHeader>Created At</DataTableHeader>
+                    <DataTableHeader className="text-right">Actions</DataTableHeader>
+                </DataTableHead>
+
+                <tbody>
+                {orders.get.data?.map((order: OrderResponse) => (
+                    <OrderRow key={order.publicId} order={order} onDelete={orders.handleDeleteOrder}
+                              onMovementDelete={orders.handleDeleteMovement} onComplete={orders.handleCompleteOrder}
+                              onAddMovement={modal.openForMovements}
+                    />
+                ))}
+                </tbody>
+            </DataTable>
+            <Button className={"mt-5"} onClick={modal.openForCreate} icon={<Plus size={16}/>}>
+                New Order
+            </Button>
         </>
     );
 }
