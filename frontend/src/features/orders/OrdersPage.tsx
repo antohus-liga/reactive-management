@@ -15,9 +15,6 @@ export default function OrdersPage() {
     const orders = useOrders();
     const modal = useOrderModal();
 
-    if (orders.get.isLoading) return null;
-    if (orders.get.isError) return null;
-
     return (
         <>
             <Modal open={modal.open} onClose={modal.close}>

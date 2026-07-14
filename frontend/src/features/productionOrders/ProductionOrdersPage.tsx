@@ -2,9 +2,15 @@ import useOrderModal from "@/features/orders/useOrderModal.ts";
 import useProductionOrders from "@/features/productionOrders/useProductionOrders.ts";
 import type {ProductionOrderResponse} from "@/features/productionOrders/api.ts";
 import ProductionOrderRow from "@/features/productionOrders/ProductionOrderRow.tsx";
-import ProductionOrderModal from "@/features/productionOrders/ProductionOrderModal.tsx";
 import {useQueryClient} from "@tanstack/react-query";
 import {useEffect, useRef} from "react";
+import Modal from "@/components/Modal.tsx";
+import ProductionOrderForm from "@/features/productionOrders/ProductionOrderForm.tsx";
+import DataTable from "@/components/table/DataTable";
+import {DataTableHead} from "@/components/table/DataTableHead.tsx";
+import {DataTableHeader} from "@/components/table/DataTableHeader.tsx";
+import Button from "@/components/Button.tsx";
+import {Plus} from "lucide-react";
 
 export default function ProductionOrdersPage() {
     const productionOrders = useProductionOrders();
@@ -26,42 +32,45 @@ export default function ProductionOrdersPage() {
         }
     }, [productionOrders.get.data, queryClient]);
 
-    if (productionOrders.get.isLoading) return null;
-    if (productionOrders.get.isError) return null;
-
     return (
         <>
-            <ProductionOrderModal open={modal.open} onClose={modal.close}/>
-            <div
-                className={"relative flex flex-col w-auto max-h-[calc(100vh-18rem)] overflow-y-auto shadow-md shadow-white rounded-xl bg-clip-border"}>
-                <table className={"w-full text-left table-auto bg-red-500"}>
-                    <thead>
-                    <tr className={"border-b bg-red-500"}>
-                        <th className={"p-4"}>Product Description</th>
-                        <th className={"p-4"}>Product Production Cost</th>
-                        <th className={"p-4"}>Quantity</th>
-                        <th className={"p-4"}>Status</th>
-                        <th className={"p-4"}>Total Cost</th>
-                        <th className={"p-4"}>Created At</th>
-                        <th className={"p-4"}>Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {productionOrders.get.data?.map((production: ProductionOrderResponse) => (
-                        <ProductionOrderRow key={production.publicId} productionOrder={production}
-                                            onDelete={productionOrders.handleDeleteProductionOrder}
-                                            onExecute={productionOrders.handleExecuteProductionOrder}
-                        />
-                    ))}
-                    </tbody>
-                </table>
-            </div>
-            <div className={"mt-10"}>
-                <button onClick={() => modal.openForCreate()}
-                        className={"p-3 bg-emerald-700 border-2 border-emerald-700 hover:bg-emerald-500 active:bg-emerald-600 active:scale-95 rounded-xl transition duration-100"}>New
-                    Production Order
-                </button>
-            </div>
+            <Modal open={modal.open} onClose={modal.close}>
+                <ProductionOrderForm onClose={modal.close}/>
+            </Modal>
+
+            <DataTable
+                loading={productionOrders.get.isLoading}
+                empty={!productionOrders.get.isLoading && productionOrders.get.data?.length === 0}
+                emptyMessage="No orders found."
+            >
+                <DataTableHead>
+                    <DataTableHeader>Product</DataTableHeader>
+                    <DataTableHeader>Production Cost</DataTableHeader>
+                    <DataTableHeader>Quantity</DataTableHeader>
+                    <DataTableHeader>Total Cost</DataTableHeader>
+                    <DataTableHeader>Status</DataTableHeader>
+                    <DataTableHeader>Created At</DataTableHeader>
+                    <DataTableHeader className="text-right">Actions</DataTableHeader>
+                </DataTableHead>
+
+                <tbody>
+                {productionOrders.get.data?.map((prod: ProductionOrderResponse) => (
+                    <ProductionOrderRow
+                        key={prod.publicId}
+                        productionOrder={prod}
+                        onDelete={productionOrders.handleDeleteProductionOrder}
+                        onExecute={productionOrders.handleExecuteProductionOrder}
+                    />
+                ))}
+                </tbody>
+            </DataTable>
+            <Button
+                className={"mt-5"}
+                onClick={modal.openForCreate}
+                icon={<Plus size={16}/>}
+            >
+                New Production Order
+            </Button>
         </>
     );
 }
