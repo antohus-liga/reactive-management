@@ -7,6 +7,22 @@ import ProductionOrderModal from "@/features/productionOrders/ProductionOrderMod
 export default function ProductionOrdersPage() {
     const productionOrders = useProductionOrders();
     const modal = useOrderModal();
+    const queryClient = useQueryClient();
+    const handledCompletions = useRef(new Set<string>());
+
+    useEffect(() => {
+        if (!productionOrders.get.data) return;
+
+        const newlyCompleted = productionOrders.get.data.filter(
+            (p) => p.status === "COMPLETED" && !handledCompletions.current.has(p.publicId)
+        );
+
+        if (newlyCompleted.length > 0) {
+            newlyCompleted.forEach((p) => handledCompletions.current.add(p.publicId));
+            queryClient.invalidateQueries({queryKey: ["products", "get"]}).then();
+            queryClient.invalidateQueries({queryKey: ["materials", "get"]}).then();
+        }
+    }, [productionOrders.get.data, queryClient]);
 
     if (productionOrders.get.isLoading) return null;
     if (productionOrders.get.isError) return null;
