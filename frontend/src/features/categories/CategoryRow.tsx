@@ -2,6 +2,8 @@ import type {CategoryResponse} from "@/features/categories/api.ts";
 import {CategoryType} from "@/types/CategoryType.ts";
 import Badge from "@/components/Badge.tsx";
 import Button from "@/components/Button.tsx";
+import {Pencil, Trash2} from "lucide-react";
+
 export default function CategoryRow({
                                         category,
                                         onDelete,
@@ -64,11 +66,11 @@ export default function CategoryRow({
                         Material & Product
                     </Badge>
                 ) : hasMaterial ? (
-                    <Badge variant="material">
+                    <Badge variant="info">
                         Material
                     </Badge>
                 ) : (
-                    <Badge variant="product">
+                    <Badge variant="neutral">
                         Product
                     </Badge>
                 )}
@@ -90,17 +92,16 @@ export default function CategoryRow({
 
                     <Button
                         variant="secondary"
-                        className="px-3 py-2"
                         onClick={() => onEdit(category)}
+                        icon={<Pencil size={16}/>}
                     >
                         Edit
                     </Button>
 
-
                     <Button
                         variant="danger"
-                        className="px-3 py-2"
                         onClick={() => onDelete(category.publicId)}
+                        icon={<Trash2 size={16}/>}
                     >
                         Delete
                     </Button>

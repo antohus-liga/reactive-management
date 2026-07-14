@@ -197,7 +197,7 @@ export default function ProductionOverview() {
                     </p>
 
                     <p className="mt-1 text-2xl font-semibold text-zinc-900 dark:text-zinc-100">
-                        {new Intl.NumberFormat("en-US", {
+                        {new Intl.NumberFormat("pt-PT", {
                             style: "currency",
                             currency: "EUR",
                         }).format(totalCost)}

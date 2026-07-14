@@ -1,6 +1,7 @@
 import Button from "@/components/Button";
 import type {MaterialResponse} from "@/features/materials/api.ts";
 import {MeasurementTypeLabel} from "@/types/MeasurementType.ts";
+import {Pencil, Trash2} from "lucide-react";
 
 export default function MaterialRow({
                                         material,
@@ -14,56 +15,24 @@ export default function MaterialRow({
     const color = material.categoryColor;
 
     return (
-        <tr
-            className="
-                border-b
-                border-zinc-200
-                transition-colors
-                duration-150
-                hover:bg-zinc-50
-                dark:border-zinc-800
-                dark:hover:bg-zinc-800/50
-            "
-        >
+        <tr className="border-b border-zinc-200 transition-colors duration-150 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-800/50">
 
-            <td
-                className="
-                    px-5
-                    py-4
-                    font-medium
-                    text-zinc-900
-                    dark:text-zinc-100
-                "
-            >
+            <td className="px-5 py-4 font-medium text-zinc-900 dark:text-zinc-100">
                 {material.description}
             </td>
 
 
             <td className="px-5 py-4">
-
                 <div className="flex items-center gap-3">
-
                     <span
-                        className="
-                            h-8
-                            w-8
-                            rounded-md
-                            border
-                            border-zinc-200
-                            shadow-sm
-                            dark:border-zinc-700
-                        "
+                        className="h-8 w-8 rounded-md border border-zinc-200 shadow-sm dark:border-zinc-700"
                         style={{
                             backgroundColor: color,
                         }}
                     />
 
                     <span
-                        className="
-                            text-sm
-                            text-zinc-700
-                            dark:text-zinc-300
-                        "
+                        className="text-sm text-zinc-700 dark:text-zinc-300"
                     >
                         {material.categoryDescription}
                     </span>
@@ -73,53 +42,26 @@ export default function MaterialRow({
             </td>
 
 
-            <td
-                className="
-                    px-5
-                    py-4
-                    text-zinc-700
-                    dark:text-zinc-300
-                "
-            >
-                {material.unitPrice}
+            <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300">
+                {new Intl.NumberFormat("pt-PT", {
+                    style: "currency",
+                    currency: "EUR",
+                }).format(material.unitPrice)}
             </td>
 
 
-            <td
-                className="
-                    px-5
-                    py-4
-                    text-zinc-700
-                    dark:text-zinc-300
-                "
-            >
+            <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300">
                 {material.quantity}{" "}
                 {MeasurementTypeLabel[material.measurement]}
             </td>
 
 
-            <td
-                className="
-                    px-5
-                    py-4
-                    text-sm
-                    text-zinc-500
-                    dark:text-zinc-400
-                "
-            >
+            <td className="px-5 py-4 text-sm text-zinc-500 dark:text-zinc-400">
                 {new Date(material.createdAt).toLocaleString()}
             </td>
 
 
-            <td
-                className="
-                    px-5
-                    py-4
-                    text-sm
-                    text-zinc-500
-                    dark:text-zinc-400
-                "
-            >
+            <td className="px-5 py-4 text-sm text-zinc-500 dark:text-zinc-400">
                 {new Date(material.updatedAt).toLocaleString()}
             </td>
 
@@ -130,17 +72,16 @@ export default function MaterialRow({
 
                     <Button
                         variant="secondary"
-                        className="px-3 py-2"
                         onClick={() => onEdit(material)}
+                        icon={<Pencil size={16}/>}
                     >
                         Edit
                     </Button>
 
-
                     <Button
                         variant="danger"
-                        className="px-3 py-2"
                         onClick={() => onDelete(material.publicId)}
+                        icon={<Trash2 size={16}/>}
                     >
                         Delete
                     </Button>

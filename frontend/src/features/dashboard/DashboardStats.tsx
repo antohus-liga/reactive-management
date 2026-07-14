@@ -67,7 +67,7 @@ export default function DashboardStats() {
 
     const formatCurrency = (value: number) =>
         new Intl.NumberFormat(
-            "en-US",
+            "pt-PT",
             {
                 style: "currency",
                 currency: "EUR"

@@ -74,7 +74,11 @@ export default function RevenueChart() {
                         />
 
                         <Tooltip
-                            formatter={(value) => `€${value}`}
+                            formatter={(value) => ` ${new Intl.NumberFormat("pt-PT", {
+                                style: "currency",
+                                currency: "EUR",
+                            }).format(Number(value ?? 0))}
+                            `}
                             contentStyle={{
                                 borderRadius: "12px",
                                 border: isDark ? "1px solid #3f3f46" : "1px solid #e4e4e7",

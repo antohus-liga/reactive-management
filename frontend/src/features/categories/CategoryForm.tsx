@@ -8,6 +8,7 @@ import Checkbox from "@/components/Checkbox.tsx";
 import FormSectionTitle from "@/components/FormSectionTitle.tsx";
 import Badge from "@/components/Badge";
 import Button from "@/components/Button.tsx";
+import {Check, Tags, X} from "lucide-react";
 
 export default function CategoryForm({
                                          initial,
@@ -38,11 +39,7 @@ export default function CategoryForm({
                             dark:bg-blue-500/10
                         "
                     >
-                        <img
-                            className="size-5"
-                            src="/plus.png"
-                            alt="Create category"
-                        />
+                        <Tags className={"dark:invert"} size={18}/>
                     </div>
 
                     <div className="flex-1">
@@ -266,12 +263,16 @@ export default function CategoryForm({
                 <Button
                     type="button"
                     variant="secondary"
+                    icon={<X/>}
                     onClick={onClose}
                 >
                     Cancel
                 </Button>
 
-                <Button type="submit">
+                <Button
+                    type="submit"
+                    icon={<Check/>}
+                >
                     {initial ? "Update" : "Create"}
                 </Button>
             </div>

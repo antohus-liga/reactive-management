@@ -8,6 +8,7 @@ import {DataTableHeader} from "@/components/table/DataTableHeader";
 import {DataTableHead} from "@/components/table/DataTableHead.tsx";
 import DataTable from "@/components/table/DataTable.tsx";
 import Button from "@/components/Button.tsx";
+import {Plus} from "lucide-react";
 
 export default function MaterialsPage() {
     const materials = useMaterials();
@@ -48,6 +49,7 @@ export default function MaterialsPage() {
             <Button
                 className={"mt-5"}
                 onClick={modal.openForCreate}
+                icon={<Plus size={16}/>}
             >
                 New Material
             </Button>

@@ -279,7 +279,7 @@ export default function RecipeForm({
                     type="submit"
                     icon={<Check/>}
                 >
-                    {initial ? "Update" : "Save Recipe"}
+                    {initial?.ingredients.length ?? 0 > 0 ? "Update" : "Save Recipe"}
                 </Button>
             </div>
 

@@ -8,6 +8,7 @@ import {DataTableHeader} from "@/components/table/DataTableHeader.tsx";
 import Button from "@/components/Button";
 import Modal from "@/components/Modal.tsx";
 import CategoryForm from "@/features/categories/CategoryForm.tsx";
+import {Plus} from "lucide-react";
 
 export default function CategoriesPage() {
     const categories = useCategories();
@@ -43,12 +44,12 @@ export default function CategoriesPage() {
                 ))}
                 </tbody>
             </DataTable>
-            <Button className={"mt-5"}>
-                <button
-                    onClick={modal.openForCreate}
-                >
-                    New Category
-                </button>
+            <Button
+                className={"mt-5"}
+                onClick={modal.openForCreate}
+                icon={<Plus size={16}/>}
+            >
+                New Category
             </Button>
         </>
     );

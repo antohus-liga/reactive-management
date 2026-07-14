@@ -4,6 +4,7 @@ import {countryLabels} from "@/features/auth/countryOptions.ts";
 import Button from "@/components/Button.tsx";
 import Badge from "@/components/Badge.tsx";
 import {CompanyRole} from "@/types/CompanyRole.ts";
+import {Pencil, Trash2} from "lucide-react";
 
 export default function CompanyRow({
                                        company,
@@ -83,16 +84,16 @@ export default function CompanyRow({
                 <div className="flex items-center gap-2">
                     <Button
                         variant="secondary"
-                        className="px-3 py-2"
                         onClick={() => onEdit(company)}
+                        icon={<Pencil size={16}/>}
                     >
                         Edit
                     </Button>
 
                     <Button
                         variant="danger"
-                        className="px-3 py-2"
                         onClick={() => onDelete(company.publicId)}
+                        icon={<Trash2 size={16}/>}
                     >
                         Delete
                     </Button>

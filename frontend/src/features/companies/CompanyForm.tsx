@@ -11,6 +11,7 @@ import {TypeSelect} from "@/components/TypeSelect.tsx";
 import FormSectionTitle from "@/components/FormSectionTitle.tsx";
 import Button from "@/components/Button";
 import Badge from "@/components/Badge.tsx";
+import {Check, X} from "lucide-react";
 
 export default function CompanyForm({
                                         initial,
@@ -374,13 +375,16 @@ export default function CompanyForm({
                 <Button
                     type="button"
                     variant="secondary"
+                    icon={<X/>}
                     onClick={onClose}
                 >
                     Cancel
                 </Button>
 
-
-                <Button type="submit">
+                <Button
+                    type="submit"
+                    icon={<Check/>}
+                >
                     {initial ? "Update" : "Create"}
                 </Button>
 

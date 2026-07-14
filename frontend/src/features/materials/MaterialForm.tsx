@@ -9,6 +9,7 @@ import {MeasurementType, MeasurementTypeLabel} from "@/types/MeasurementType.ts"
 import FormSectionTitle from "@/components/FormSectionTitle";
 import Button from "@/components/Button";
 import {CategoryType} from "@/types/CategoryType.ts";
+import {Check, X} from "lucide-react";
 
 export default function MaterialForm({initial, onClose}: {
     initial: MaterialResponse | null,
@@ -188,12 +189,16 @@ export default function MaterialForm({initial, onClose}: {
                 <Button
                     type="button"
                     variant="secondary"
+                    icon={<X/>}
                     onClick={onClose}
                 >
                     Cancel
                 </Button>
 
-                <Button type="submit">
+                <Button
+                    type="submit"
+                    icon={<Check/>}
+                >
                     {initial ? "Update" : "Create"}
                 </Button>
             </div>

@@ -8,6 +8,7 @@ import {DataTableHead} from "@/components/table/DataTableHead";
 import Button from "@/components/Button.tsx";
 import CompanyForm from "@/features/companies/CompanyForm.tsx";
 import Modal from "@/components/Modal.tsx";
+import {Plus} from "lucide-react";
 
 export default function CompaniesPage() {
     const companies = useCompanies();
@@ -52,6 +53,7 @@ export default function CompaniesPage() {
             <Button
                 className={"mt-5"}
                 onClick={modal.openForCreate}
+                icon={<Plus size={16}/>}
             >
                 New Company
             </Button>

@@ -43,7 +43,6 @@ export default function Modal(
                     inset-0
                     z-50
                     flex
-                    min-h-full
                     items-center
                     justify-center
                     p-4
@@ -53,12 +52,18 @@ export default function Modal(
                 <DialogPanel
                     transition
                     className="
+                        flex
+                        max-h-[90vh]
                         w-full
                         max-w-2xl
+                        flex-col
+
                         overflow-hidden
+
                         rounded-xl
                         border
                         border-zinc-200
+
                         bg-white
                         shadow-xl
 
@@ -80,7 +85,18 @@ export default function Modal(
                         data-closed:sm:scale-95
                     "
                 >
-                    {open && children}
+
+                    {open && (
+                        <div
+                            className="
+                                overflow-y-auto
+                                overscroll-contain
+                            "
+                        >
+                            {children}
+                        </div>
+                    )}
+
                 </DialogPanel>
 
             </div>
