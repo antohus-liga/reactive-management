@@ -163,9 +163,9 @@ export default function ProductRow(
 
                                                     <td className="px-5 py-4">
                                                         {new Intl.NumberFormat("en-US", {
-                                                            style: "currency",
-                                                            currency: "EUR",
-                                                        }).format(ingredient.materialUnitPrice)}
+                                                            notation: "compact",
+                                                            maximumFractionDigits: 2,
+                                                        }).format(ingredient.materialUnitPrice)} €
                                                     </td>
 
                                                     <td className="px-5 py-4">
