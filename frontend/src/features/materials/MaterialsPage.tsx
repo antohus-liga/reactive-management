@@ -9,10 +9,19 @@ import {DataTableHead} from "@/components/table/DataTableHead.tsx";
 import DataTable from "@/components/table/DataTable.tsx";
 import Button from "@/components/Button.tsx";
 import {Plus} from "lucide-react";
+import {useMemo, useState} from "react";
 
 export default function MaterialsPage() {
     const materials = useMaterials();
     const modal = useMaterialModal();
+    const [nameFilter, setNameFilter] = useState("");
+
+    const filteredMaterials = useMemo(() => {
+        if (!nameFilter.trim()) return materials.get.data;
+        return materials.get.data?.filter((material: MaterialResponse) =>
+            material.description?.toLowerCase().includes(nameFilter.toLowerCase())
+        );
+    }, [materials.get.data, nameFilter]);
 
     return (
         <>
@@ -20,8 +29,16 @@ export default function MaterialsPage() {
                 <MaterialForm initial={modal.updateTarget} onClose={modal.close}/>
             </Modal>
 
+            <input
+                type="text"
+                placeholder="Filter by material description..."
+                value={nameFilter}
+                onChange={(e) => setNameFilter(e.target.value)}
+                className="mb-4 px-3 py-2 border rounded-md w-full max-w-sm"
+            />
+
             <DataTable loading={materials.get.isLoading}
-                       empty={!materials.get.isLoading && materials.get.data?.length === 0}
+                       empty={!materials.get.isLoading && filteredMaterials?.length === 0}
                        emptyMessage="No materials found."
             >
                 <DataTableHead>
@@ -35,7 +52,7 @@ export default function MaterialsPage() {
                 </DataTableHead>
 
                 <tbody>
-                {materials.get.data?.map((material: MaterialResponse) => (
+                {filteredMaterials?.map((material: MaterialResponse) => (
                     <MaterialRow key={material.publicId} material={material} onDelete={materials.handleDeleteMaterial}
                                  onEdit={modal.openForUpdate}
                     />

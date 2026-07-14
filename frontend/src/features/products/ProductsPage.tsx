@@ -10,10 +10,19 @@ import Button from "@/components/Button.tsx";
 import ProductForm from "@/features/products/ProductForm.tsx";
 import {Plus} from "lucide-react";
 import RecipeForm from "@/features/products/RecipeForm.tsx";
+import {useMemo, useState} from "react";
 
 export default function ProductsPage() {
     const products = useProducts();
     const modal = useProductModal();
+    const [nameFilter, setNameFilter] = useState("");
+
+    const filteredProducts = useMemo(() => {
+        if (!nameFilter.trim()) return products.get.data;
+        return products.get.data?.filter((product: ProductResponse) =>
+            product.description?.toLowerCase().includes(nameFilter.toLowerCase())
+        );
+    }, [products.get.data, nameFilter]);
 
     return (
         <>
@@ -23,9 +32,18 @@ export default function ProductsPage() {
                 {!modal.updateTarget && !!modal.productPublicId &&
                     <RecipeForm initial={modal.recipe} productId={modal.productPublicId ?? ""} onClose={modal.close}/>}
             </Modal>
+
+            <input
+                type="text"
+                placeholder="Filter by product description..."
+                value={nameFilter}
+                onChange={(e) => setNameFilter(e.target.value)}
+                className="mb-4 px-3 py-2 border rounded-md w-full max-w-sm"
+            />
+
             <DataTable
                 loading={products.get.isLoading}
-                empty={!products.get.isLoading && products.get.data?.length === 0}
+                empty={!products.get.isLoading && filteredProducts?.length === 0}
                 emptyMessage="No products found."
             >
                 <DataTableHead>
@@ -40,7 +58,7 @@ export default function ProductsPage() {
                     <DataTableHeader className="text-right">Actions</DataTableHeader>
                 </DataTableHead>
                 <tbody>
-                {products.get.data?.map((product: ProductResponse) => (
+                {filteredProducts?.map((product: ProductResponse) => (
                     <ProductRow
                         key={product.publicId}
                         product={product}

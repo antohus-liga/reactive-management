@@ -3,7 +3,7 @@ import useProductionOrders from "@/features/productionOrders/useProductionOrders
 import type {ProductionOrderResponse} from "@/features/productionOrders/api.ts";
 import ProductionOrderRow from "@/features/productionOrders/ProductionOrderRow.tsx";
 import {useQueryClient} from "@tanstack/react-query";
-import {useEffect, useRef} from "react";
+import {useEffect, useMemo, useRef, useState} from "react";
 import Modal from "@/components/Modal.tsx";
 import ProductionOrderForm from "@/features/productionOrders/ProductionOrderForm.tsx";
 import DataTable from "@/components/table/DataTable";
@@ -17,6 +17,14 @@ export default function ProductionOrdersPage() {
     const modal = useOrderModal();
     const queryClient = useQueryClient();
     const handledCompletions = useRef(new Set<string>());
+    const [nameFilter, setNameFilter] = useState("");
+
+    const filteredProduction = useMemo(() => {
+        if (!nameFilter.trim()) return productionOrders.get.data;
+        return productionOrders.get.data?.filter((prod: ProductionOrderResponse) =>
+            prod.productDescription?.toLowerCase().includes(nameFilter.toLowerCase())
+        );
+    }, [productionOrders.get.data, nameFilter]);
 
     useEffect(() => {
         if (!productionOrders.get.data) return;
@@ -38,9 +46,17 @@ export default function ProductionOrdersPage() {
                 <ProductionOrderForm onClose={modal.close}/>
             </Modal>
 
+            <input
+                type="text"
+                placeholder="Filter by product description..."
+                value={nameFilter}
+                onChange={(e) => setNameFilter(e.target.value)}
+                className="mb-4 px-3 py-2 border rounded-md w-full max-w-sm"
+            />
+
             <DataTable
                 loading={productionOrders.get.isLoading}
-                empty={!productionOrders.get.isLoading && productionOrders.get.data?.length === 0}
+                empty={!productionOrders.get.isLoading && filteredProduction?.length === 0}
                 emptyMessage="No production orders found."
             >
                 <DataTableHead>
@@ -54,7 +70,7 @@ export default function ProductionOrdersPage() {
                 </DataTableHead>
 
                 <tbody>
-                {productionOrders.get.data?.map((prod: ProductionOrderResponse) => (
+                {filteredProduction?.map((prod: ProductionOrderResponse) => (
                     <ProductionOrderRow
                         key={prod.publicId}
                         productionOrder={prod}
