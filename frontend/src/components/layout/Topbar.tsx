@@ -11,8 +11,7 @@ import ThemeToggle from "@/components/ThemeToggle.tsx";
 import LanguageSwitcher from "@/components/LanguageSwitcher.tsx";
 import {useTranslation} from "react-i18next";
 import Modal from "@/components/Modal.tsx";
-import {Settings, LogOut} from "lucide-react";
-import Button from "@/components/Button.tsx";
+import {LogOut, Settings} from "lucide-react";
 
 export default function Topbar() {
     const {data: user} = useCurrentUser()
@@ -49,7 +48,7 @@ export default function Topbar() {
                         onClick={() => setOpen(true)}
                         aria-label="Settings"
                     >
-                        <Settings className={"dark:text-zinc-300"} size={20}/>
+                        <Settings className={"dark:text-zinc-300 text-zinc-700"} size={20}/>
                     </button>
                     <button
                         className="bg-red-50 hover:bg-red-100 dark:bg-red-950/40 dark:hover:bg-red-950/60 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900 rounded-md transition-colors duration-150 p-2 text-sm font-medium cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500/50"
