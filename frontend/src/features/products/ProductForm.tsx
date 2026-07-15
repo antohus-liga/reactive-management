@@ -12,6 +12,7 @@ import {Check, CircleDollarSign, Package, Tag, X,} from "lucide-react";
 import FormSection from "@/components/FormSection.tsx";
 import Button from "@/components/Button.tsx";
 import Badge from "@/components/Badge.tsx";
+import {useTranslation} from "react-i18next";
 
 export default function ProductForm(
     {
@@ -22,6 +23,7 @@ export default function ProductForm(
         onClose: () => void;
     }) {
     const form = useProductForm(initial);
+    const {t} = useTranslation();
 
     const error = form.create.error ?? form.update.error;
     const fieldErrors = getFieldErrors(error);
@@ -36,12 +38,12 @@ export default function ProductForm(
                     </div>
                     <div className="flex-1">
                         <DialogTitle as="h1" className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-                            {initial ? "Update Product" : "Create Product"}
+                            {initial ? t("updateProduct") : t("createProduct")}
                         </DialogTitle>
                         <div className="mt-6 space-y-8">
-                            <FormSection title="Product Information" icon={<Package size={16}/>}>
-                                <TextField label="Description" error={fieldErrors?.description} inputProps={{
-                                    placeholder: "Enter product description",
+                            <FormSection title={t("productInfo")} icon={<Package size={16}/>}>
+                                <TextField label={t("description")} error={fieldErrors?.description} inputProps={{
+                                    placeholder: t("descriptionPlaceholder"),
                                     value: form.product.description,
                                     onChange: (e) => form.setProduct(prev => ({
                                         ...prev,
@@ -53,7 +55,7 @@ export default function ProductForm(
 
                                 <label
                                     className="flex flex-col gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                                    Measurement
+                                    {t("measurement")}
                                     <TypeSelect values={Object.values(MeasurementType)} labels={MeasurementTypeLabel}
                                                 value={form.product.measurement}
                                                 onChange={(value) => form.setProduct(prev => ({
@@ -61,7 +63,7 @@ export default function ProductForm(
                                                     measurement:
                                                     value,
                                                 }))}
-                                                placeHolder="Select measurement"
+                                                placeHolder={t("measurementPlaceholder")}
                                     />
 
                                     {fieldErrors?.measurement && (
@@ -71,24 +73,24 @@ export default function ProductForm(
                                     )}
                                 </label>
                             </FormSection>
-                            <FormSection title="Pricing" icon={<CircleDollarSign size={16}/>}
-                                         description="Choose either a fixed selling price or a percentage margin."
+                            <FormSection title={t("pricing")} icon={<CircleDollarSign size={16}/>}
+                                         description={t("pricingDescription")}
                             >
 
                                 {form.product.fixedPrice && (
                                     <Badge variant="success">
-                                        Fixed Pricing
+                                        {t("fixedPricing")}
                                     </Badge>
                                 )}
 
                                 {form.product.sellingMargin && (
                                     <Badge variant="warning">
-                                        Margin Pricing
+                                        {t("marginPricing")}
                                     </Badge>
                                 )}
 
                                 <div className="grid grid-cols-2 gap-4">
-                                    <TextField label="Fixed Price" error={fieldErrors?.fixedPrice} inputProps={{
+                                    <TextField label={t("fixedPrice")} error={fieldErrors?.fixedPrice} inputProps={{
                                         disabled: !!form.product.sellingMargin, type: "number", required: false,
                                         value: form.product.fixedPrice ?? "",
                                         onChange: (e) => form.setProduct(prev => ({
@@ -98,7 +100,7 @@ export default function ProductForm(
                                     }}
                                     />
 
-                                    <TextField label="Selling Margin (%)" error={fieldErrors?.sellingMargin}
+                                    <TextField label={t("sellingMargin")} error={fieldErrors?.sellingMargin}
                                                inputProps={{
                                                    disabled: !!form.product.fixedPrice,
                                                    required: false,
@@ -111,7 +113,7 @@ export default function ProductForm(
                                     />
                                 </div>
                             </FormSection>
-                            <FormSection title="Category & Inventory" icon={<Tag size={16}/>}>
+                            <FormSection title={t("categoryAndInventory")} icon={<Tag size={16}/>}>
                                 <CategorySelect value={form.product.categoryPublicId}
                                                 onChange={(value) => form.setProduct(prev => ({
                                                     ...prev,
@@ -120,7 +122,7 @@ export default function ProductForm(
                                                 type={CategoryType.PRODUCT}
                                 />
 
-                                <TextField label="Quantity" error={fieldErrors?.quantity} inputProps={{
+                                <TextField label={t("quantity")} error={fieldErrors?.quantity} inputProps={{
                                     disabled: !initial, type: "number",
                                     value: form.product.quantity,
                                     onChange: (e) => form.setProduct(prev => ({
@@ -132,7 +134,7 @@ export default function ProductForm(
 
                                 {!initial && (
                                     <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                                        Initial stock is managed through inventory movements.
+                                        {t("quantityDescription")}
                                     </p>
                                 )}
                             </FormSection>
@@ -147,11 +149,11 @@ export default function ProductForm(
 
             <div className="flex justify-end gap-3 border-t border-zinc-200 px-6 py-4 dark:border-zinc-800">
                 <Button type="button" variant="secondary" icon={<X/>} onClick={onClose}>
-                    Cancel
+                    {t("cancel")}
                 </Button>
 
                 <Button type="submit" icon={<Check/>}>
-                    {initial ? "Update" : "Create"}
+                    {initial ? t("update") : t("create")}
                 </Button>
             </div>
         </form>

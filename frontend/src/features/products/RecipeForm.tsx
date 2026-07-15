@@ -7,6 +7,7 @@ import TextField from "@/components/TextField";
 import {BookOpen, Check, Package, Trash2, X,} from "lucide-react";
 import RepeaterField from "@/components/RepeaterField.tsx";
 import Button from "@/components/Button.tsx";
+import {useTranslation} from "react-i18next";
 
 export default function RecipeForm(
     {
@@ -19,6 +20,7 @@ export default function RecipeForm(
         onClose: () => void;
     }) {
     const form = useRecipeForm(productId, initial);
+    const {t} = useTranslation();
 
     const error = form.replaceRecipe.error;
     const fieldErrors = getFieldErrors(error);
@@ -34,13 +36,13 @@ export default function RecipeForm(
 
                     <div className="flex-1">
                         <DialogTitle as="h1" className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-                            {initial ? "Update Recipe" : "Create Recipe"}
+                            {initial ? t("updateRecipe") : t("createRecipe")}
                         </DialogTitle>
 
                         <div className="mt-6">
-                            <RepeaterField title="Ingredients"
-                                           description="Add the materials required to manufacture this product."
-                                           emptyText="No ingredients yet." addLabel="Add Ingredient"
+                            <RepeaterField title={t("ingredients")}
+                                           description={t("recipeFormDescription")}
+                                           emptyText={t("noIngredients")} addLabel={t("addIngredient")}
                                            onAdd={() =>
                                                form.setRecipe(prev => ({
                                                    ...prev,
@@ -63,7 +65,7 @@ export default function RecipeForm(
                                                 <Package size={16} className="text-zinc-500"/>
 
                                                 <p className="font-medium text-zinc-900 dark:text-zinc-100">
-                                                    Ingredient #{index + 1}
+                                                    {t("ingredient")} #{index + 1}
                                                 </p>
                                             </div>
 
@@ -71,7 +73,7 @@ export default function RecipeForm(
                                                 <div>
                                                     <label
                                                         className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                                                        Material
+                                                        {t("material")}
                                                     </label>
 
                                                     <MaterialSelect
@@ -95,7 +97,7 @@ export default function RecipeForm(
                                                 </div>
 
                                                 <TextField
-                                                    label="Quantity"
+                                                    label={t("quantity")}
                                                     inputProps={{
                                                         type: "number", value: ingredient.quantity,
                                                         onChange: (e) =>
@@ -127,7 +129,7 @@ export default function RecipeForm(
                                                             )
                                                         }
                                                 >
-                                                    Remove
+                                                    {t("remove")}
                                                 </Button>
                                             </div>
                                         </div>
@@ -151,11 +153,11 @@ export default function RecipeForm(
 
             <div className="flex justify-end gap-3 border-t border-zinc-200 px-6 py-4 dark:border-zinc-800">
                 <Button type="button" variant="secondary" icon={<X/>} onClick={onClose}>
-                    Cancel
+                    {t("cancel")}
                 </Button>
 
                 <Button type="submit" icon={<Check/>}>
-                    {initial?.ingredients.length ?? 0 > 0 ? "Update" : "Save Recipe"}
+                    {initial?.ingredients.length ?? 0 > 0 ? t("update") : t("saveRecipe")}
                 </Button>
             </div>
 

@@ -11,11 +11,13 @@ import ProductForm from "@/features/products/ProductForm.tsx";
 import {Plus} from "lucide-react";
 import RecipeForm from "@/features/products/RecipeForm.tsx";
 import {useMemo, useState} from "react";
+import {useTranslation} from "react-i18next";
 
 export default function ProductsPage() {
     const products = useProducts();
     const modal = useProductModal();
     const [nameFilter, setNameFilter] = useState("");
+    const {t} = useTranslation();
 
     const filteredProducts = useMemo(() => {
         if (!nameFilter.trim()) return products.get.data;
@@ -35,7 +37,7 @@ export default function ProductsPage() {
 
             <input
                 type="text"
-                placeholder="Filter by product description..."
+                placeholder={t("filterByProduct")}
                 value={nameFilter}
                 onChange={(e) => setNameFilter(e.target.value)}
                 className="mb-4 px-3 py-2 border rounded-md w-full max-w-sm"
@@ -44,18 +46,18 @@ export default function ProductsPage() {
             <DataTable
                 loading={products.get.isLoading}
                 empty={!products.get.isLoading && filteredProducts?.length === 0}
-                emptyMessage="No products found."
+                emptyMessage={t("productsNotFound")}
             >
                 <DataTableHead>
-                    <DataTableHeader>Description</DataTableHeader>
-                    <DataTableHeader>Category</DataTableHeader>
-                    <DataTableHeader>Price Rule</DataTableHeader>
-                    <DataTableHeader>Quantity</DataTableHeader>
-                    <DataTableHeader>Production Cost</DataTableHeader>
-                    <DataTableHeader>Price</DataTableHeader>
-                    <DataTableHeader>Created At</DataTableHeader>
-                    <DataTableHeader>Updated At</DataTableHeader>
-                    <DataTableHeader className="text-right">Actions</DataTableHeader>
+                    <DataTableHeader>{t("description")}</DataTableHeader>
+                    <DataTableHeader>{t("category")}</DataTableHeader>
+                    <DataTableHeader>{t("priceRule")}</DataTableHeader>
+                    <DataTableHeader>{t("quantity")}</DataTableHeader>
+                    <DataTableHeader>{t("productionCost")}</DataTableHeader>
+                    <DataTableHeader>{t("price")}</DataTableHeader>
+                    <DataTableHeader>{t("createdAt")}</DataTableHeader>
+                    <DataTableHeader>{t("updatedAt")}</DataTableHeader>
+                    <DataTableHeader className="text-right">{t("actions")}</DataTableHeader>
                 </DataTableHead>
                 <tbody>
                 {filteredProducts?.map((product: ProductResponse) => (
@@ -74,7 +76,7 @@ export default function ProductsPage() {
                 className={"mt-5"}
                 onClick={modal.openForCreate}
             >
-                New Product
+                {t("newProduct")}
             </Button>
         </>
     );
