@@ -213,6 +213,7 @@
   "validation.sellingMargin": "La marge de vente doit être supérieure à 0 % et se terminer par '%'",
   "validation.roles": "Sélectionnez au moins un rôle",
   "validation.types": "Sélectionnez au moins un type",
+  "error.orderCompleted": "La commande a déjà été terminée",
   "error.orderHasNoMovements": "Cette commande ne peut pas être terminée car aucun mouvement ne lui est associé",
   "error.negativeQuantity": "Cette action entraînera une quantité négative pour le ou les éléments concernés",
   "error.invalidCredentials": "Identifiants invalides",

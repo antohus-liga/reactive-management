@@ -215,7 +215,6 @@
   "validation.types": "Wählen Sie mindestens einen Typ aus",
   "error.orderCompleted": "Die Bestellung wurde bereits abgeschlossen",
   "error.orderHasNoMovements": "Diese Bestellung kann nicht abgeschlossen werden, da ihr keine Bewegungen zugeordnet sind",
-  "error.orderCompleted": "La commande a déjà été terminée",
   "error.negativeQuantity": "Diese Aktion führt dazu, dass Element(e) eine negative Menge aufweisen",
   "error.invalidCredentials": "Ungültige Anmeldedaten",
   "error.cannotDeleteProductionOrder": "Produktionsaufträge mit dem Status 'Abgeschlossen' oder 'In Bearbeitung' können nicht gelöscht werden",
