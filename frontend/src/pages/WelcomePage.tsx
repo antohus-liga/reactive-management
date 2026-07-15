@@ -51,7 +51,7 @@ export default function WelcomePage() {
             {/* Features */}
             <div
                 className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm p-8 rounded-2xl flex flex-col lg:flex-row items-center gap-8 text-left">
-                <h2 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100 shrink-0">{t("features")}</h2>
+                <h2 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100 shrink-0 max-w-50 text-wrap">{t("features")}</h2>
                 <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 w-full">
                     <Feature name={t("cliAndSup")}
                              description={t("cliAndSupDesc")}
@@ -83,7 +83,7 @@ export default function WelcomePage() {
             {/* Links */}
             <div
                 className="w-fit bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm p-8 rounded-2xl flex flex-col lg:flex-row items-center gap-8">
-                <h2 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100 shrink-0">{t("tech")}</h2>
+                <h2 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100 shrink-0 max-w-50 text-wrap">{t("tech")}</h2>
                 <div className="flex flex-col gap-4 items-center">
                     <IconLink href={"https://github.com/antohus-liga/reactive-management"} src={"/github.png"}
                               alt={"GitHub"} invert={true}/>

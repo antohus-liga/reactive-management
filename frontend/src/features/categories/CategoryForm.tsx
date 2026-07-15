@@ -55,7 +55,7 @@ export default function CategoryForm(
 
                                 <label
                                     className="flex flex-col gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                                    Color
+                                    {t("color")}
                                     <div className="flex items-center gap-3">
                                         <input type="color" required value={form.category.colorHex}
                                                onChange={(e) =>

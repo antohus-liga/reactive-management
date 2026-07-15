@@ -82,7 +82,7 @@ export default function RegisterPage() {
                 </div>
                 <hr className="border-zinc-200 dark:border-zinc-800"/>
                 <div className="flex flex-col gap-4">
-                    <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Password</h2>
+                    <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">{t("password")}</h2>
                     <TextField label={t("password")} error={fieldErrors?.password} inputProps={{
                         name: "password",
                         type: "password",
