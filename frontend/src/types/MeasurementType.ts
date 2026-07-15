@@ -72,12 +72,12 @@ export const MeasurementTypeLabel: Record<MeasurementType, string> = {
     M3: "m³",
 
     // Packaging
-    PACK: "Pack",
-    BOX: "Box",
-    BAG: "Bag",
-    BOTTLE: "Bottle",
-    CAN: "Can",
-    ROLL: "Roll",
-    SHEET: "Sheet",
-    PALLET: "Pallet",
+    PACK: "pack",
+    BOX: "box",
+    BAG: "bag",
+    BOTTLE: "bottle",
+    CAN: "can",
+    ROLL: "roll",
+    SHEET: "sheet",
+    PALLET: "pallet",
 };

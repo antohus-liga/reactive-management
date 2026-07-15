@@ -11,10 +11,10 @@ export type CompanyType =
     typeof CompanyType[keyof typeof CompanyType];
 
 export const CompanyTypeLabel: Record<CompanyType, string> = {
-    SOLE_PROPRIETORSHIP: "Sole Proprietorship",
-    PARTNERSHIP: "Partnership",
-    LIMITED_LIABILITY_COMPANY: "Limited Liability Company",
-    CORPORATION: "Corporation",
-    COOPERATIVE: "Cooperative",
-    NONPROFIT_ORGANISATION: "Nonprofit Organisation",
+    SOLE_PROPRIETORSHIP: "soleProprietorship",
+    PARTNERSHIP: "partnership",
+    LIMITED_LIABILITY_COMPANY: "llc",
+    CORPORATION: "corp",
+    COOPERATIVE: "cooperative",
+    NONPROFIT_ORGANISATION: "nonprofit",
 };

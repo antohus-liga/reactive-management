@@ -14,11 +14,11 @@ export default function ProductSelect({value, onChange}: {
                 required={true}
         >
             <option value="" disabled>
-                Select product
+                {t("productPlaceholder")}
             </option>
             {getProducts.data?.map((product) => (
                 <option key={product.publicId} value={product.publicId}>
-                    {t("productPlaceholder")}
+                    {product.description}
                 </option>
             ))}
         </select>

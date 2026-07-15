@@ -52,7 +52,7 @@ export default function ProductionOrderRow(
 
             <td className="px-5 py-4">
                 <Badge variant={statusVariant[productionOrder.status] as "warning" | "info" | "success" | "danger"}>
-                    {ProductionStatusLabel[productionOrder.status]}
+                    {t(ProductionStatusLabel[productionOrder.status])}
                 </Badge>
             </td>
 

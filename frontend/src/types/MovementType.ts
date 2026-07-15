@@ -6,6 +6,6 @@ export const MovementType = {
 export type MovementType = typeof MovementType[keyof typeof MovementType];
 
 export const MovementTypeLabel = {
-    INBOUND: "Inbound",
-    OUTBOUND: "Outbound",
+    INBOUND: "inbound",
+    OUTBOUND: "outbound",
 }
