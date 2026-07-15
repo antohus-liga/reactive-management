@@ -31,18 +31,18 @@ export default function ProductRow(
     return (
         <>
             <tr className="border-b border-zinc-200 transition-colors duration-150 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-800/50">
-                <td className="px-5 py-4 font-medium text-zinc-900 dark:text-zinc-100">
+                <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300 whitespace-nowrap">
                     {product.description}
                 </td>
 
-                <td className="px-5 py-4">
+                <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300 whitespace-nowrap">
                     <ColorSwatch
                         color={product.categoryColor}
                         label={product.categoryDescription}
                     />
                 </td>
 
-                <td className="px-5 py-4">
+                <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300 whitespace-nowrap">
                     <div className="flex items-center gap-3">
                         {product.fixedPrice ? (
                             <>
@@ -72,34 +72,34 @@ export default function ProductRow(
                     </div>
                 </td>
 
-                <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300">
+                <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300 whitespace-nowrap">
                     {product.quantity}{" "}
                     {MeasurementTypeLabel[product.measurement]}
                 </td>
 
-                <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300">
+                <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300 whitespace-nowrap">
                     {new Intl.NumberFormat("en-US", {
                         notation: "compact",
                         maximumFractionDigits: 2,
                     }).format(product.productionCost)} €
                 </td>
 
-                <td className="px-5 py-4 font-medium text-zinc-900 dark:text-zinc-100">
+                <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300 whitespace-nowrap">
                     {new Intl.NumberFormat("en-US", {
                         notation: "compact",
                         maximumFractionDigits: 2,
                     }).format(product.price)} €
                 </td>
 
-                <td className="px-5 py-4 text-sm text-zinc-500 dark:text-zinc-400">
+                <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300 whitespace-nowrap">
                     {new Date(product.createdAt).toLocaleString()}
                 </td>
 
-                <td className="px-5 py-4 text-sm text-zinc-500 dark:text-zinc-400">
+                <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300 whitespace-nowrap">
                     {new Date(product.updatedAt).toLocaleString()}
                 </td>
 
-                <td className="px-5 py-4">
+                <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300 whitespace-nowrap">
                     <div className="flex flex-wrap items-center gap-2">
                         <Button variant="secondary" onClick={() => onEdit(product)} icon={<Pencil size={16}/>}>
                             {t("edit")}
@@ -159,18 +159,18 @@ export default function ProductRow(
                                                     key={ingredient.materialPublicId}
                                                     className="border-b last:border-none border-zinc-200 dark:border-zinc-800"
                                                 >
-                                                    <td className="px-5 py-4">
+                                                    <td className="px-5 py-4 whitespace-nowrap">
                                                         {ingredient.materialDescription}
                                                     </td>
 
-                                                    <td className="px-5 py-4">
+                                                    <td className="px-5 py-4 whitespace-nowrap">
                                                         {new Intl.NumberFormat("en-US", {
                                                             notation: "compact",
                                                             maximumFractionDigits: 2,
                                                         }).format(ingredient.materialUnitPrice)} €
                                                     </td>
 
-                                                    <td className="px-5 py-4">
+                                                    <td className="px-5 py-4 whitespace-nowrap">
                                                         {ingredient.quantityNeeded}{" "}
                                                         {MeasurementTypeLabel[ingredient.materialMeasurement]}
                                                     </td>

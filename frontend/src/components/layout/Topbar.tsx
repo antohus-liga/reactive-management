@@ -11,6 +11,8 @@ import ThemeToggle from "@/components/ThemeToggle.tsx";
 import LanguageSwitcher from "@/components/LanguageSwitcher.tsx";
 import {useTranslation} from "react-i18next";
 import Modal from "@/components/Modal.tsx";
+import {Settings, LogOut} from "lucide-react";
+import Button from "@/components/Button.tsx";
 
 export default function Topbar() {
     const {data: user} = useCurrentUser()
@@ -27,7 +29,7 @@ export default function Topbar() {
                 <UserForm onClose={() => setOpen(false)}/>
             </Modal>
             <header
-                className="fixed top-0 left-0 right-0 h-16 bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 z-50 px-6 flex items-center shadow-sm">
+                className="fixed top-0 left-0 right-0 h-16 bg-slate-200 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 z-50 px-6 flex items-center shadow-sm">
                 <div className="mr-auto">
                     <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">{t(title)}</h1>
                 </div>
@@ -43,17 +45,17 @@ export default function Topbar() {
                     <ThemeToggle/>
 
                     <button
-                        className="bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 border border-zinc-200 dark:border-zinc-700 rounded-md transition-colors duration-150 p-2 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50"
+                        className="bg-slate-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 border border-zinc-300 dark:border-zinc-700 rounded-md transition-colors duration-150 p-2 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50"
                         onClick={() => setOpen(true)}
                         aria-label="Settings"
                     >
-                        <img className="dark:invert size-5" src="/settings.png" alt="Settings"/>
+                        <Settings className={"dark:text-zinc-300"} size={20}/>
                     </button>
                     <button
-                        className="bg-red-50 hover:bg-red-100 dark:bg-red-950/40 dark:hover:bg-red-950/60 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900 rounded-md transition-colors duration-150 px-3 py-2 text-sm font-medium cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500/50"
+                        className="bg-red-50 hover:bg-red-100 dark:bg-red-950/40 dark:hover:bg-red-950/60 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900 rounded-md transition-colors duration-150 p-2 text-sm font-medium cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500/50"
                         onClick={() => logout.mutate()}
                     >
-                        {t("signOut")}
+                        <LogOut size={20}/>
                     </button>
                 </div>
             </header>

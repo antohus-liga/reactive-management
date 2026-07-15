@@ -37,21 +37,21 @@ export default function OrderRow(
     return (
         <>
             <tr className="border-b border-zinc-200 transition-colors hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-800/50">
-                <td className="px-5 py-4 font-medium text-zinc-900 dark:text-zinc-100">
+                <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300 whitespace-nowrap">
                     {order.companyName}
                 </td>
-                <td className="px-5 py-4 text-zinc-600 dark:text-zinc-400">
+                <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300 whitespace-nowrap">
                     {countryLabels[order.companyCountry]}
                 </td>
-                <td className="px-5 py-4 text-zinc-600 dark:text-zinc-400">
+                <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300 whitespace-nowrap">
                     {order.withRole === CompanyRole.CLIENT
                         ? <Badge variant={"info"}>{t("client")}</Badge>
                         : <Badge variant={"neutral"}>{t("supplier")}</Badge>}
                 </td>
-                <td className="px-5 py-4 text-sm text-zinc-500 dark:text-zinc-400">
+                <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300 whitespace-nowrap">
                     {new Date(order.createdAt).toLocaleString()}
                 </td>
-                <td className="px-5 py-4">
+                <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300 whitespace-nowrap">
                     <div className="flex items-center gap-2">
                         <Button variant="danger" icon={<Trash2 size={16}/>} onClick={() => onDelete(order.publicId)}>
                             {t("delete")}
@@ -107,11 +107,11 @@ export default function OrderRow(
                                                             <tr key={movement.publicId}
                                                                 className="border-b border-zinc-200 dark:border-zinc-800"
                                                             >
-                                                                <td className="px-4 py-3">
+                                                                <td className="px-4 py-3 whitespace-nowrap">
                                                                     {movement.materialDescription ??
                                                                         movement.productDescription}
                                                                 </td>
-                                                                <td className="px-4 py-3">
+                                                                <td className="px-4 py-3 whitespace-nowrap">
                                                                     {new Intl.NumberFormat("en-US", {
                                                                         notation: "compact",
                                                                         maximumFractionDigits: 2,
@@ -121,26 +121,26 @@ export default function OrderRow(
                                                                         ?? 0
                                                                     )} €
                                                                 </td>
-                                                                <td className="px-4 py-3">
+                                                                <td className="px-4 py-3 whitespace-nowrap">
                                                                     {movement.quantity}
                                                                 </td>
-                                                                <td className="px-4 py-3">
+                                                                <td className="px-4 py-3 whitespace-nowrap">
                                                                     {movement.discount ?? "—"}
                                                                 </td>
-                                                                <td className="px-4 py-3">
+                                                                <td className="px-4 py-3 whitespace-nowrap">
                                                                     {new Intl.NumberFormat("en-US", {
                                                                         notation: "compact",
                                                                         maximumFractionDigits: 2,
                                                                     }).format(movement.totalPrice)} €
                                                                 </td>
-                                                                <td className="px-4 py-3">
+                                                                <td className="px-4 py-3 whitespace-nowrap">
                                                                     {movement.movementType === MovementType.INBOUND
                                                                         ? <Badge
                                                                             variant={"success"}>{t("inbound")}</Badge>
                                                                         : <Badge
                                                                             variant={"danger"}>{t("outbound")}</Badge>}
                                                                 </td>
-                                                                <td className="px-4 py-3">
+                                                                <td className="px-4 py-3 whitespace-nowrap">
                                                                     <Button variant="danger" icon={<Trash2 size={15}/>}
                                                                             disabled={order.isCompleted}
                                                                             onClick={() => onMovementDelete(order.publicId, movement.publicId)}

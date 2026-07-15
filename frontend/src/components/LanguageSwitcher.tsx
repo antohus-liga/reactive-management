@@ -8,7 +8,7 @@ export default function LanguageSwitcher() {
     return (
         <Menu as="div" className="relative">
             <MenuButton
-                className="flex items-center gap-1.5 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 border border-zinc-200 dark:border-zinc-700 rounded-md transition-colors duration-150 p-2 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50"
+                className="flex items-center gap-1.5 bg-slate-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 border border-zinc-300 dark:border-zinc-700 rounded-md transition-colors duration-150 p-2 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50"
                 aria-label="Change language"
             >
                 <Languages className="size-5 text-zinc-600 dark:text-zinc-300"/>
