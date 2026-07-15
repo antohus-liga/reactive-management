@@ -198,7 +198,6 @@
   "newOrderCreated": "Nova Encomenda Criada",
   "productMovement": "Movimento de produto",
   "materialMovement": "Movimento de material",
-
   "validation.companyName": "O nome da empresa não deve exceder 100 caracteres",
   "validation.taxId": "O NIF deve ser alfanumérico (5-20 caracteres)",
   "validation.phone": "O número de telefone deve estar num formato internacional válido",
@@ -213,5 +212,15 @@
   "validation.usedQuantity": "A quantidade não pode ser inferior a 1",
   "validation.sellingMargin": "A margem de venda deve ser superior a 0% e terminar com '%'",
   "validation.roles": "Selecione pelo menos uma função",
-  "validation.types": "Selecione pelo menos um tipo"
+  "validation.types": "Selecione pelo menos um tipo",
+  "error.orderCompleted": "A encomenda já foi concluída",
+  "error.orderHasNoMovements": "Esta encomenda não pode ser concluída por não ter movimentos associados",
+  "error.negativeQuantity": "Esta ação fará com que o(s) elemento(s) fique(m) com quantidade negativa",
+  "error.invalidCredentials": "Credenciais inválidas",
+  "error.cannotDeleteProductionOrder": "Não é possível eliminar ordens de produção com o estado 'Concluída' ou 'Em curso'",
+  "error.productDependency": "Algumas encomendas dependem deste produto",
+  "error.materialDependency": "Algumas encomendas ou receitas dependem deste material",
+  "error.categoryDependency": "Alguns materiais ou produtos dependem desta categoria",
+  "error.companyDependency": "Algumas encomendas dependem desta empresa",
+  
 }

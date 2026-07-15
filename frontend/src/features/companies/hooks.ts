@@ -1,5 +1,6 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {companyApi, type CompanyRequest} from "@/features/companies/api.ts";
+import {useTranslation} from "react-i18next";
 
 export function useFetchCompanies() {
     return useQuery({
@@ -38,10 +39,11 @@ export function useUpdateCompany() {
 
 export function useDeleteCompany() {
     const queryClient = useQueryClient();
+    const {t} = useTranslation();
 
     return useMutation({
         mutationFn: (publicId: string) => companyApi.delete(publicId),
         onSuccess: () => queryClient.invalidateQueries({queryKey: ["companies", "get"]}),
-        onError: () => alert("Some orders depend on this company.")
+        onError: () => alert(t("error.companyDependency"))
     });
 }

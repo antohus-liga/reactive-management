@@ -1,5 +1,6 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {categoryApi, type CategoryRequest} from "@/features/categories/api.ts";
+import {useTranslation} from "react-i18next";
 
 export function useFetchCategories() {
     return useQuery({
@@ -40,10 +41,11 @@ export function useUpdateCategory() {
 
 export function useDeleteCategory() {
     const queryClient = useQueryClient();
+    const {t} = useTranslation();
 
     return useMutation({
         mutationFn: async (publicId: string) => await categoryApi.delete(publicId),
         onSuccess: async () => await queryClient.invalidateQueries({queryKey: ["categories", "get"]}),
-        onError: () => alert("Some products or materials depend on this category.")
+        onError: () => alert(t("error.categoryDependency"))
     });
 }

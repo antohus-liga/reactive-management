@@ -198,7 +198,6 @@
   "newOrderCreated": "Nouvelle Commande Créée",
   "productMovement": "Mouvement de produit",
   "materialMovement": "Mouvement de matériau",
-
   "validation.companyName": "Le nom de l'entreprise ne doit pas dépasser 100 caractères",
   "validation.taxId": "Le numéro de TVA doit être alphanumérique (5 à 20 caractères)",
   "validation.phone": "Le numéro de téléphone doit être dans un format international valide",
@@ -213,5 +212,13 @@
   "validation.usedQuantity": "La quantité ne peut pas être inférieure à 1",
   "validation.sellingMargin": "La marge de vente doit être supérieure à 0 % et se terminer par '%'",
   "validation.roles": "Sélectionnez au moins un rôle",
-  "validation.types": "Sélectionnez au moins un type"
+  "validation.types": "Sélectionnez au moins un type",
+  "error.orderHasNoMovements": "Cette commande ne peut pas être terminée car aucun mouvement ne lui est associé",
+  "error.negativeQuantity": "Cette action entraînera une quantité négative pour le ou les éléments concernés",
+  "error.invalidCredentials": "Identifiants invalides",
+  "error.cannotDeleteProductionOrder": "Impossible de supprimer les ordres de production ayant le statut 'Terminée' ou 'En cours'",
+  "error.productDependency": "Certaines commandes dépendent de ce produit",
+  "error.materialDependency": "Certaines commandes ou recettes dépendent de ce matériau",
+  "error.categoryDependency": "Certains matériaux ou produits dépendent de cette catégorie",
+  "error.companyDependency": "Certaines commandes dépendent de cette entreprise"
 }

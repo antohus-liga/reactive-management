@@ -1,6 +1,7 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {type MovementRequest, type OrderRequest, ordersApi} from "@/features/orders/api.ts";
 import {getErrorMessage} from "@/lib/getErrorMessage.ts";
+import {useTranslation} from "react-i18next";
 
 export function useFetchOrders() {
     return useQuery({
@@ -22,6 +23,7 @@ export function useCreateOrder() {
 
 export function useDeleteOrder() {
     const queryClient = useQueryClient();
+    const {t} = useTranslation();
 
     return useMutation({
         mutationFn: (publicId: string) => ordersApi.delete(publicId),
@@ -31,7 +33,7 @@ export function useDeleteOrder() {
             await queryClient.invalidateQueries({queryKey: ["materials", "get"]});
             await queryClient.invalidateQueries({queryKey: ["products", "get"]});
         },
-        onError: (error) => alert(getErrorMessage(error))
+        onError: (error) => alert(t(getErrorMessage(error)))
     });
 }
 

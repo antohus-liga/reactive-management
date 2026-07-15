@@ -1,5 +1,6 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {materialApi, type MaterialRequest} from "@/features/materials/api.ts";
+import {useTranslation} from "react-i18next";
 
 export function useFetchMaterials() {
     return useQuery({
@@ -33,10 +34,11 @@ export function useUpdateMaterial() {
 
 export function useDeleteMaterial() {
     const queryClient = useQueryClient();
+    const {t} = useTranslation();
 
     return useMutation({
         mutationFn: async (publicId: string) => await materialApi.delete(publicId),
         onSuccess: () => queryClient.invalidateQueries({queryKey: ["materials", "get"]}),
-        onError: () => alert("Some orders depend on this material.")
+        onError: () => alert(t("error.materialDependency"))
     })
 }

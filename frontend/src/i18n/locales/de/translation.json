@@ -198,7 +198,6 @@
   "newOrderCreated": "Neue Bestellung erstellt",
   "productMovement": "Produktbewegung",
   "materialMovement": "Materialbewegung",
-
   "validation.companyName": "Der Unternehmensname darf 100 Zeichen nicht überschreiten",
   "validation.taxId": "Die Steuernummer muss alphanumerisch sein (5-20 Zeichen)",
   "validation.phone": "Die Telefonnummer muss in einem gültigen internationalen Format vorliegen",
@@ -213,5 +212,15 @@
   "validation.usedQuantity": "Die Menge darf nicht kleiner als 1 sein",
   "validation.sellingMargin": "Die Verkaufsmarge muss größer als 0 % sein und mit '%' enden",
   "validation.roles": "Wählen Sie mindestens eine Rolle aus",
-  "validation.types": "Wählen Sie mindestens einen Typ aus"
+  "validation.types": "Wählen Sie mindestens einen Typ aus",
+  "error.orderCompleted": "Die Bestellung wurde bereits abgeschlossen",
+  "error.orderHasNoMovements": "Diese Bestellung kann nicht abgeschlossen werden, da ihr keine Bewegungen zugeordnet sind",
+  "error.orderCompleted": "La commande a déjà été terminée",
+  "error.negativeQuantity": "Diese Aktion führt dazu, dass Element(e) eine negative Menge aufweisen",
+  "error.invalidCredentials": "Ungültige Anmeldedaten",
+  "error.cannotDeleteProductionOrder": "Produktionsaufträge mit dem Status 'Abgeschlossen' oder 'In Bearbeitung' können nicht gelöscht werden",
+  "error.productDependency": "Einige Bestellungen sind von diesem Produkt abhängig",
+  "error.materialDependency": "Einige Bestellungen oder Rezepturen sind von diesem Material abhängig",
+  "error.categoryDependency": "Einige Materialien oder Produkte sind von dieser Kategorie abhängig",
+  "error.companyDependency": "Einige Bestellungen sind von diesem Unternehmen abhängig"
 }

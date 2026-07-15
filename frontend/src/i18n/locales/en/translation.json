@@ -198,7 +198,6 @@
   "newOrderCreated": "New Order Created",
   "productMovement": "Product movement",
   "materialMovement": "Material movement",
-
   "validation.companyName": "Company name should not exceed 100 characters",
   "validation.taxId": "Tax ID must be alphanumeric (5-20 chars)",
   "validation.phone": "Phone number must be valid international format",
@@ -213,5 +212,14 @@
   "validation.usedQuantity": "Quantity cannot be less than 1",
   "validation.sellingMargin": "Selling margin must be greater than 0% and end with '%'",
   "validation.roles": "Select at least one role",
-  "validation.types": "Select at least one type"
+  "validation.types": "Select at least one type",
+  "error.orderCompleted": "The order has already been completed",
+  "error.orderHasNoMovements": "This order cannot be completed due to having no movements attached to it",
+  "error.negativeQuantity": "This action will cause element(s) to have negative quantity",
+  "error.invalidCredentials": "Invalid credentials",
+  "error.cannotDeleteProductionOrder": "Cannot delete production orders with status 'Completed' or 'In Progress'",
+  "error.productDependency": "Some orders depend on this product",
+  "error.materialDependency": "Some orders or recipes depend on this material",
+  "error.categoryDependency": "Some materials or products depend on this category",
+  "error.companyDependency": "Some orders depend on this company"
 }
