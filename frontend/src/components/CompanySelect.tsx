@@ -1,10 +1,12 @@
 import {useFetchCompanies} from "@/features/companies/hooks.ts";
 import {CompanyRole} from "@/types/CompanyRole.ts";
+import {useTranslation} from "react-i18next";
 export default function CompanySelect({value, onChange}: {
     value: string,
     onChange: (value: string) => void;
 }) {
     const getCompanies = useFetchCompanies();
+    const {t} = useTranslation();
     return (
         <select value={value}
                 onChange={(e) => onChange(e.target.value)}
@@ -12,15 +14,15 @@ export default function CompanySelect({value, onChange}: {
                 required={true}
         >
             <option value="" disabled>
-                Select company
+                {t("companyPlaceholder")}
             </option>
             {getCompanies.data?.map((company) => {
                 const isBoth = company.roles.includes(CompanyRole.CLIENT) && company.roles.includes(CompanyRole.SUPPLIER);
                 const isClient = company.roles.includes(CompanyRole.CLIENT);
-                const roleTag = isBoth ? "Client & Supplier" : isClient ? "Client" : "Supplier";
+                const roleTag = isBoth ? t("supplierAndClient") : isClient ? t("client") : t("supplier");
                 return (
                     <option key={company.publicId} value={company.publicId}>
-                        {company.companyName + " (Tax: " + company.taxId + ") — " + roleTag}
+                        {`${company.companyName} (${t("taxId")}: ${company.taxId}) — ${roleTag}`}
                     </option>
                 );
             })}
