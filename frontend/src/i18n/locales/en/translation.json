@@ -94,6 +94,7 @@
   "updateCategory": "Update Category",
   "categoryInfo": "Category Information",
   "categoryTypes": "Category Types",
+  "ordersNotFound": "No orders found...",
   "showMovements": "Show Movements",
   "hideMovements": "Hide Movements",
   "complete": "Complete",
@@ -117,5 +118,11 @@
   "createOrder": "Create Order",
   "orderDetails": "Order Details",
   "orderHint": "Select the company and the role associated with this order.",
-  "companyPlaceholder": "Select Company"
+  "companyPlaceholder": "Select Company",
+  "status": "Status",
+  "execute": "Execute",
+  "newProductionOrder": "New Production Order",
+  "totalCost": "Total Cost",
+  "productionOrdersNotFound": "No production orders found...",
+  "createNewProductionOrder": "Create New Production Order"
 }

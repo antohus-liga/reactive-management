@@ -43,7 +43,7 @@ export default function OrdersPage() {
             />
 
             <DataTable loading={orders.get.isLoading} empty={!orders.get.isLoading && filteredOrders?.length === 0}
-                       emptyMessage={t("companiesNotFound")}
+                       emptyMessage={t("ordersNotFound")}
             >
                 <DataTableHead>
                     <DataTableHeader>{t("companyName")}</DataTableHeader>

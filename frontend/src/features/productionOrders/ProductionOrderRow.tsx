@@ -4,6 +4,7 @@ import {ProductionStatus, ProductionStatusLabel} from "@/types/ProductionStatus.
 import {Check, Trash2} from "lucide-react";
 import Button from "@/components/Button.tsx";
 import Badge from "@/components/Badge.tsx";
+import {useTranslation} from "react-i18next";
 
 export default function ProductionOrderRow(
     {
@@ -15,6 +16,8 @@ export default function ProductionOrderRow(
         onDelete: (publicId: string) => void,
         onExecute: (publicId: string) => void,
     }) {
+
+    const {t} = useTranslation();
 
     const statusVariant: Record<ProductionStatus, string> = {
         PENDING: "warning",
@@ -62,14 +65,14 @@ export default function ProductionOrderRow(
                     <Button variant="danger" icon={<Trash2 size={16}/>}
                             onClick={() => onDelete(productionOrder.publicId)}
                     >
-                        Delete
+                        {t("delete")}
                     </Button>
 
                     <Button variant="success" icon={<Check size={16}/>}
                             disabled={productionOrder.status !== ProductionStatus.PENDING}
                             onClick={() => onExecute(productionOrder.publicId)}
                     >
-                        Execute
+                        {t("execute")}
                     </Button>
                 </div>
             </td>

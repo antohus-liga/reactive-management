@@ -11,6 +11,8 @@ import {DataTableHead} from "@/components/table/DataTableHead.tsx";
 import {DataTableHeader} from "@/components/table/DataTableHeader.tsx";
 import Button from "@/components/Button.tsx";
 import {Plus} from "lucide-react";
+import {ProductionStatus} from "@/types/ProductionStatus.ts";
+import {useTranslation} from "react-i18next";
 
 export default function ProductionOrdersPage() {
     const productionOrders = useProductionOrders();
@@ -18,6 +20,7 @@ export default function ProductionOrdersPage() {
     const queryClient = useQueryClient();
     const handledCompletions = useRef(new Set<string>());
     const [nameFilter, setNameFilter] = useState("");
+    const {t} = useTranslation();
 
     const filteredProduction = useMemo(() => {
         if (!nameFilter.trim()) return productionOrders.get.data;
@@ -30,7 +33,7 @@ export default function ProductionOrdersPage() {
         if (!productionOrders.get.data) return;
 
         const newlyCompleted = productionOrders.get.data.filter(
-            (p) => p.status === "COMPLETED" && !handledCompletions.current.has(p.publicId)
+            (p) => p.status === ProductionStatus.COMPLETED && !handledCompletions.current.has(p.publicId)
         );
 
         if (newlyCompleted.length > 0) {
@@ -48,7 +51,7 @@ export default function ProductionOrdersPage() {
 
             <input
                 type="text"
-                placeholder="Filter by product description..."
+                placeholder={t("filterByProduct")}
                 value={nameFilter}
                 onChange={(e) => setNameFilter(e.target.value)}
                 className="mb-4 px-3 py-2 border rounded-md w-full max-w-sm"
@@ -57,16 +60,16 @@ export default function ProductionOrdersPage() {
             <DataTable
                 loading={productionOrders.get.isLoading}
                 empty={!productionOrders.get.isLoading && filteredProduction?.length === 0}
-                emptyMessage="No production orders found."
+                emptyMessage={t("productionOrdersNotFound")}
             >
                 <DataTableHead>
-                    <DataTableHeader>Product</DataTableHeader>
-                    <DataTableHeader>Production Cost</DataTableHeader>
-                    <DataTableHeader>Quantity</DataTableHeader>
-                    <DataTableHeader>Total Cost</DataTableHeader>
-                    <DataTableHeader>Status</DataTableHeader>
-                    <DataTableHeader>Created At</DataTableHeader>
-                    <DataTableHeader className="text-right">Actions</DataTableHeader>
+                    <DataTableHeader>{t("product")}</DataTableHeader>
+                    <DataTableHeader>{t("productionCost")}</DataTableHeader>
+                    <DataTableHeader>{t("quantity")}</DataTableHeader>
+                    <DataTableHeader>{t("totalCost")}</DataTableHeader>
+                    <DataTableHeader>{t("status")}</DataTableHeader>
+                    <DataTableHeader>{t("createdAt")}</DataTableHeader>
+                    <DataTableHeader className="text-right">{t("actions")}</DataTableHeader>
                 </DataTableHead>
 
                 <tbody>
@@ -81,7 +84,7 @@ export default function ProductionOrdersPage() {
                 </tbody>
             </DataTable>
             <Button className={"mt-5"} onClick={modal.openForCreate} icon={<Plus size={16}/>}>
-                New Production Order
+                {t("newProductionOrder")}
             </Button>
         </>
     );
