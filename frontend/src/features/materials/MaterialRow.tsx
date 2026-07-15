@@ -2,6 +2,7 @@ import Button from "@/components/Button";
 import type {MaterialResponse} from "@/features/materials/api.ts";
 import {MeasurementTypeLabel} from "@/types/MeasurementType.ts";
 import {Pencil, Trash2} from "lucide-react";
+import {useTranslation} from "react-i18next";
 
 export default function MaterialRow(
     {
@@ -14,6 +15,7 @@ export default function MaterialRow(
         onEdit: (material: MaterialResponse) => void;
     }) {
     const color = material.categoryColor;
+    const {t} = useTranslation();
 
     return (
         <tr className="border-b border-zinc-200 transition-colors duration-150 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-800/50">
@@ -52,11 +54,11 @@ export default function MaterialRow(
             <td className="px-5 py-4">
                 <div className="flex items-center gap-2">
                     <Button variant="secondary" onClick={() => onEdit(material)} icon={<Pencil size={16}/>}>
-                        Edit
+                        {t("edit")}
                     </Button>
 
                     <Button variant="danger" onClick={() => onDelete(material.publicId)} icon={<Trash2 size={16}/>}>
-                        Delete
+                        {t("delete")}
                     </Button>
                 </div>
             </td>

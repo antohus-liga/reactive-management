@@ -73,5 +73,12 @@
   "updateProduct": "Update Product",
   "descriptionPlaceholder": "Enter description",
   "categoryPlaceholder": "Select category",
-  "quantityDescription": "Initial stock is managed through inventory movements."
+  "quantityDescription": "Initial stock is managed through inventory movements.",
+  "newMaterial": "New Material",
+  "filterByMaterial": "Filter by material description...",
+  "materialsNotFound": "No materials found...",
+  "createNewMaterial": "Create New Material",
+  "updateMaterial": "Update Material",
+  "materialCategory": "Material Category",
+  "materialInfo": "Material Information"
 }

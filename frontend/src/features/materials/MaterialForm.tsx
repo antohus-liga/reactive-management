@@ -10,12 +10,14 @@ import FormSectionTitle from "@/components/FormSectionTitle";
 import Button from "@/components/Button";
 import {CategoryType} from "@/types/CategoryType.ts";
 import {Boxes, Check, X} from "lucide-react";
+import {useTranslation} from "react-i18next";
 
 export default function MaterialForm({initial, onClose}: {
     initial: MaterialResponse | null,
     onClose: () => void,
 }) {
     const form = useMaterialForm(initial);
+    const {t} = useTranslation();
 
     const error = form.create.error ?? form.update.error;
     const fieldErrors = getFieldErrors(error);
@@ -31,17 +33,17 @@ export default function MaterialForm({initial, onClose}: {
 
                     <div className="flex-1">
                         <DialogTitle as="h1" className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-                            {initial ? "Update Material" : "Create New Material"}
+                            {initial ? t("updateMaterial") : t("createNewMaterial")}
                         </DialogTitle>
                         <div className="mt-6 grid grid-cols-1 gap-8 lg:grid-cols-2">
                             <section className="space-y-4">
                                 <FormSectionTitle>
-                                    Material Information
+                                    {t("materialInfo")}
                                 </FormSectionTitle>
 
                                 <TextField
-                                    label="Description" error={fieldErrors?.description} inputProps={{
-                                    placeholder: "Enter the description",
+                                    label={t("description")} error={fieldErrors?.description} inputProps={{
+                                    placeholder: t("descriptionPlaceholder"),
                                     value: form.material.description,
                                     onChange: (e) => form.setMaterial(prev => ({
                                         ...prev,
@@ -51,7 +53,7 @@ export default function MaterialForm({initial, onClose}: {
                                 />
 
                                 <TextField
-                                    label="Unit Price" error={fieldErrors?.unitPrice}
+                                    label={t("unitPrice")} error={fieldErrors?.unitPrice}
                                     inputProps={{
                                         type: "number",
                                         value: form.material.unitPrice,
@@ -63,7 +65,7 @@ export default function MaterialForm({initial, onClose}: {
                                 />
 
                                 <TextField
-                                    label="Quantity" error={fieldErrors?.quantity}
+                                    label={t("quantity")} error={fieldErrors?.quantity}
                                     inputProps={{
                                         disabled: !initial, type: "number",
                                         value: form.material.quantity,
@@ -77,14 +79,14 @@ export default function MaterialForm({initial, onClose}: {
 
                                 <label
                                     className="flex flex-col gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                                    Measurement Type
+                                    {t("measurement")}
                                     <TypeSelect values={Object.values(MeasurementType)} labels={MeasurementTypeLabel}
                                                 value={form.material.measurement}
                                                 onChange={value => form.setMaterial(prev => ({
                                                     ...prev,
                                                     measurement: value
                                                 }))}
-                                                placeHolder={"Select a measurement type"}/>
+                                                placeHolder={t("measurementPlaceholder")}/>
                                     {fieldErrors?.measurement &&
                                         <p className="text-red-400 text-xl">{fieldErrors.measurement}</p>}
                                 </label>
@@ -92,12 +94,12 @@ export default function MaterialForm({initial, onClose}: {
 
                             <section className="space-y-4">
                                 <FormSectionTitle>
-                                    Category
+                                    {t("category")}
                                 </FormSectionTitle>
 
                                 <label
                                     className="flex flex-col gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                                    Material Category
+                                    {t("materialCategory")}
                                     <CategorySelect
                                         value={form.material.categoryPublicId}
                                         onChange={(value) => form.setMaterial(prev => ({
@@ -119,11 +121,11 @@ export default function MaterialForm({initial, onClose}: {
 
             <div className="flex justify-end gap-3 border-t border-zinc-200 px-6 py-4 dark:border-zinc-800">
                 <Button type="button" variant="secondary" icon={<X/>} onClick={onClose}>
-                    Cancel
+                    {t("cancel")}
                 </Button>
 
                 <Button type="submit" icon={<Check/>}>
-                    {initial ? "Update" : "Create"}
+                    {initial ? t("update") : t("create")}
                 </Button>
             </div>
         </form>
