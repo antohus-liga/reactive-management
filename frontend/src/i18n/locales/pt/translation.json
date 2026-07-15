@@ -180,5 +180,22 @@
   "tech": "Tecnologias que usámos",
   "404": "404 — Página não encontrada",
   "404Desc": "A página que procura não existe ou pode ter sido movida.",
-  "goHome": "Voltar ao início"
+  "goHome": "Voltar ao início",
+  "totalSales": "Vendas Totais",
+  "productSales": "Vendas de Produtos",
+  "inventoryValue": "Valor do Inventário",
+  "openOrders": "Encomendas Abertas",
+  "currentlyRunning": "Em Execução",
+  "revenue": "Receita",
+  "productionStatus": "Estado da Produção",
+  "totalOrders": "Total de Encomendas",
+  "count": "Contagem",
+  "inventoryAlerts": "Alertas de Inventário",
+  "lowStockMaterials": "Materiais com Stock Baixo",
+  "lowStockProducts": "Produtos com Stock Baixo",
+  "noLowStock": "Nenhum item com stock baixo",
+  "recentActivity": "Atividade Recente",
+  "newOrderCreated": "Nova Encomenda Criada",
+  "productMovement": "Movimento de produto",
+  "materialMovement": "Movimento de material"
 }
