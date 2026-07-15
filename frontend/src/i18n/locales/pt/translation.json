@@ -221,6 +221,5 @@
   "error.productDependency": "Algumas encomendas dependem deste produto",
   "error.materialDependency": "Algumas encomendas ou receitas dependem deste material",
   "error.categoryDependency": "Alguns materiais ou produtos dependem desta categoria",
-  "error.companyDependency": "Algumas encomendas dependem desta empresa",
-  
+  "error.companyDependency": "Algumas encomendas dependem desta empresa"
 }
