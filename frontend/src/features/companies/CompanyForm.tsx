@@ -168,7 +168,7 @@ export default function CompanyForm(
 
                             <section className="space-y-4">
                                 <FormSectionTitle>
-                                    {t("roles")}
+                                    {t("role")}
                                 </FormSectionTitle>
 
                                 <div className="space-y-2">
