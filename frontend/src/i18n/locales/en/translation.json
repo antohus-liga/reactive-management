@@ -80,5 +80,18 @@
   "createNewMaterial": "Create New Material",
   "updateMaterial": "Update Material",
   "materialCategory": "Material Category",
-  "materialInfo": "Material Information"
+  "materialInfo": "Material Information",
+  "name": "Name",
+  "color": "Color",
+  "filterByCategory": "Filter by category name...",
+  "categoriesNotFound": "No categories found...",
+  "type": "Type",
+  "newCategory": "New Category",
+  "product": "Product",
+  "materialAndProduct": "Material & Product",
+  "namePlaceholder": "Enter name",
+  "createNewCategory": "Create New Category",
+  "updateCategory": "Update Category",
+  "categoryInfo": "Category Information",
+  "categoryTypes": "Category Types"
 }

@@ -9,6 +9,7 @@ import FormSectionTitle from "@/components/FormSectionTitle.tsx";
 import Badge from "@/components/Badge";
 import Button from "@/components/Button.tsx";
 import {Check, Tags, X} from "lucide-react";
+import {useTranslation} from "react-i18next";
 
 export default function CategoryForm(
     {
@@ -19,6 +20,7 @@ export default function CategoryForm(
         onClose: () => void;
     }) {
     const form = useCategoryForm(initial);
+    const {t} = useTranslation();
 
     const error = form.create.error ?? form.update.error;
     const fieldErrors = getFieldErrors(error);
@@ -33,15 +35,15 @@ export default function CategoryForm(
                     </div>
                     <div className="flex-1">
                         <DialogTitle as="h1" className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-                            {initial ? "Update Category" : "Create New Category"}
+                            {initial ? t("updateCategory") : t("createNewCategory")}
                         </DialogTitle>
                         <div className="mt-6 space-y-6">
                             <section className="space-y-4">
                                 <FormSectionTitle>
-                                    Category Information
+                                    {t("categoryInfo")}
                                 </FormSectionTitle>
-                                <TextField label="Name" error={fieldErrors?.name} inputProps={{
-                                    placeholder: "Enter category name",
+                                <TextField label={t("name")} error={fieldErrors?.name} inputProps={{
+                                    placeholder: t("namePlaceholder"),
                                     value: form.category.name,
                                     onChange: (e) => form.setCategory(prev => ({
                                         ...prev,
@@ -80,27 +82,27 @@ export default function CategoryForm(
 
                             <section className="space-y-3">
                                 <FormSectionTitle>
-                                    Category Types
+                                    {t("categoryTypes")}
                                 </FormSectionTitle>
 
                                 <div className="space-y-2">
                                     <label
                                         className="flex items-center justify-between rounded-lg border border-zinc-200 px-3 py-2 dark:border-zinc-800">
-                                        <Checkbox label="Material"
+                                        <Checkbox label={t("material")}
                                                   checked={form.category.types.includes(CategoryType.MATERIAL)}
                                                   onChange={(checked) => form.toggleType(CategoryType.MATERIAL, checked)}
                                         />
 
-                                        <Badge variant="info">Material</Badge>
+                                        <Badge variant="info">{t("material")}</Badge>
                                     </label>
 
                                     <label
                                         className="flex items-center justify-between rounded-lg border border-zinc-200 px-3 py-2 dark:border-zinc-800">
-                                        <Checkbox label="Product"
+                                        <Checkbox label={t("product")}
                                                   checked={form.category.types.includes(CategoryType.PRODUCT)}
                                                   onChange={(checked) => form.toggleType(CategoryType.PRODUCT, checked)}
                                         />
-                                        <Badge variant="neutral">Product</Badge>
+                                        <Badge variant="neutral">{t("product")}</Badge>
                                     </label>
                                 </div>
                                 {fieldErrors?.types && (
@@ -118,11 +120,11 @@ export default function CategoryForm(
 
             <div className="flex justify-end gap-3 border-t border-zinc-200 px-6 py-4 dark:border-zinc-800">
                 <Button type="button" variant="secondary" icon={<X/>} onClick={onClose}>
-                    Cancel
+                    {t("cancel")}
                 </Button>
 
                 <Button type="submit" icon={<Check/>}>
-                    {initial ? "Update" : "Create"}
+                    {initial ? t("update") : t("create")}
                 </Button>
             </div>
         </form>

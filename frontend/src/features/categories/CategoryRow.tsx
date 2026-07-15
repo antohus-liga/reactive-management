@@ -3,6 +3,7 @@ import {CategoryType} from "@/types/CategoryType.ts";
 import Badge from "@/components/Badge.tsx";
 import Button from "@/components/Button.tsx";
 import {Pencil, Trash2} from "lucide-react";
+import {useTranslation} from "react-i18next";
 
 export default function CategoryRow(
     {
@@ -16,6 +17,7 @@ export default function CategoryRow(
     }) {
     const hasMaterial = category.types.includes(CategoryType.MATERIAL);
     const hasProduct = category.types.includes(CategoryType.PRODUCT);
+    const {t} = useTranslation();
 
     return (
         <tr className="border-b border-zinc-200 transition-colors duration-150 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-800/50">
@@ -38,15 +40,15 @@ export default function CategoryRow(
             <td className="px-5 py-4">
                 {hasMaterial && hasProduct ? (
                     <Badge variant="indigo">
-                        Material & Product
+                        {t("materialAndProduct")}
                     </Badge>
                 ) : hasMaterial ? (
                     <Badge variant="info">
-                        Material
+                        {t("material")}
                     </Badge>
                 ) : (
                     <Badge variant="neutral">
-                        Product
+                        {t("product")}
                     </Badge>
                 )}
             </td>
@@ -62,11 +64,11 @@ export default function CategoryRow(
             <td className="px-5 py-4">
                 <div className="flex items-center gap-2">
                     <Button variant="secondary" onClick={() => onEdit(category)} icon={<Pencil size={16}/>}>
-                        Edit
+                        {t("edit")}
                     </Button>
 
                     <Button variant="danger" onClick={() => onDelete(category.publicId)} icon={<Trash2 size={16}/>}>
-                        Delete
+                        {t("delete")}
                     </Button>
                 </div>
             </td>
