@@ -1,6 +1,5 @@
 import {useCurrentUser, useLogout, useUpdateUser} from "@/features/auth/hooks.ts";
 import {useMatches} from "react-router-dom";
-import {Dialog, DialogBackdrop, DialogPanel} from "@headlessui/react";
 import {type SubmitEvent, useState} from "react";
 import {TypeSelect} from "@/components/TypeSelect.tsx";
 import {getErrorMessage, getFieldErrors} from "@/lib/getErrorMessage.ts";
@@ -10,23 +9,27 @@ import TextField from "@/components/TextField.tsx";
 import {CountrySelect} from "@/features/auth/RegisterPage.tsx";
 import ThemeToggle from "@/components/ThemeToggle.tsx";
 import LanguageSwitcher from "@/components/LanguageSwitcher.tsx";
+import {useTranslation} from "react-i18next";
+import Modal from "@/components/Modal.tsx";
 
 export default function Topbar() {
     const {data: user} = useCurrentUser()
     const logout = useLogout()
     const matches = useMatches()
-    const title =
-        (matches.at(-1)?.handle as { title?: string } | undefined)?.title ?? "";
+    const title = (matches.at(-1)?.handle as { title?: string } | undefined)?.title ?? "";
+    const {t} = useTranslation();
 
     const [open, setOpen] = useState(false);
 
     return (
         <>
-            <UserModal open={open} setOpen={setOpen}/>
+            <Modal open={open} onClose={() => setOpen(false)}>
+                <UserForm onClose={() => setOpen(false)}/>
+            </Modal>
             <header
                 className="fixed top-0 left-0 right-0 h-16 bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 z-50 px-6 flex items-center shadow-sm">
                 <div className="mr-auto">
-                    <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">{title}</h1>
+                    <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">{t(title)}</h1>
                 </div>
                 <div className="flex items-center gap-4">
                     <div className="flex flex-col items-end text-sm leading-tight">
@@ -50,35 +53,11 @@ export default function Topbar() {
                         className="bg-red-50 hover:bg-red-100 dark:bg-red-950/40 dark:hover:bg-red-950/60 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900 rounded-md transition-colors duration-150 px-3 py-2 text-sm font-medium cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500/50"
                         onClick={() => logout.mutate()}
                     >
-                        Sign Out
+                        {t("signOut")}
                     </button>
                 </div>
             </header>
         </>
-    );
-}
-
-function UserModal({open, setOpen}: { open: boolean, setOpen: (value: boolean) => void }) {
-    return (
-        <div>
-            <Dialog open={open} onClose={() => setOpen(false)} className="relative z-50">
-                <DialogBackdrop
-                    transition
-                    className="fixed inset-0 bg-zinc-900/40 backdrop-blur-sm transition-opacity data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in"
-                />
-
-                <div className="fixed inset-0 z-50 w-screen overflow-y-auto">
-                    <div className="flex min-h-full items-center justify-center p-4">
-                        <DialogPanel
-                            transition
-                            className="relative transform w-full max-w-2xl overflow-hidden rounded-lg text-left shadow-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 transition-all data-closed:translate-y-4 data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in data-closed:sm:translate-y-0 data-closed:sm:scale-95"
-                        >
-                            <UserForm onClose={() => setOpen(false)}/>
-                        </DialogPanel>
-                    </div>
-                </div>
-            </Dialog>
-        </div>
     );
 }
 
@@ -98,6 +77,7 @@ function UserForm({onClose}: { onClose: () => void }) {
 
     const error = editUser.error;
     const fieldErrors = getFieldErrors(error);
+    const {t} = useTranslation();
 
     if (!user) return null;
 
@@ -112,10 +92,11 @@ function UserForm({onClose}: { onClose: () => void }) {
             className="bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 rounded-lg p-8 gap-6 flex flex-col">
             <div className="flex flex-col sm:flex-row gap-8">
                 <div className="flex flex-col gap-4 flex-1">
-                    <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Company
-                        Information</h2>
-                    <TextField label={"Company Name"} error={fieldErrors?.companyName} inputProps={{
-                        placeholder: "Enter your company name",
+                    <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                        {t("companyInfo")}
+                    </h2>
+                    <TextField label={t("companyName")} error={fieldErrors?.companyName} inputProps={{
+                        placeholder: t("companyNamePlaceholder"),
                         value: update.companyName,
                         onChange: e => setUpdate(prev => ({
                             ...prev,
@@ -123,19 +104,19 @@ function UserForm({onClose}: { onClose: () => void }) {
                         })),
                     }}/>
                     <label className="flex flex-col gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                        Company Type
+                        {t("companyType")}
                         <TypeSelect values={Object.values(CompanyType)} labels={CompanyTypeLabel}
                                     value={update.companyType}
                                     onChange={value => setUpdate(prev => ({
                                         ...prev,
                                         companyType: value
                                     }))}
-                                    placeHolder={"Select your company type"}/>
+                                    placeHolder={t("companyTypePlaceholder")}/>
                         {fieldErrors?.companyType &&
                             <p className="text-red-500 text-xs font-normal">{fieldErrors.companyType}</p>}
                     </label>
-                    <TextField label={"Tax ID"} error={fieldErrors?.taxId} inputProps={{
-                        placeholder: "Enter your company tax ID",
+                    <TextField label={t("taxId")} error={fieldErrors?.taxId} inputProps={{
+                        placeholder: t("taxIdPlaceholder"),
                         value: update.taxId,
                         onChange: e => setUpdate(prev => ({
                             ...prev,
@@ -145,19 +126,20 @@ function UserForm({onClose}: { onClose: () => void }) {
                 </div>
                 <div className="hidden sm:block w-px bg-zinc-200 dark:bg-zinc-800"/>
                 <div className="flex flex-col gap-4 flex-1">
-                    <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Company
-                        Contacts</h2>
-                    <TextField label={"Phone Number"} error={fieldErrors?.phoneNumber} inputProps={{
-                        placeholder: "Enter your company phone number",
+                    <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                        {t("companyContacts")}
+                    </h2>
+                    <TextField label={t("phone")} error={fieldErrors?.phoneNumber} inputProps={{
+                        placeholder: t("phonePlaceholder"),
                         value: update.phoneNumber,
                         onChange: e => setUpdate(prev => ({
                             ...prev,
                             phoneNumber: e.target.value
                         })),
                     }}/>
-                    <TextField label={"Email"} error={fieldErrors?.email} inputProps={{
+                    <TextField label={t("email")} error={fieldErrors?.email} inputProps={{
                         type: "email",
-                        placeholder: "Enter your company email",
+                        placeholder: t("emailPlaceholder"),
                         value: update.email,
                         onChange: e => setUpdate(prev => ({
                             ...prev,
@@ -168,18 +150,19 @@ function UserForm({onClose}: { onClose: () => void }) {
             </div>
             <hr className="border-zinc-200 dark:border-zinc-800"/>
             <div className="flex flex-col gap-4">
-                <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Company
-                    Localization</h2>
+                <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                    {t("companyLocalization")}
+                </h2>
                 <label className="flex flex-col gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                    Country
+                    {t("country")}
                     <CountrySelect value={update.country} setValue={value => setUpdate(prev => ({
                         ...prev,
                         country: value
                     }))}/>
                     {fieldErrors?.country && <p className="text-red-500 text-xs font-normal">{fieldErrors.country}</p>}
                 </label>
-                <TextField label={"Address"} error={fieldErrors?.address} inputProps={{
-                    placeholder: "Enter your company address",
+                <TextField label={t("address")} error={fieldErrors?.address} inputProps={{
+                    placeholder: t("addressPlaceholder"),
                     value: update.address,
                     onChange: e => setUpdate(prev => ({
                         ...prev,
@@ -197,14 +180,14 @@ function UserForm({onClose}: { onClose: () => void }) {
                         className="w-fit disabled:opacity-50 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-200 px-4 py-2 text-sm font-medium border border-zinc-200 dark:border-zinc-700 rounded-md transition-colors duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50"
                         onClick={onClose}
                     >
-                        Cancel
+                        {t("cancel")}
                     </button>
                     <button
                         disabled={editUser.isPending}
                         type="submit"
                         className="w-fit disabled:opacity-50 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm font-medium border border-blue-600 rounded-md transition-colors duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50"
                     >
-                        Confirm
+                        {t("confirm")}
                     </button>
                 </div>
             </div>

@@ -12,20 +12,22 @@ import {
     PanelLeftOpen,
 } from "lucide-react";
 import {useSidebarCollapsed} from "@/hooks/useSidebarCollapsed.ts";
+import {useTranslation} from "react-i18next";
 
 export default function Sidebar() {
     const location = useLocation();
     const path = location.pathname;
     const { isCollapsed, toggle } = useSidebarCollapsed();
+    const {t} = useTranslation();
 
     const navItems = [
-        {to: "/dashboard", label: "Dashboard", icon: LayoutDashboard},
-        {to: "/companies", label: "Companies", icon: Building2},
-        {to: "/products", label: "Products", icon: Package},
-        {to: "/materials", label: "Materials", icon: Boxes},
-        {to: "/categories", label: "Categories", icon: Tags},
-        {to: "/orders", label: "Orders", icon: ClipboardList},
-        {to: "/production-orders", label: "Production", icon: Factory},
+        {to: "/dashboard", label: t("dashboard"), icon: LayoutDashboard},
+        {to: "/companies", label: t("companies"), icon: Building2},
+        {to: "/products", label: t("products"), icon: Package},
+        {to: "/materials", label: t("materials"), icon: Boxes},
+        {to: "/categories", label: t("categories"), icon: Tags},
+        {to: "/orders", label: t("orders"), icon: ClipboardList},
+        {to: "/production-orders", label: t("production"), icon: Factory},
     ];
 
     return (
@@ -67,7 +69,7 @@ export default function Sidebar() {
                     aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
                 >
                     {isCollapsed ? <PanelLeftOpen className="size-4.5 shrink-0"/> : <PanelLeftClose className="size-4.5 shrink-0"/>}
-                    {!isCollapsed && <span>Collapse</span>}
+                    {!isCollapsed && <span>{t("collapse")}</span>}
                 </button>
             </div>
         </aside>

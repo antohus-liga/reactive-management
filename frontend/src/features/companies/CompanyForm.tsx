@@ -131,7 +131,7 @@ export default function CompanyForm(
 
                             <section className="space-y-4">
                                 <FormSectionTitle>
-                                    Company Localization
+                                    {t("companyLocalization")}
                                 </FormSectionTitle>
 
                                 <label
