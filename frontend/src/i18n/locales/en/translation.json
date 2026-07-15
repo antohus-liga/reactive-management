@@ -134,5 +134,10 @@
   "newProductionOrder": "New Production Order",
   "totalCost": "Total Cost",
   "productionOrdersNotFound": "No production orders found...",
-  "createNewProductionOrder": "Create New Production Order"
+  "createNewProductionOrder": "Create New Production Order",
+  "signIn": "Sign In",
+  "register": "Register",
+  "password": "Password",
+  "orRegister": "or create a new account",
+  "orSignIn": "or sign in"
 }
