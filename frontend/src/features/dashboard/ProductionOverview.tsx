@@ -52,7 +52,7 @@ export default function ProductionOverview() {
 
 
     const totalCost = productionOrders.reduce(
-        (sum, order) => sum + order.totalCost,
+        (sum, order) => sum + (order.status !== ProductionStatus.FAILED ? order.totalCost : 0),
         0
     );
 
