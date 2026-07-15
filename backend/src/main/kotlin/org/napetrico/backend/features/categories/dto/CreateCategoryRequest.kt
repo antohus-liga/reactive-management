@@ -7,12 +7,12 @@ import org.napetrico.backend.common.enums.CategoryType
 
 data class CreateCategoryRequest(
 
-    @field:Size(max = 60)
+    @field:Size(max = 60, message = "validation.name")
     val name: String,
 
-    @field:Pattern(regexp = "^#?([a-f0-9]{6}|[a-f0-9]{3})$", message = "Color must be in hex format")
+    @field:Pattern(regexp = "^#?([a-f0-9]{6}|[a-f0-9]{3})$", message = "validation.colorHex")
     val colorHex: String,
 
-    @field:NotEmpty
+    @field:NotEmpty(message = "validation.types")
     val types: Set<CategoryType>,
 )

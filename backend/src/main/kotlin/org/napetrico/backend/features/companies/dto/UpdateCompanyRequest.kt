@@ -11,32 +11,35 @@ import org.napetrico.backend.common.enums.CompanyType
 
 data class UpdateCompanyRequest(
     @field:NotBlank(message = "Company name is required")
-    @field:Size(min = 2, max = 100)
+    @field:Size(min = 1, max = 100, message = "validation.companyName")
     val companyName: String,
 
     @field:NotNull(message = "Company type is required")
     var companyType: CompanyType,
 
-    @field:NotEmpty
+    @field:NotEmpty(message = "validation.roles")
     val roles: Set<CompanyRole>,
 
     @field:NotBlank(message = "Tax ID is required")
     @field:Pattern(
         regexp = "^[A-Z0-9-]{5,20}$",
-        message = "Tax ID must be alphanumeric (5-20 chars)"
+        message = "validation.taxId"
     )
     val taxId: String,
 
     @field:NotBlank(message = "Phone number is required")
     @field:Pattern(
         regexp = "^\\+?[0-9]{7,15}$",
-        message = "Phone number must be valid international format"
+        message = "validation.phone"
     )
     val phoneNumber: String,
 
     @field:NotBlank(message = "Email is required")
     @field:Size(max = 255)
-    @Email(message = "Provide a valid email.")
+    @field:Pattern(
+        regexp = "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$",
+        message = "validation.email"
+    )
     val email: String,
 
     @field:NotBlank(message = "Country is required")
@@ -44,6 +47,6 @@ data class UpdateCompanyRequest(
     val country: String,
 
     @field:NotBlank(message = "Address is required")
-    @field:Size(min = 5, max = 255)
+    @field:Size(min = 5, max = 255, message = "validation.address")
     val address: String,
 )

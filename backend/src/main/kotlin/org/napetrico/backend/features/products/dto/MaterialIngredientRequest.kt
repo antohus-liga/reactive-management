@@ -6,6 +6,6 @@ import java.util.UUID
 data class MaterialIngredientRequest(
     val materialPublicId: UUID,
 
-    @field:Min(value = 1, message = "Amount must be greater than or equal to 1")
+    @field:Min(value = 1, message = "validation.usedQuantity")
     val quantity: Int,
 )
