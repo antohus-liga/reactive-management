@@ -11,11 +11,13 @@ import {DataTableHeader} from "@/components/table/DataTableHeader.tsx";
 import Button from "@/components/Button.tsx";
 import {Plus} from "lucide-react";
 import {useMemo, useState} from "react";
+import {useTranslation} from "react-i18next";
 
 export default function OrdersPage() {
     const orders = useOrders();
     const modal = useOrderModal();
     const [nameFilter, setNameFilter] = useState("");
+    const {t} = useTranslation();
 
     const filteredOrders = useMemo(() => {
         if (!nameFilter.trim()) return orders.get.data;
@@ -34,21 +36,21 @@ export default function OrdersPage() {
 
             <input
                 type="text"
-                placeholder="Filter by company..."
+                placeholder={t("filterByCompany")}
                 value={nameFilter}
                 onChange={(e) => setNameFilter(e.target.value)}
                 className="mb-4 px-3 py-2 border rounded-md w-full max-w-sm"
             />
 
             <DataTable loading={orders.get.isLoading} empty={!orders.get.isLoading && filteredOrders?.length === 0}
-                       emptyMessage="No orders found."
+                       emptyMessage={t("companiesNotFound")}
             >
                 <DataTableHead>
-                    <DataTableHeader>Company Description</DataTableHeader>
-                    <DataTableHeader>Company Country</DataTableHeader>
-                    <DataTableHeader>Role</DataTableHeader>
-                    <DataTableHeader>Created At</DataTableHeader>
-                    <DataTableHeader className="text-right">Actions</DataTableHeader>
+                    <DataTableHeader>{t("companyName")}</DataTableHeader>
+                    <DataTableHeader>{t("country")}</DataTableHeader>
+                    <DataTableHeader>{t("role")}</DataTableHeader>
+                    <DataTableHeader>{t("createdAt")}</DataTableHeader>
+                    <DataTableHeader className="text-right">{t("actions")}</DataTableHeader>
                 </DataTableHead>
 
                 <tbody>
@@ -61,7 +63,7 @@ export default function OrdersPage() {
                 </tbody>
             </DataTable>
             <Button className={"mt-5"} onClick={modal.openForCreate} icon={<Plus size={16}/>}>
-                New Order
+                {t("newOrder")}
             </Button>
         </>
     );

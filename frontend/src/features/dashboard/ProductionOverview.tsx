@@ -3,6 +3,7 @@ import {Cell, Pie, PieChart, ResponsiveContainer, Tooltip,} from "recharts";
 import DashboardCard from "./DashboardCard";
 import {useFetchProductionOrders} from "@/features/productionOrders/hooks.ts";
 import Badge from "@/components/Badge.tsx";
+import {ProductionStatus} from "@/types/ProductionStatus.ts";
 
 export default function ProductionOverview() {
     const isDark = document.documentElement.classList.contains("dark");

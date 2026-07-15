@@ -8,6 +8,7 @@ import Button from "@/components/Button.tsx";
 import {MovementType} from "@/types/MovementType.ts";
 import Badge from "@/components/Badge.tsx";
 import {CompanyRole} from "@/types/CompanyRole.ts";
+import {useTranslation} from "react-i18next";
 
 export default function OrderRow(
     {
@@ -28,6 +29,7 @@ export default function OrderRow(
     }) {
 
     const [showInfo, setShowInfo] = useState(false);
+    const {t} = useTranslation();
 
     const orderDetails =
         useFetchOrderMovements(order.publicId);
@@ -52,15 +54,15 @@ export default function OrderRow(
                 <td className="px-5 py-4">
                     <div className="flex items-center gap-2">
                         <Button variant="danger" icon={<Trash2 size={16}/>} onClick={() => onDelete(order.publicId)}>
-                            Delete
+                            {t("delete")}
                         </Button>
                         <Button variant="secondary" icon={showInfo ? <EyeOff size={16}/> : <Eye size={16}/>}
                                 onClick={() => setShowInfo(!showInfo)}>
-                            {showInfo ? "Hide Movements" : "Show Movements"}
+                            {showInfo ? t("hideMovements") : t("showMovements")}
                         </Button>
                         <Button variant="success" icon={<Check size={16}/>} disabled={order.isCompleted}
                                 onClick={() => onComplete(order.publicId)}>
-                            Complete
+                            {t("complete")}
                         </Button>
                     </div>
                 </td>
@@ -76,11 +78,11 @@ export default function OrderRow(
                                     ? (
                                         <div className="flex flex-col items-center gap-3 py-6">
                                             <p className="text-sm text-zinc-500">
-                                                There are no movements yet
+                                                {t("noMovements")}
                                             </p>
                                             <Button icon={<Plus size={16}/>} variant="success"
                                                     onClick={() => onAddMovement(order.publicId)}>
-                                                Add Movement
+                                                {t("addMovement")}
                                             </Button>
                                         </div>
                                     )
@@ -89,13 +91,13 @@ export default function OrderRow(
                                             <table className="w-full text-left">
                                                 <thead>
                                                 <tr className="border-b border-zinc-200 dark:border-zinc-800">
-                                                    <th className="px-4 py-3">Goods</th>
-                                                    <th className="px-4 py-3">Price</th>
-                                                    <th className="px-4 py-3">Quantity</th>
-                                                    <th className="px-4 py-3">Discount</th>
-                                                    <th className="px-4 py-3">Total</th>
-                                                    <th className="px-4 py-3">Type</th>
-                                                    <th className="px-4 py-3">Actions</th>
+                                                    <th className="px-4 py-3">{t("goods")}</th>
+                                                    <th className="px-4 py-3">{t("price")}</th>
+                                                    <th className="px-4 py-3">{t("quantity")}</th>
+                                                    <th className="px-4 py-3">{t("discount")}</th>
+                                                    <th className="px-4 py-3">{t("total")}</th>
+                                                    <th className="px-4 py-3">{t("type")}</th>
+                                                    <th className="px-4 py-3">{t("actions")}</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
@@ -133,15 +135,15 @@ export default function OrderRow(
                                                                 </td>
                                                                 <td className="px-4 py-3">
                                                                     {movement.movementType === MovementType.INBOUND
-                                                                        ? <Badge variant={"success"}>Inbound</Badge>
-                                                                        : <Badge variant={"danger"}>Outbound</Badge>}
+                                                                        ? <Badge variant={"success"}>{t("inbound")}</Badge>
+                                                                        : <Badge variant={"danger"}>{t("outbound")}</Badge>}
                                                                 </td>
                                                                 <td className="px-4 py-3">
                                                                     <Button variant="danger" icon={<Trash2 size={15}/>}
                                                                             disabled={order.isCompleted}
                                                                             onClick={() => onMovementDelete(order.publicId, movement.publicId)}
                                                                     >
-                                                                        Delete
+                                                                        {t("delete")}
                                                                     </Button>
                                                                 </td>
                                                             </tr>
@@ -155,7 +157,7 @@ export default function OrderRow(
                                                     <Button icon={<Plus size={16}/>} variant="success"
                                                             onClick={() => onAddMovement(order.publicId)}
                                                     >
-                                                        Add Movement
+                                                        {t("addMovement")}
                                                     </Button>
                                                 </div>
                                             )}
