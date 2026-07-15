@@ -33,7 +33,7 @@ export default function Sidebar() {
     return (
         <aside
             className={`bg-white dark:bg-zinc-900 fixed top-16 left-0 bottom-0 border-r border-zinc-200 dark:border-zinc-800 z-40 flex flex-col items-stretch py-6 overflow-y-auto overflow-x-hidden transition-all duration-200 ${
-                isCollapsed ? "w-16" : "w-40"
+                isCollapsed ? "w-16" : "w-42"
             }`}
         >
             <ul className="flex flex-col gap-1 px-3 text-sm">
