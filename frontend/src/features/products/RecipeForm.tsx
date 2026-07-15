@@ -139,7 +139,7 @@ export default function RecipeForm(
 
                             {fieldErrors?.["ingredients[].quantity"] && (
                                 <p className="mt-3 text-sm text-red-500">
-                                    {fieldErrors["ingredients[].quantity"]}
+                                    {t(fieldErrors["ingredients[].quantity"])}
                                 </p>
                             )}
                         </div>

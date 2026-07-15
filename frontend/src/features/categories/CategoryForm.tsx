@@ -25,6 +25,13 @@ export default function CategoryForm(
     const error = form.create.error ?? form.update.error;
     const fieldErrors = getFieldErrors(error);
 
+
+    const typeRowClass = `flex items-center justify-between rounded-lg border px-3 py-2 transition-colors duration-150 ${
+        fieldErrors?.types
+            ? "border-red-400 dark:border-red-500"
+            : "border-zinc-200 dark:border-zinc-800"
+    }`;
+
     return (
         <form onSubmit={(e) => form.handleSubmit(e, onClose)}>
             <div className="px-6 py-5">
@@ -75,7 +82,7 @@ export default function CategoryForm(
                                     </div>
 
                                     {fieldErrors?.colorHex && (
-                                        <p className="text-xs text-red-500">{fieldErrors.colorHex}</p>
+                                        <p className="text-xs text-red-500">{t(fieldErrors.colorHex)}</p>
                                     )}
                                 </label>
                             </section>
@@ -86,18 +93,14 @@ export default function CategoryForm(
                                 </FormSectionTitle>
 
                                 <div className="space-y-2">
-                                    <label
-                                        className="flex items-center justify-between rounded-lg border border-zinc-200 px-3 py-2 dark:border-zinc-800">
+                                    <label className={typeRowClass}>
                                         <Checkbox label={t("material")}
                                                   checked={form.category.types.includes(CategoryType.MATERIAL)}
                                                   onChange={(checked) => form.toggleType(CategoryType.MATERIAL, checked)}
                                         />
-
                                         <Badge variant="info">{t("material")}</Badge>
                                     </label>
-
-                                    <label
-                                        className="flex items-center justify-between rounded-lg border border-zinc-200 px-3 py-2 dark:border-zinc-800">
+                                    <label className={typeRowClass}>
                                         <Checkbox label={t("product")}
                                                   checked={form.category.types.includes(CategoryType.PRODUCT)}
                                                   onChange={(checked) => form.toggleType(CategoryType.PRODUCT, checked)}
@@ -106,7 +109,7 @@ export default function CategoryForm(
                                     </label>
                                 </div>
                                 {fieldErrors?.types && (
-                                    <p className="text-xs text-red-500">{fieldErrors.types}</p>
+                                    <p className="text-xs text-red-500">{t(fieldErrors.types)}</p>
                                 )}
                             </section>
                         </div>

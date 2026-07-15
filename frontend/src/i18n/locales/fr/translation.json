@@ -197,5 +197,21 @@
   "recentActivity": "Activité Récente",
   "newOrderCreated": "Nouvelle Commande Créée",
   "productMovement": "Mouvement de produit",
-  "materialMovement": "Mouvement de matériau"
+  "materialMovement": "Mouvement de matériau",
+
+  "validation.companyName": "Le nom de l'entreprise ne doit pas dépasser 100 caractères",
+  "validation.taxId": "Le numéro de TVA doit être alphanumérique (5 à 20 caractères)",
+  "validation.phone": "Le numéro de téléphone doit être dans un format international valide",
+  "validation.email": "Doit être une adresse e-mail valide",
+  "validation.address": "L'adresse doit contenir entre 5 et 255 caractères",
+  "validation.password": "Le mot de passe doit contenir entre 8 et 72 caractères",
+  "validation.name": "Le nom ne doit pas dépasser 60 caractères",
+  "validation.description": "La description ne doit pas dépasser 90 caractères",
+  "validation.price": "Le prix ne peut pas être négatif",
+  "validation.stockQuantity": "La quantité ne peut pas être négative",
+  "validation.discount": "Les remises doivent suivre ce format : ex. 2%+1.5%",
+  "validation.usedQuantity": "La quantité ne peut pas être inférieure à 1",
+  "validation.sellingMargin": "La marge de vente doit être supérieure à 0 % et se terminer par '%'",
+  "validation.roles": "Sélectionnez au moins un rôle",
+  "validation.types": "Sélectionnez au moins un type"
 }

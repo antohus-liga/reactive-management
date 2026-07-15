@@ -1,6 +1,6 @@
 import {useState} from "react";
 import type {OrderResponse} from "@/features/orders/api.ts";
-import {countryLabels} from "@/features/auth/countryOptions.ts";
+import useCountryOptions from "@/features/auth/useCountryOptions.ts";
 import {useFetchOrderMovements} from "@/features/orders/hooks.ts";
 
 import {Check, Eye, EyeOff, Plus, Trash2,} from "lucide-react";
@@ -31,8 +31,8 @@ export default function OrderRow(
     const [showInfo, setShowInfo] = useState(false);
     const {t} = useTranslation();
 
-    const orderDetails =
-        useFetchOrderMovements(order.publicId);
+    const orderDetails = useFetchOrderMovements(order.publicId);
+    const {countryLabels} = useCountryOptions();
 
     return (
         <>
@@ -45,8 +45,8 @@ export default function OrderRow(
                 </td>
                 <td className="px-5 py-4 text-zinc-600 dark:text-zinc-400">
                     {order.withRole === CompanyRole.CLIENT
-                        ? <Badge variant={"info"}>Client</Badge>
-                        : <Badge variant={"neutral"}>Supplier</Badge>}
+                        ? <Badge variant={"info"}>{t("client")}</Badge>
+                        : <Badge variant={"neutral"}>{t("supplier")}</Badge>}
                 </td>
                 <td className="px-5 py-4 text-sm text-zinc-500 dark:text-zinc-400">
                     {new Date(order.createdAt).toLocaleString()}
@@ -135,8 +135,10 @@ export default function OrderRow(
                                                                 </td>
                                                                 <td className="px-4 py-3">
                                                                     {movement.movementType === MovementType.INBOUND
-                                                                        ? <Badge variant={"success"}>{t("inbound")}</Badge>
-                                                                        : <Badge variant={"danger"}>{t("outbound")}</Badge>}
+                                                                        ? <Badge
+                                                                            variant={"success"}>{t("inbound")}</Badge>
+                                                                        : <Badge
+                                                                            variant={"danger"}>{t("outbound")}</Badge>}
                                                                 </td>
                                                                 <td className="px-4 py-3">
                                                                     <Button variant="danger" icon={<Trash2 size={15}/>}

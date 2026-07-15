@@ -145,12 +145,6 @@ export default function CompanyForm(
                                         }))
                                         }
                                     />
-
-                                    {fieldErrors?.country && (
-                                        <p className="text-xs text-red-500">
-                                            {fieldErrors.country}
-                                        </p>
-                                    )}
                                 </label>
 
                                 <TextField
@@ -173,20 +167,28 @@ export default function CompanyForm(
 
                                 <div className="space-y-2">
                                     <label
-                                        className="flex items-center gap-3 rounded-lg border border-zinc-200 px-3 py-2 dark:border-zinc-800">
+                                        className={`flex items-center gap-3 rounded-lg border px-3 py-2 transition-colors duration-150 ${
+                                            fieldErrors?.roles
+                                                ? "border-red-400 dark:border-red-500"
+                                                : "border-zinc-200 dark:border-zinc-800"
+                                        }`}
+                                    >
                                         <Checkbox
                                             label={t("client")}
                                             checked={form.company.roles.includes(CompanyRole.CLIENT)}
                                             onChange={(checked) => form.toggleRole(CompanyRole.CLIENT, checked)}
                                         />
-
                                         <Badge variant="info">
                                             {t("client")}
                                         </Badge>
                                     </label>
-
                                     <label
-                                        className="flex items-center gap-3 rounded-lg border border-zinc-200 px-3 py-2 dark:border-zinc-800">
+                                        className={`flex items-center gap-3 rounded-lg border px-3 py-2 transition-colors duration-150 ${
+                                            fieldErrors?.roles
+                                                ? "border-red-400 dark:border-red-500"
+                                                : "border-zinc-200 dark:border-zinc-800"
+                                        }`}
+                                    >
                                         <Checkbox
                                             label={t("supplier")}
                                             checked={form.company.roles.includes(CompanyRole.SUPPLIER)}
@@ -196,6 +198,11 @@ export default function CompanyForm(
                                             {t("supplier")}
                                         </Badge>
                                     </label>
+                                    {fieldErrors?.roles && (
+                                        <p className="text-xs text-red-500">
+                                            {t(fieldErrors.roles)}
+                                        </p>
+                                    )}
                                 </div>
                             </section>
                         </div>

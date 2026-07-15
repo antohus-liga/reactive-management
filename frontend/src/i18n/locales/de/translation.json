@@ -197,5 +197,21 @@
   "recentActivity": "Letzte Aktivitäten",
   "newOrderCreated": "Neue Bestellung erstellt",
   "productMovement": "Produktbewegung",
-  "materialMovement": "Materialbewegung"
+  "materialMovement": "Materialbewegung",
+
+  "validation.companyName": "Der Unternehmensname darf 100 Zeichen nicht überschreiten",
+  "validation.taxId": "Die Steuernummer muss alphanumerisch sein (5-20 Zeichen)",
+  "validation.phone": "Die Telefonnummer muss in einem gültigen internationalen Format vorliegen",
+  "validation.email": "Muss eine gültige E-Mail-Adresse sein",
+  "validation.address": "Die Adresse muss zwischen 5 und 255 Zeichen lang sein",
+  "validation.password": "Das Passwort muss zwischen 8 und 72 Zeichen lang sein",
+  "validation.name": "Der Name darf 60 Zeichen nicht überschreiten",
+  "validation.description": "Die Beschreibung darf 90 Zeichen nicht überschreiten",
+  "validation.price": "Der Preis darf nicht negativ sein",
+  "validation.stockQuantity": "Die Menge darf nicht negativ sein",
+  "validation.discount": "Rabatte müssen folgendem Format entsprechen: z. B. 2%+1.5%",
+  "validation.usedQuantity": "Die Menge darf nicht kleiner als 1 sein",
+  "validation.sellingMargin": "Die Verkaufsmarge muss größer als 0 % sein und mit '%' enden",
+  "validation.roles": "Wählen Sie mindestens eine Rolle aus",
+  "validation.types": "Wählen Sie mindestens einen Typ aus"
 }

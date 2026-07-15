@@ -1,7 +1,7 @@
 import {Link} from "react-router-dom";
 import {getErrorMessage, getFieldErrors} from "@/lib/getErrorMessage.ts";
 import {CompanyType, CompanyTypeLabel} from "@/types/CompanyType.ts";
-import {countryOptions} from "@/features/auth/countryOptions.ts";
+import useCountryOptions from "@/features/auth/useCountryOptions.ts";
 import {useRegisterForm} from "@/features/auth/useRegisterForm.ts";
 import {TypeSelect} from "@/components/TypeSelect.tsx";
 import TextField from "@/components/TextField.tsx";
@@ -55,7 +55,7 @@ export default function RegisterPage() {
                         value: form.phoneNumber,
                         onChange: (e) => form.setPhoneNumber(e.target.value),
                     }}/>
-                    <TextField label={"email"} error={fieldErrors?.email} inputProps={{
+                    <TextField label={t("email")} error={fieldErrors?.email} inputProps={{
                         name: "email",
                         type: "email",
                         placeholder: t("emailPlaceholder"),
@@ -119,6 +119,7 @@ export function CountrySelect({value, setValue, error}: {
     error?: string
 }) {
     const {t} = useTranslation();
+    const {countryOptions} = useCountryOptions();
     return (
         <select
             value={value}

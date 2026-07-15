@@ -1,6 +1,6 @@
 import type {CompanyResponse} from "@/features/companies/api.ts";
 import {CompanyTypeLabel} from "@/types/CompanyType.ts";
-import {countryLabels} from "@/features/auth/countryOptions.ts";
+import useCountryOptions from "@/features/auth/useCountryOptions.ts";
 import Button from "@/components/Button.tsx";
 import Badge from "@/components/Badge.tsx";
 import {CompanyRole} from "@/types/CompanyRole.ts";
@@ -18,6 +18,7 @@ export default function CompanyRow(
         onEdit: (company: CompanyResponse) => void;
     }) {
     const {t} = useTranslation();
+    const {countryLabels} = useCountryOptions();
 
     return (
         <tr className="border-b border-zinc-200 transition-colors duration-150 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-800/50">
@@ -26,7 +27,7 @@ export default function CompanyRow(
             </td>
 
             <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300">
-                {CompanyTypeLabel[company.companyType]}
+                {t(CompanyTypeLabel[company.companyType])}
             </td>
 
             <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300">
