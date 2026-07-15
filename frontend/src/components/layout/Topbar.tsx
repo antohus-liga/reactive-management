@@ -9,6 +9,7 @@ import {CompanyType, CompanyTypeLabel} from "@/types/CompanyType.ts";
 import TextField from "@/components/TextField.tsx";
 import {CountrySelect} from "@/features/auth/RegisterPage.tsx";
 import ThemeToggle from "@/components/ThemeToggle.tsx";
+import LanguageSwitcher from "@/components/LanguageSwitcher.tsx";
 
 export default function Topbar() {
     const {data: user} = useCurrentUser()
@@ -35,6 +36,7 @@ export default function Topbar() {
 
                     <div className="w-px bg-zinc-200 dark:bg-zinc-700 h-8"/>
 
+                    <LanguageSwitcher/>
                     <ThemeToggle/>
 
                     <button

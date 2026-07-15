@@ -5,6 +5,7 @@ import Button from "@/components/Button.tsx";
 import Badge from "@/components/Badge.tsx";
 import {CompanyRole} from "@/types/CompanyRole.ts";
 import {Pencil, Trash2} from "lucide-react";
+import {useTranslation} from "react-i18next";
 
 export default function CompanyRow(
     {
@@ -16,6 +17,8 @@ export default function CompanyRow(
         onDelete: (publicId: string) => void;
         onEdit: (company: CompanyResponse) => void;
     }) {
+    const {t} = useTranslation();
+
     return (
         <tr className="border-b border-zinc-200 transition-colors duration-150 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-800/50">
             <td className="px-5 py-4 font-medium text-zinc-900 dark:text-zinc-100">
@@ -50,15 +53,15 @@ export default function CompanyRow(
                 {company.roles.includes(CompanyRole.SUPPLIER) &&
                 company.roles.includes(CompanyRole.CLIENT) ? (
                     <Badge variant="indigo">
-                        Supplier & Client
+                        {t("supplierAndClient")}
                     </Badge>
                 ) : company.roles.includes(CompanyRole.CLIENT) ? (
                     <Badge variant="info">
-                        Client
+                        {t("client")}
                     </Badge>
                 ) : (
                     <Badge variant="neutral">
-                        Supplier
+                        {t("supplier")}
                     </Badge>
                 )}
             </td>
@@ -74,11 +77,11 @@ export default function CompanyRow(
             <td className="px-5 py-4">
                 <div className="flex items-center gap-2">
                     <Button variant="secondary" onClick={() => onEdit(company)} icon={<Pencil size={16}/>}>
-                        Edit
+                        {t("edit")}
                     </Button>
 
                     <Button variant="danger" onClick={() => onDelete(company.publicId)} icon={<Trash2 size={16}/>}>
-                        Delete
+                        {t("delete")}
                     </Button>
                 </div>
             </td>

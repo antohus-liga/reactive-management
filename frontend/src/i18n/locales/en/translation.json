@@ -1,23 +1,37 @@
-[
-  {
-    "companies": {
-      "title": "Companies",
-      "newCompany": "New Company",
-      "filterPlaceholder": "Filter by company name...",
-      "noResults": "No companies found.",
-      "columns": {
-        "companyName": "Company Name",
-        "companyType": "Company Type",
-        "taxId": "Tax ID",
-        "phone": "Phone Number",
-        "email": "Email",
-        "country": "Country",
-        "address": "Address",
-        "role": "Role",
-        "createdAt": "Created At",
-        "updatedAt": "Updated At",
-        "actions": "Actions"
-      }
-    }
-  }
-]
+{
+  "companies": "Companies",
+  "newCompany": "New Company",
+  "filterByCompany": "Filter by company name...",
+  "noCompaniesFound": "No companies found.",
+  "companyName": "Company Name",
+  "companyNamePlaceholder":  "Enter company name",
+  "companyType": "Company Type",
+  "companyTypePlaceholder":  "Select company type",
+  "taxId": "Tax ID",
+  "taxIdPlaceholder":  "Enter tax ID",
+  "phone": "Phone Number",
+  "phonePlaceholder":  "Enter phone number",
+  "email": "Email",
+  "emailPlaceholder":  "Enter email",
+  "country": "Country",
+  "countryPlaceholder":  "Select country",
+  "address": "Address",
+  "addressPlaceholder":  "Enter address",
+  "role": "Role",
+  "rolePlaceholder":  "Select role",
+  "createdAt": "Created At",
+  "updatedAt": "Updated At",
+  "actions": "Actions",
+  "createNewCompany": "Create New Company",
+  "updateCompany": "Update Company",
+  "companyInfo": "Company Information",
+  "companyContacts": "Company Contacts",
+  "client": "Client",
+  "supplier": "Supplier",
+  "supplierAndClient": "Supplier & Client",
+  "update": "Update",
+  "create": "Create",
+  "cancel": "Cancel",
+  "edit": "Edit",
+  "delete": "Delete"
+}
