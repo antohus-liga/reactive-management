@@ -180,5 +180,22 @@
   "tech": "Tech we used",
   "404": "404 — Page not found",
   "404Desc": "The page you're looking for doesn't exist or may have been moved.",
-  "goHome": "Go back home"
+  "goHome": "Go back home",
+  "totalSales": "Total Sales",
+  "productSales": "Product Sales",
+  "inventoryValue": "Inventory Value",
+  "openOrders": "Open Orders",
+  "currentlyRunning": "Currently Running",
+  "revenue": "Revenue",
+  "productionStatus": "Production Status",
+  "totalOrders": "Total Orders",
+  "count": "Count",
+  "inventoryAlerts": "Inventory Alerts",
+  "lowStockMaterials": "Low Stock Materials",
+  "lowStockProducts": "Low Stock Products",
+  "noLowStock": "No low-stock Items",
+  "recentActivity": "Recent Activity",
+  "newOrderCreated": "New Order Created",
+  "productMovement": "Product movement",
+  "materialMovement": "Material movement"
 }

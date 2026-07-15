@@ -3,10 +3,12 @@ import {Cell, Pie, PieChart, ResponsiveContainer, Tooltip,} from "recharts";
 import DashboardCard from "./DashboardCard";
 import {useFetchProductionOrders} from "@/features/productionOrders/hooks.ts";
 import Badge from "@/components/Badge.tsx";
-import {ProductionStatus} from "@/types/ProductionStatus.ts";
+import {ProductionStatus, ProductionStatusLabel} from "@/types/ProductionStatus.ts";
+import {useTranslation} from "react-i18next";
 
 export default function ProductionOverview() {
     const isDark = document.documentElement.classList.contains("dark");
+    const {t} = useTranslation();
 
     const STATUS_COLORS: Record<string, string> = {
         PENDING: "#d97706",
@@ -30,85 +32,57 @@ export default function ProductionOverview() {
         isLoading,
     } = useFetchProductionOrders();
 
-
     if (isLoading) {
         return (
-            <DashboardCard title="Production Status">
+            <DashboardCard title={t("productionStatus")}>
                 <div className="h-72 animate-pulse rounded-xl bg-zinc-100 dark:bg-zinc-800"/>
             </DashboardCard>
         );
     }
-
 
     const statusCount = productionOrders.reduce((acc, order) => {
         acc[order.status] = (acc[order.status] ?? 0) + 1;
         return acc;
     }, {} as Record<string, number>);
 
-
     const data = Object.entries(statusCount).map(([status, value]) => ({
         name: status,
         value,
     }));
-
 
     const totalCost = productionOrders.reduce(
         (sum, order) => sum + (order.status !== ProductionStatus.FAILED ? order.totalCost : 0),
         0
     );
 
-
     return (
         <DashboardCard title="Production Status">
-
             <div className="h-72">
                 <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
-
                         <Pie data={data} dataKey="value" nameKey="name" innerRadius={60} outerRadius={90}
                              paddingAngle={4}
                         >
                             {data.map((entry) => (
-                                <Cell
-                                    key={entry.name}
-                                    fill={
-                                        STATUS_COLORS[entry.name] ?? "#71717a"
-                                    }
-                                />
+                                <Cell key={entry.name} fill={STATUS_COLORS[entry.name] ?? "#71717a"}/>
                             ))}
                         </Pie>
 
                         <Tooltip
                             formatter={(value) => [
-                                `${value} orders`,
-                                "Count",
+                                `${value} ${t("orders")}`,
+                                t("count"),
                             ]}
                             contentStyle={{
                                 borderRadius: "12px",
-                                border: isDark
-                                    ? "1px solid #3f3f46"
-                                    : "1px solid #e4e4e7",
-                                backgroundColor: isDark
-                                    ? "#18181b"
-                                    : "#ffffff",
-                                color: isDark
-                                    ? "#f4f4f5"
-                                    : "#18181b",
-                                boxShadow:
-                                    "0 1px 3px rgba(0,0,0,0.08)",
+                                border: isDark ? "1px solid #3f3f46" : "1px solid #e4e4e7",
+                                backgroundColor: isDark ? "#18181b" : "#ffffff",
+                                color: isDark ? "#f4f4f5" : "#18181b",
+                                boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
                                 fontSize: "13px",
                             }}
-                            labelStyle={{
-                                color: isDark
-                                    ? "#f4f4f5"
-                                    : "#18181b",
-                                fontWeight: 600,
-                            }}
-                            itemStyle={{
-                                color: isDark
-                                    ? "#f4f4f5"
-                                    : "#18181b",
-                            }}
+                            labelStyle={{color: isDark ? "#f4f4f5" : "#18181b", fontWeight: 600,}}
+                            itemStyle={{color: isDark ? "#f4f4f5" : "#18181b",}}
                         />
                     </PieChart>
                 </ResponsiveContainer>
@@ -120,7 +94,7 @@ export default function ProductionOverview() {
                          className="flex items-center justify-between rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2.5 dark:border-zinc-800 dark:bg-zinc-900/60"
                     >
                         <Badge variant={STATUS_BADGES[entry.name]}>
-                            {entry.name.replace("_", " ")}
+                            {t(ProductionStatusLabel[entry.name])}
                         </Badge>
 
                         <span className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
@@ -134,7 +108,7 @@ export default function ProductionOverview() {
                 <div
                     className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/60">
                     <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
-                        Total Orders
+                        {t("totalOrders")}
                     </p>
 
                     <p className="mt-1 text-2xl font-semibold text-zinc-900 dark:text-zinc-100">
@@ -145,7 +119,7 @@ export default function ProductionOverview() {
                 <div
                     className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/60">
                     <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
-                        Production Cost
+                        {t("productionCost")}
                     </p>
 
                     <p className="mt-1 text-2xl font-semibold text-zinc-900 dark:text-zinc-100">

@@ -4,21 +4,17 @@ import DashboardCard from "./DashboardCard";
 import {useFetchMaterials} from "@/features/materials/hooks.ts";
 import {useFetchProducts} from "@/features/products/hooks.ts";
 import Badge from "@/components/Badge.tsx";
+import {MeasurementTypeLabel} from "@/types/MeasurementType.ts";
+import {useTranslation} from "react-i18next";
 
 export default function InventoryAlerts() {
-    const {
-        data: materials = [],
-        isLoading: materialsLoading,
-    } = useFetchMaterials();
-
-    const {
-        data: products = [],
-        isLoading: productsLoading,
-    } = useFetchProducts();
+    const {t} = useTranslation();
+    const {data: materials = [], isLoading: materialsLoading,} = useFetchMaterials();
+    const {data: products = [], isLoading: productsLoading,} = useFetchProducts();
 
     if (materialsLoading || productsLoading) {
         return (
-            <DashboardCard title="Inventory Alerts">
+            <DashboardCard title={t("inventoryAlerts")}>
                 <div className="h-72 animate-pulse rounded-xl bg-zinc-100 dark:bg-zinc-800"/>
             </DashboardCard>
         );
@@ -35,23 +31,23 @@ export default function InventoryAlerts() {
         .slice(0, 5);
 
     return (
-        <DashboardCard title="Inventory Alerts">
+        <DashboardCard title={t("inventoryAlerts")}>
             <div className="space-y-8">
                 <InventorySection
-                    title="Low Stock Materials"
+                    title={t("lowStockMaterials")}
                     items={lowMaterials.map((material) => ({
                         name: material.description,
                         quantity: material.quantity,
-                        measurement: material.measurement,
+                        measurement: t(MeasurementTypeLabel[material.measurement]),
                     }))}
                 />
 
                 <InventorySection
-                    title="Low Stock Products"
+                    title={t("lowStockProducts")}
                     items={lowProducts.map((product) => ({
                         name: product.description,
                         quantity: product.quantity,
-                        measurement: product.measurement,
+                        measurement: t(MeasurementTypeLabel[product.measurement]),
                     }))}
                 />
             </div>
@@ -72,6 +68,8 @@ function InventorySection(
             measurement: string;
         }[];
     }) {
+    const {t} = useTranslation();
+
     return (
         <section>
             <div className="mb-4 flex items-center gap-2">
@@ -88,7 +86,7 @@ function InventorySection(
             {items.length === 0 ? (
                 <div
                     className="rounded-lg border border-dashed border-zinc-300 bg-zinc-50 px-4 py-5 text-sm text-zinc-500 dark:border-zinc-700 dark:bg-zinc-900/40 dark:text-zinc-400">
-                    No low-stock items.
+                    {t("noLowStock")}
                 </div>
             ) : (
                 <div className="space-y-2">

@@ -1,43 +1,21 @@
 import {Boxes, ClipboardList, DollarSign, Factory, Package} from "lucide-react";
-
 import StatCard from "./StatCard";
-
 import {useFetchProducts} from "@/features/products/hooks.ts";
 import {useFetchMaterials} from "@/features/materials/hooks.ts";
 import {useFetchOrders} from "@/features/orders/hooks.ts";
 import {useFetchProductionOrders} from "@/features/productionOrders/hooks.ts";
 import {useDashboardSales} from "@/features/dashboard/useDashboardSales.ts";
+import {ProductionStatus} from "@/types/ProductionStatus.ts";
+import {useTranslation} from "react-i18next";
 
 export default function DashboardStats() {
+    const {t} = useTranslation();
 
-    const {
-        data: products = [],
-        isLoading: productsLoading,
-    } = useFetchProducts();
-
-
-    const {
-        data: materials = [],
-        isLoading: materialsLoading,
-    } = useFetchMaterials();
-
-
-    const {
-        data: orders = [],
-        isLoading: ordersLoading,
-    } = useFetchOrders();
-
-
-    const {
-        data: productionOrders = [],
-        isLoading: productionLoading,
-    } = useFetchProductionOrders();
-
-
-    const {
-        sales,
-        isLoading: salesLoading,
-    } = useDashboardSales();
+    const {data: products = [], isLoading: productsLoading,} = useFetchProducts();
+    const {data: materials = [], isLoading: materialsLoading,} = useFetchMaterials();
+    const {data: orders = [], isLoading: ordersLoading,} = useFetchOrders();
+    const {data: productionOrders = [], isLoading: productionLoading,} = useFetchProductionOrders();
+    const {sales, isLoading: salesLoading,} = useDashboardSales();
 
     const inventoryValue =
         products.reduce(
@@ -45,25 +23,17 @@ export default function DashboardStats() {
                 total + (product.quantity * product.price),
             0
         )
-        +
-        materials.reduce(
+        + materials.reduce(
             (total, material) =>
                 total + (material.quantity * material.unitPrice),
             0
         );
 
 
-    const openOrders =
-        orders.filter(
-            order => !order.isCompleted
-        ).length;
-
-
-    const runningProduction =
-        productionOrders.filter(
-            order => order.status === "IN_PROGRESS"
-        ).length;
-
+    const openOrders = orders.filter(order => !order.isCompleted).length;
+    const runningProduction = productionOrders.filter(
+        order => order.status === ProductionStatus.IN_PROGRESS
+    ).length;
 
     const formatCurrency = (value: number) => {
         return `${new Intl.NumberFormat("en-US", {
@@ -72,39 +42,38 @@ export default function DashboardStats() {
         }).format(value)} €`;
     }
 
-
     const stats = [
         {
-            title: "Total Sales",
+            title: t("totalSales"),
             value: formatCurrency(sales),
             icon: <DollarSign size={22}/>,
-            description: "Product sales"
+            description: t("productSales")
         },
         {
-            title: "Inventory Value",
+            title: t("inventoryValue"),
             value: formatCurrency(inventoryValue),
             icon: <Package size={22}/>,
         },
         {
-            title: "Products",
+            title: t("products"),
             value: products.length,
             icon: <Boxes size={22}/>,
         },
         {
-            title: "Materials",
+            title: t("materials"),
             value: materials.length,
             icon: <Package size={22}/>,
         },
         {
-            title: "Open Orders",
+            title: t("openOrders"),
             value: openOrders,
             icon: <ClipboardList size={22}/>,
         },
         {
-            title: "Production",
+            title: t("production"),
             value: runningProduction,
             icon: <Factory size={22}/>,
-            description: "Currently running"
+            description: t("currentlyRunning")
         }
     ];
 
@@ -119,27 +88,11 @@ export default function DashboardStats() {
 
     if (isLoading) {
         return (
-            <div
-                className="
-                    grid
-                    grid-cols-1
-                    sm:grid-cols-2
-                    xl:grid-cols-6
-                    gap-5
-                "
-            >
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-6 gap-5">
                 {
                     Array.from({length: 6})
                         .map((_, index) => (
-                            <div
-                                key={index}
-                                className="
-                                    h-32
-                                    rounded-xl
-                                    bg-gray-800
-                                    animate-pulse
-                                "
-                            />
+                            <div key={index} className="h-32 rounded-xl bg-gray-800 animate-pulse"/>
                         ))
                 }
             </div>
@@ -148,21 +101,10 @@ export default function DashboardStats() {
 
 
     return (
-        <div
-            className="
-                grid
-                grid-cols-1
-                sm:grid-cols-2
-                xl:grid-cols-6
-                gap-5
-            "
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-6 gap-5">
             {
                 stats.map(stat => (
-                    <StatCard
-                        key={stat.title}
-                        {...stat}
-                    />
+                    <StatCard key={stat.title} {...stat} />
                 ))
             }
         </div>

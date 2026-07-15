@@ -3,18 +3,17 @@ import {Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAx
 
 import DashboardCard from "./DashboardCard";
 import {useRevenueChart} from "@/features/dashboard/useRevenueChart.ts";
+import {useTranslation} from "react-i18next";
 
 export default function RevenueChart() {
     const isDark = document.documentElement.classList.contains("dark");
+    const {t} = useTranslation();
 
-    const {
-        data = [],
-        isLoading,
-    } = useRevenueChart();
+    const {data = [], isLoading,} = useRevenueChart();
 
     if (isLoading) {
         return (
-            <DashboardCard title="Revenue">
+            <DashboardCard title={t("revenue")}>
                 <div className="h-72 animate-pulse rounded-xl bg-zinc-100 dark:bg-zinc-800"/>
             </DashboardCard>
         );
@@ -29,7 +28,7 @@ export default function RevenueChart() {
     }));
 
     return (
-        <DashboardCard title="Revenue">
+        <DashboardCard title={t("revenue")}>
             <div className="h-72">
                 <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={formatted}>
@@ -61,17 +60,9 @@ export default function RevenueChart() {
                                 boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
                                 fontSize: "13px",
                             }}
-                            labelStyle={{
-                                color: isDark ? "#f4f4f5" : "#18181b",
-                                fontWeight: 600,
-                            }}
-                            itemStyle={{
-                                color: isDark ? "#f4f4f5" : "#18181b",
-                            }}
-                            cursor={{
-                                stroke: isDark ? "#52525b" : "#d4d4d8",
-                                strokeDasharray: "4 4",
-                            }}
+                            labelStyle={{color: isDark ? "#f4f4f5" : "#18181b", fontWeight: 600,}}
+                            itemStyle={{color: isDark ? "#f4f4f5" : "#18181b",}}
+                            cursor={{stroke: isDark ? "#52525b" : "#d4d4d8", strokeDasharray: "4 4",}}
                         />
 
                         <Area type="monotone" dataKey="revenue" stroke="#2563eb" strokeWidth={2.5}

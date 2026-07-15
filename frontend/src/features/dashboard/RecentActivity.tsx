@@ -4,6 +4,7 @@ import {Factory, Package, ShoppingCart} from "lucide-react";
 import DashboardCard from "./DashboardCard";
 
 import {useRecentActivity} from "@/features/dashboard/useRecentActivity";
+import {useTranslation} from "react-i18next";
 
 const icons = {
     ORDER: <ShoppingCart size={18}/>,
@@ -12,21 +13,19 @@ const icons = {
 };
 
 export default function RecentActivity() {
-    const {
-        data = [],
-        isLoading,
-    } = useRecentActivity();
+    const {t} = useTranslation();
+    const {data = [], isLoading,} = useRecentActivity();
 
     if (isLoading) {
         return (
-            <DashboardCard title="Recent Activity">
+            <DashboardCard title={t("recentActivity")}>
                 <div className="h-72 animate-pulse rounded-xl bg-zinc-100 dark:bg-zinc-800"/>
             </DashboardCard>
         );
     }
 
     return (
-        <DashboardCard title="Recent Activity">
+        <DashboardCard title={t("recentActivity")}>
             <div className="space-y-3">
                 {data.map((activity) => (
                     <div key={activity.id}
