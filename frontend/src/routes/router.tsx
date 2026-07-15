@@ -36,13 +36,13 @@ export const router = createBrowserRouter([
             {
                 element: <AppShell/>,
                 children: [
-                    { path: "/dashboard", element: <DashboardPage/>, handle: { title: "Dashboard" } },
-                    { path: "/companies", element: <CompaniesPage/>, handle: { title: "Companies" } },
-                    { path: "/categories", element: <CategoriesPage/>, handle: { title: "Categories" } },
-                    { path: "/materials", element: <MaterialsPage/>, handle: { title: "Materials" } },
-                    { path: "/products", element: <ProductsPage/>, handle: { title: "Products" } },
-                    { path: "/orders", element: <OrdersPage/>, handle: { title: "Orders" } },
-                    { path: "/production-orders", element: <ProductionOrdersPage/>, handle: { title: "Production Orders" } },
+                    { path: "/dashboard", element: <DashboardPage/>, handle: { title: "dashboard" } },
+                    { path: "/companies", element: <CompaniesPage/>, handle: { title: "companies" } },
+                    { path: "/categories", element: <CategoriesPage/>, handle: { title: "categories" } },
+                    { path: "/materials", element: <MaterialsPage/>, handle: { title: "materials" } },
+                    { path: "/products", element: <ProductsPage/>, handle: { title: "products" } },
+                    { path: "/orders", element: <OrdersPage/>, handle: { title: "orders" } },
+                    { path: "/production-orders", element: <ProductionOrdersPage/>, handle: { title: "production" } },
                 ]
             },
         ]

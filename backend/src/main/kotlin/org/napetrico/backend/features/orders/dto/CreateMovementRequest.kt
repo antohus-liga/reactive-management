@@ -17,11 +17,11 @@ data class CreateMovementRequest(
 
     @Pattern(
         regexp = "^(?:0\\.\\d*[1-9]\\d*|[1-9]\\d*(?:\\.\\d+)?)%(?:\\+(?:0\\.\\d*[1-9]\\d*|[1-9]\\d*(?:\\.\\d+)?)%)*$",
-        message = "Discounts have to follow this format: eg. 2%+1.5%"
+        message = "validation.discount"
     )
     val discount: String?,
 
-    @field:Min(value = 1, message = "Quantity must be at least 1")
+    @field:Min(value = 1, message = "validation.usedQuantity")
     val quantity: Int,
 
     @field:Size(max = 300)

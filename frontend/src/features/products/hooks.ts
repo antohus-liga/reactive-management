@@ -1,5 +1,6 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {type ProductRecipeRequest, type ProductRequest, productsApi} from "@/features/products/api.ts";
+import {useTranslation} from "react-i18next";
 
 export function useFetchProducts() {
     return useQuery({
@@ -35,6 +36,7 @@ export function useUpdateProduct() {
 }
 
 export function useDeleteProduct() {
+    const {t} = useTranslation();
     const queryClient = useQueryClient();
 
     return useMutation({
@@ -43,7 +45,7 @@ export function useDeleteProduct() {
             await queryClient.invalidateQueries({queryKey: ["products", "get"]})
             await queryClient.invalidateQueries({queryKey: ["products", "recipe", publicId]})
         },
-        onError: () => alert("Some orders depend on this product.")
+        onError: () => alert(t("error.productDependency"))
     })
 }
 

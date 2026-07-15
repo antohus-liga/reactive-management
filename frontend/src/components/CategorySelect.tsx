@@ -1,5 +1,6 @@
 import type {CategoryType} from "@/types/CategoryType.ts";
 import {useFetchCategories} from "@/features/categories/hooks.ts";
+import {useTranslation} from "react-i18next";
 
 export default function CategorySelect({value, onChange, type}: {
     value: string,
@@ -7,6 +8,7 @@ export default function CategorySelect({value, onChange, type}: {
     type: CategoryType,
 }) {
     const getCategories = useFetchCategories();
+    const {t} = useTranslation();
     return (
         <select value={value}
                 onChange={(e) => onChange(e.target.value)}
@@ -14,7 +16,7 @@ export default function CategorySelect({value, onChange, type}: {
                 required={true}
         >
             <option value="" disabled>
-                Select category
+                {t("categoryPlaceholder")}
             </option>
             {getCategories.data?.filter(cat => cat.types.includes(type)).map((category) => (
                 <option key={category.publicId} value={category.publicId}>

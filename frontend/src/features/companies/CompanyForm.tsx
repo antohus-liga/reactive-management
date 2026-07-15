@@ -12,6 +12,7 @@ import FormSectionTitle from "@/components/FormSectionTitle.tsx";
 import Button from "@/components/Button";
 import Badge from "@/components/Badge.tsx";
 import {Building2, Check, X} from "lucide-react";
+import {useTranslation} from "react-i18next";
 
 export default function CompanyForm(
     {
@@ -21,6 +22,7 @@ export default function CompanyForm(
         initial: CompanyResponse | null;
         onClose: () => void;
     }) {
+    const {t} = useTranslation();
     const form = useCompanyForm(initial);
 
     const error = form.create.error ?? form.update.error;
@@ -37,19 +39,19 @@ export default function CompanyForm(
 
                     <div className="flex-1">
                         <DialogTitle as="h1" className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-                            {initial ? "Update Company" : "Create New Company"}
+                            {initial ? t("updateCompany") : t("createNewCompany") }
                         </DialogTitle>
 
                         <div className="mt-6 grid grid-cols-1 gap-8 lg:grid-cols-2">
                             <section className="space-y-4">
                                 <FormSectionTitle>
-                                    Company Information
+                                    {t("companyInfo")}
                                 </FormSectionTitle>
 
                                 <TextField
-                                    label="Company Name" error={fieldErrors?.companyName}
+                                    label={t("companyName")} error={fieldErrors?.companyName}
                                     inputProps={{
-                                        placeholder: "Enter your company name",
+                                        placeholder: t("companyNamePlaceholder"),
                                         value: form.company.companyName,
                                         onChange: (e) =>
                                             form.setCompany(prev => ({
@@ -61,7 +63,7 @@ export default function CompanyForm(
 
                                 <label
                                     className="flex flex-col gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                                    Company Type
+                                    {t("companyType")}
                                     <TypeSelect
                                         value={form.company.companyType as CompanyType}
                                         onChange={(companyType) =>
@@ -71,7 +73,7 @@ export default function CompanyForm(
                                             }))
                                         }
                                         values={Object.values(CompanyType)}
-                                        labels={CompanyTypeLabel} placeHolder="Select a company type"
+                                        labels={CompanyTypeLabel} placeHolder={t("companyTypePlaceholder")}
                                     />
 
                                     {fieldErrors?.companyType && (
@@ -82,9 +84,9 @@ export default function CompanyForm(
                                 </label>
 
                                 <TextField
-                                    label="Tax ID" error={fieldErrors?.taxId}
+                                    label={t("taxId")} error={fieldErrors?.taxId}
                                     inputProps={{
-                                        placeholder: "Enter company tax ID",
+                                        placeholder: t("taxIdPlaceholder"),
                                         value: form.company.taxId,
                                         onChange: (e) =>
                                             form.setCompany(prev => ({
@@ -97,13 +99,13 @@ export default function CompanyForm(
 
                             <section className="space-y-4">
                                 <FormSectionTitle>
-                                    Company Contacts
+                                    {t("companyContacts")}
                                 </FormSectionTitle>
 
                                 <TextField
-                                    label="Phone Number" error={fieldErrors?.phoneNumber}
+                                    label={t("phone")} error={fieldErrors?.phoneNumber}
                                     inputProps={{
-                                        placeholder: "Enter phone number",
+                                        placeholder: t("phonePlaceholder"),
                                         value: form.company.phoneNumber,
                                         onChange: (e) =>
                                             form.setCompany(prev => ({
@@ -114,9 +116,9 @@ export default function CompanyForm(
                                 />
 
                                 <TextField
-                                    label="Email" error={fieldErrors?.email}
+                                    label={t("email")} error={fieldErrors?.email}
                                     inputProps={{
-                                        type: "email", placeholder: "Enter email address",
+                                        type: "email", placeholder: t("emailPlaceholder"),
                                         value: form.company.email,
                                         onChange: (e) =>
                                             form.setCompany(prev => ({
@@ -129,12 +131,12 @@ export default function CompanyForm(
 
                             <section className="space-y-4">
                                 <FormSectionTitle>
-                                    Company Localization
+                                    {t("companyLocalization")}
                                 </FormSectionTitle>
 
                                 <label
                                     className="flex flex-col gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                                    Country
+                                    {t("country")}
                                     <CountrySelect
                                         value={form.company.country}
                                         setValue={(country) => form.setCompany(prev => ({
@@ -143,18 +145,12 @@ export default function CompanyForm(
                                         }))
                                         }
                                     />
-
-                                    {fieldErrors?.country && (
-                                        <p className="text-xs text-red-500">
-                                            {fieldErrors.country}
-                                        </p>
-                                    )}
                                 </label>
 
                                 <TextField
-                                    label="Address" error={fieldErrors?.address}
+                                    label={t("address")} error={fieldErrors?.address}
                                     inputProps={{
-                                        placeholder: "Enter company address",
+                                        placeholder: t("addressPlaceholder"),
                                         value: form.company.address,
                                         onChange: (e) => form.setCompany(prev => ({
                                             ...prev,
@@ -166,34 +162,47 @@ export default function CompanyForm(
 
                             <section className="space-y-4">
                                 <FormSectionTitle>
-                                    Roles
+                                    {t("role")}
                                 </FormSectionTitle>
 
                                 <div className="space-y-2">
                                     <label
-                                        className="flex items-center gap-3 rounded-lg border border-zinc-200 px-3 py-2 dark:border-zinc-800">
+                                        className={`flex items-center gap-3 rounded-lg border px-3 py-2 transition-colors duration-150 ${
+                                            fieldErrors?.roles
+                                                ? "border-red-400 dark:border-red-500"
+                                                : "border-zinc-200 dark:border-zinc-800"
+                                        }`}
+                                    >
                                         <Checkbox
-                                            label="Client"
+                                            label={t("client")}
                                             checked={form.company.roles.includes(CompanyRole.CLIENT)}
                                             onChange={(checked) => form.toggleRole(CompanyRole.CLIENT, checked)}
                                         />
-
                                         <Badge variant="info">
-                                            Client
+                                            {t("client")}
                                         </Badge>
                                     </label>
-
                                     <label
-                                        className="flex items-center gap-3 rounded-lg border border-zinc-200 px-3 py-2 dark:border-zinc-800">
+                                        className={`flex items-center gap-3 rounded-lg border px-3 py-2 transition-colors duration-150 ${
+                                            fieldErrors?.roles
+                                                ? "border-red-400 dark:border-red-500"
+                                                : "border-zinc-200 dark:border-zinc-800"
+                                        }`}
+                                    >
                                         <Checkbox
-                                            label="Supplier"
+                                            label={t("supplier")}
                                             checked={form.company.roles.includes(CompanyRole.SUPPLIER)}
                                             onChange={(checked) => form.toggleRole(CompanyRole.SUPPLIER, checked)}
                                         />
                                         <Badge>
-                                            Supplier
+                                            {t("supplier")}
                                         </Badge>
                                     </label>
+                                    {fieldErrors?.roles && (
+                                        <p className="text-xs text-red-500">
+                                            {t(fieldErrors.roles)}
+                                        </p>
+                                    )}
                                 </div>
                             </section>
                         </div>
@@ -207,11 +216,11 @@ export default function CompanyForm(
 
             <div className="flex justify-end gap-3 border-t border-zinc-200 px-6 py-4 dark:border-zinc-800">
                 <Button type="button" variant="secondary" icon={<X/>} onClick={onClose}>
-                    Cancel
+                    {t("cancel")}
                 </Button>
 
                 <Button type="submit" icon={<Check/>}>
-                    {initial ? "Update" : "Create"}
+                    {initial ? t("update") : t("create")}
                 </Button>
             </div>
         </form>

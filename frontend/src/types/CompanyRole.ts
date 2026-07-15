@@ -6,6 +6,6 @@ export const CompanyRole = {
 export type CompanyRole = typeof CompanyRole[keyof typeof CompanyRole];
 
 export const CompanyRoleLabel = {
-    CLIENT: "Client",
-    SUPPLIER: "Supplier",
+    CLIENT: "client",
+    SUPPLIER: "supplier",
 }

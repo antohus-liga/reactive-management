@@ -12,6 +12,7 @@ import {ArrowRightLeft, Check, Package, X,} from "lucide-react";
 import Badge from "@/components/Badge.tsx";
 import FormSection from "@/components/FormSection.tsx";
 import Button from "@/components/Button.tsx";
+import {useTranslation} from "react-i18next";
 
 export default function MovementForm(
     {
@@ -27,6 +28,7 @@ export default function MovementForm(
         getOrders.data?.find(
             order => order.publicId === orderId
         );
+    const {t} = useTranslation();
 
     const form = useMovementsForm(orderId);
     const error = form.addMovement.error;
@@ -45,28 +47,28 @@ export default function MovementForm(
 
                     <div className="flex-1">
                         <DialogTitle as="h1" className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-                            Create Movement
+                            {t("createMovement")}
                         </DialogTitle>
 
                         {currOrder && (
                             <div className="mt-2 flex items-center gap-2">
                                 <span className="text-sm text-zinc-500 dark:text-zinc-400">
-                                    Order type:
+                                    {t("orderType")}
                                 </span>
 
                                 <Badge variant={isClientOrder ? "info" : "neutral"}>
-                                    {isClientOrder ? "Client" : "Supplier"}
+                                    {isClientOrder ? t("client") : t("supplier")}
                                 </Badge>
                             </div>
                         )}
 
                         <div className="mt-6">
-                            <FormSection title="Movement Details" icon={<Package size={16}/>}
-                                         description="Add the item and quantity transferred in this movement."
+                            <FormSection title={t("movementDetails")} icon={<Package size={16}/>}
+                                         description={t("movementHint")}
                             >
                                 <label
                                     className="flex flex-col gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                                    Company Role
+                                    {t("movementType")}
 
                                     <TypeSelect values={Object.values(MovementType)}
                                                 labels={MovementTypeLabel} value={form.movement.movementType}
@@ -75,7 +77,7 @@ export default function MovementForm(
                                                     movementType:
                                                     value,
                                                 }))}
-                                                placeHolder="Select movement type"
+                                                placeHolder={t("movementTypePlaceholder")}
                                     />
                                 </label>
 
@@ -84,33 +86,31 @@ export default function MovementForm(
                                     {isClientOrder
                                         ? (
                                             <>
-                                                Product
+                                                {t("product")}
                                                 <ProductSelect
                                                     value={form.movement.productPublicId ?? ""}
                                                     onChange={(value) => form.setMovement(prev => ({
                                                         ...prev,
-                                                        productPublicId:
-                                                        value,
+                                                        productPublicId: value,
                                                     }))}
                                                 />
                                             </>
                                         )
                                         : (
                                             <>
-                                                Material
+                                                {t("material")}
                                                 <MaterialSelect
                                                     value={form.movement.materialPublicId ?? ""}
                                                     onChange={(value) => form.setMovement(prev => ({
                                                         ...prev,
-                                                        materialPublicId:
-                                                        value,
+                                                        materialPublicId: value,
                                                     }))}
                                                 />
                                             </>
                                         )}
                                 </label>
 
-                                <TextField label="Quantity" error={fieldErrors?.quantity}
+                                <TextField label={t("quantity")} error={fieldErrors?.quantity}
                                            inputProps={{
                                                type: "number", min: 1, max: 999999,
                                                value: form.movement.quantity,
@@ -121,13 +121,12 @@ export default function MovementForm(
                                            }}
                                 />
                                 <TextField
-                                    label="Discount (optional)" error={fieldErrors?.discount}
+                                    label={t("discountOpt")} error={fieldErrors?.discount}
                                     inputProps={{
                                         value: form.movement.discount ?? "", required: false,
                                         onChange: e => form.setMovement(prev => ({
                                             ...prev,
-                                            discount:
-                                                e.target.value === "" ? null : e.target.value,
+                                            discount: e.target.value === "" ? null : e.target.value,
                                         }))
                                     }}
                                 />
@@ -143,11 +142,11 @@ export default function MovementForm(
             </div>
             <div className="flex justify-end gap-3 border-t border-zinc-200 px-6 py-4 dark:border-zinc-800">
                 <Button type="button" variant="secondary" icon={<X size={16}/>} onClick={onClose}>
-                    Cancel
+                    {t("cancel")}
                 </Button>
 
                 <Button type="submit" icon={<Check size={16}/>}>
-                    Create Movement
+                    {t("createMovement")}
                 </Button>
             </div>
         </form>

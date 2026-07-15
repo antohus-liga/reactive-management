@@ -1,6 +1,7 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {getErrorMessage} from "@/lib/getErrorMessage.ts";
 import {type ProductionOrderRequest, productionOrdersApi} from "@/features/productionOrders/api.ts";
+import {useTranslation} from "react-i18next";
 
 export function useFetchProductionOrders() {
     return useQuery({
@@ -31,6 +32,7 @@ export function useCreateProductionOrder() {
 
 export function useDeleteProductionOrder() {
     const queryClient = useQueryClient();
+    const {t} = useTranslation();
 
     return useMutation({
         mutationFn: (publicId: string) => productionOrdersApi.delete(publicId),
@@ -39,12 +41,13 @@ export function useDeleteProductionOrder() {
             await queryClient.invalidateQueries({queryKey: ["materials", "get"]});
             await queryClient.invalidateQueries({queryKey: ["products", "get"]});
         },
-        onError: (error) => alert(getErrorMessage(error))
+        onError: (error) => alert(t(getErrorMessage(error)))
     });
 }
 
 export function useExecuteProductionOrder() {
     const queryClient = useQueryClient();
+    const {t} = useTranslation();
 
     return useMutation({
         mutationFn: (publicId: string) => productionOrdersApi.execute(publicId),
@@ -53,6 +56,6 @@ export function useExecuteProductionOrder() {
             await queryClient.invalidateQueries({queryKey: ["materials", "get"]});
             await queryClient.invalidateQueries({queryKey: ["products", "get"]});
         },
-        onError: (error) => alert(getErrorMessage(error))
+        onError: (error) => alert(t(getErrorMessage(error)))
     });
 }

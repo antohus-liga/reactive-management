@@ -35,7 +35,7 @@ export default function DataTable({
         <div
             className="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
             <div className="max-h-[calc(100vh-16rem)] overflow-auto">
-                <table className="w-full border-collapse text-sm">
+                <table className="min-w-full border-collapse text-sm">
                     {children}
                 </table>
 

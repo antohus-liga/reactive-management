@@ -1,14 +1,16 @@
 import {Link} from "react-router-dom";
 import {getErrorMessage, getFieldErrors} from "@/lib/getErrorMessage.ts";
 import {CompanyType, CompanyTypeLabel} from "@/types/CompanyType.ts";
-import {countryOptions} from "@/features/auth/countryOptions.ts";
+import useCountryOptions from "@/features/auth/useCountryOptions.ts";
 import {useRegisterForm} from "@/features/auth/useRegisterForm.ts";
 import {TypeSelect} from "@/components/TypeSelect.tsx";
 import TextField from "@/components/TextField.tsx";
+import {useTranslation} from "react-i18next";
 
 export default function RegisterPage() {
     const form = useRegisterForm()
     const fieldErrors = getFieldErrors(form.error)
+    const {t} = useTranslation();
 
     return (
         <>
@@ -16,70 +18,72 @@ export default function RegisterPage() {
                 <img src="/favicon.png" alt="logo"
                      className="absolute inset-0 w-full h-full object-contain opacity-35 dark:opacity-45"/>
             </div>
-            <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100 -mt-4 mb-2">Register</h1>
+            <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100 -mt-4 mb-2">{t("register")}</h1>
             <form
                 onSubmit={form.handleSubmit}
                 className="w-full max-w-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm rounded-2xl p-8 gap-6 flex flex-col">
                 <div className="flex flex-col gap-4">
                     <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
-                        Company Information
+                        {t("companyInfo")}
                     </h2>
-                    <TextField label={"Company Name"} error={fieldErrors?.companyName} inputProps={{
-                        placeholder: "Enter your company name",
+                    <TextField label={t("companyName")} error={fieldErrors?.companyName} inputProps={{
+                        placeholder: t("companyNamePlaceholder"),
                         value: form.companyName,
                         onChange: (e) => form.setCompanyName(e.target.value),
                     }}/>
                     <label className="flex flex-col gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                        Company Type
+                        {t("companyType")}
                         <TypeSelect value={form.companyType} onChange={form.setCompanyType}
                                     values={Object.values(CompanyType)}
-                                    labels={CompanyTypeLabel} placeHolder={"Select a company type"}/>
+                                    labels={CompanyTypeLabel} placeHolder={t("companyTypePlaceholder")}/>
                         {fieldErrors?.companyType &&
                             <p className="text-red-500 text-xs font-normal">{fieldErrors.companyType}</p>}
                     </label>
-                    <TextField label={"Tax ID"} error={fieldErrors?.taxId} inputProps={{
-                        placeholder: "Enter your company tax ID",
+                    <TextField label={t("taxId")} error={fieldErrors?.taxId} inputProps={{
+                        placeholder: t("taxIdPlaceholder"),
                         value: form.taxId,
                         onChange: (e) => form.setTaxId(e.target.value),
                     }}/>
                 </div>
                 <hr className="border-zinc-200 dark:border-zinc-800"/>
                 <div className="flex flex-col gap-4">
-                    <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Company
-                        Contacts</h2>
-                    <TextField label={"Phone number"} error={fieldErrors?.phoneNumber} inputProps={{
-                        placeholder: "Enter your company phone number",
+                    <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                        {t("companyContacts")}
+                    </h2>
+                    <TextField label={t("phone")} error={fieldErrors?.phoneNumber} inputProps={{
+                        placeholder: t("phonePlaceholder"),
                         value: form.phoneNumber,
                         onChange: (e) => form.setPhoneNumber(e.target.value),
                     }}/>
-                    <TextField label={"Email"} error={fieldErrors?.email} inputProps={{
+                    <TextField label={t("email")} error={fieldErrors?.email} inputProps={{
                         name: "email",
                         type: "email",
-                        placeholder: "Enter your company email address",
+                        placeholder: t("emailPlaceholder"),
                         value: form.email,
                         onChange: (e) => form.setEmail(e.target.value),
                     }}/>
                 </div>
                 <hr className="border-zinc-200 dark:border-zinc-800"/>
                 <div className="flex flex-col gap-4">
-                    <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Company
-                        Localization</h2>
+                    <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                        {t("companyLocalization")}
+                    </h2>
                     <label className="flex flex-col gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                        Country
+                        {t("country")}
                         <CountrySelect value={form.country} setValue={form.setCountry}/>
                         {fieldErrors?.country &&
                             <p className="text-red-500 text-xs font-normal">{fieldErrors.country}</p>}
                     </label>
-                    <TextField label={"Address"} error={fieldErrors?.address} inputProps={{
-                        placeholder: "Enter your company address",
+                    <TextField label={t("address")} error={fieldErrors?.address} inputProps={{
+                        placeholder: t("addressPlaceholder"),
                         value: form.address,
                         onChange: (e) => form.setAddress(e.target.value),
                     }}/>
                 </div>
                 <hr className="border-zinc-200 dark:border-zinc-800"/>
                 <div className="flex flex-col gap-4">
-                    <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Password</h2>
-                    <TextField label={"Account Password"} error={fieldErrors?.password} inputProps={{
+                    <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">{t("password")}</h2>
+                    <TextField label={t("password")} error={fieldErrors?.password} inputProps={{
                         name: "password",
                         type: "password",
                         value: form.password,
@@ -95,13 +99,13 @@ export default function RegisterPage() {
                         type={"submit"}
                         className="w-full sm:w-fit sm:min-w-64 mt-2 disabled:opacity-50 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 text-sm font-medium rounded-md transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50"
                     >
-                        Register
+                        {t("register")}
                     </button>
                     <Link
                         className="text-sm text-zinc-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 underline underline-offset-2 transition-colors duration-150"
                         to="/signin"
                     >
-                        or sign in
+                        {t("orSignIn")}
                     </Link>
                 </div>
             </form>
@@ -114,6 +118,8 @@ export function CountrySelect({value, setValue, error}: {
     setValue: (value: string) => void,
     error?: string
 }) {
+    const {t} = useTranslation();
+    const {countryOptions} = useCountryOptions();
     return (
         <select
             value={value}
@@ -126,7 +132,7 @@ export function CountrySelect({value, setValue, error}: {
             }`}
         >
             <option value="" disabled className="text-zinc-400 dark:text-zinc-500">
-                Select country
+                {t("countryPlaceholder")}
             </option>
             {countryOptions.map((country) => (
                 <option key={country.value} value={country.value}>

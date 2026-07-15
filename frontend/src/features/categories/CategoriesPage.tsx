@@ -10,11 +10,13 @@ import Modal from "@/components/Modal.tsx";
 import CategoryForm from "@/features/categories/CategoryForm.tsx";
 import {Plus} from "lucide-react";
 import {useMemo, useState} from "react";
+import {useTranslation} from "react-i18next";
 
 export default function CategoriesPage() {
     const categories = useCategories();
     const modal = useCategoryModal();
     const [nameFilter, setNameFilter] = useState("");
+    const {t} = useTranslation();
 
     const filteredCategories = useMemo(() => {
         if (!nameFilter.trim()) return categories.get.data;
@@ -31,7 +33,7 @@ export default function CategoriesPage() {
 
             <input
                 type="text"
-                placeholder="Filter by category name..."
+                placeholder={t("filterByCategory")}
                 value={nameFilter}
                 onChange={(e) => setNameFilter(e.target.value)}
                 className="mb-4 px-3 py-2 border rounded-md w-full max-w-sm"
@@ -40,15 +42,15 @@ export default function CategoriesPage() {
             <DataTable
                 loading={categories.get.isLoading}
                 empty={!categories.get.isLoading && filteredCategories?.length === 0}
-                emptyMessage="No categories found."
+                emptyMessage={t("categoriesNotFound")}
             >
                 <DataTableHead>
-                    <DataTableHeader>Name</DataTableHeader>
-                    <DataTableHeader>Color</DataTableHeader>
-                    <DataTableHeader>Type</DataTableHeader>
-                    <DataTableHeader>Created At</DataTableHeader>
-                    <DataTableHeader>Updated At</DataTableHeader>
-                    <DataTableHeader className="text-right">Actions</DataTableHeader>
+                    <DataTableHeader>{t("name")}</DataTableHeader>
+                    <DataTableHeader>{t("color")}</DataTableHeader>
+                    <DataTableHeader>{t("type")}</DataTableHeader>
+                    <DataTableHeader>{t("createdAt")}</DataTableHeader>
+                    <DataTableHeader>{t("updatedAt")}</DataTableHeader>
+                    <DataTableHeader className="text-right">{t("actions")}</DataTableHeader>
                 </DataTableHead>
 
                 <tbody>
@@ -60,7 +62,7 @@ export default function CategoriesPage() {
                 </tbody>
             </DataTable>
             <Button className={"mt-5"} onClick={modal.openForCreate} icon={<Plus size={16}/>}>
-                New Category
+                {t("newCategory")}
             </Button>
         </>
     );

@@ -9,7 +9,7 @@ import java.util.UUID
 
 data class CreateProductRequest(
 
-    @field:Size(max = 90)
+    @field:Size(max = 90, message = "validation.description")
     override val description: String,
     override val categoryPublicId: UUID,
     override val measurement: MeasurementType,
@@ -17,13 +17,13 @@ data class CreateProductRequest(
     @field:DecimalMin(
         value = "0.01",
         inclusive = true,
-        message = "Fixed price cannot be negative."
+        message = "validation.price"
     )
     override val fixedPrice: BigDecimal? = null,
 
     @field:Pattern(
         regexp = "^(?:0\\.\\d*[1-9]\\d*|[1-9]\\d*(?:\\.\\d+)?)%$",
-        message = "Selling margin must be greater than 0% and end with '%'."
+        message = "validation.sellingMargin"
     )
     override val sellingMargin: String? = null,
 ) : ProductRequest(

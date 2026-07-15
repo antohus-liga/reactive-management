@@ -1,6 +1,6 @@
 import {useState} from "react";
 import type {OrderResponse} from "@/features/orders/api.ts";
-import {countryLabels} from "@/features/auth/countryOptions.ts";
+import useCountryOptions from "@/features/auth/useCountryOptions.ts";
 import {useFetchOrderMovements} from "@/features/orders/hooks.ts";
 
 import {Check, Eye, EyeOff, Plus, Trash2,} from "lucide-react";
@@ -8,6 +8,7 @@ import Button from "@/components/Button.tsx";
 import {MovementType} from "@/types/MovementType.ts";
 import Badge from "@/components/Badge.tsx";
 import {CompanyRole} from "@/types/CompanyRole.ts";
+import {useTranslation} from "react-i18next";
 
 export default function OrderRow(
     {
@@ -28,39 +29,40 @@ export default function OrderRow(
     }) {
 
     const [showInfo, setShowInfo] = useState(false);
+    const {t} = useTranslation();
 
-    const orderDetails =
-        useFetchOrderMovements(order.publicId);
+    const orderDetails = useFetchOrderMovements(order.publicId);
+    const {countryLabels} = useCountryOptions();
 
     return (
         <>
             <tr className="border-b border-zinc-200 transition-colors hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-800/50">
-                <td className="px-5 py-4 font-medium text-zinc-900 dark:text-zinc-100">
+                <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300 whitespace-nowrap">
                     {order.companyName}
                 </td>
-                <td className="px-5 py-4 text-zinc-600 dark:text-zinc-400">
+                <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300 whitespace-nowrap">
                     {countryLabels[order.companyCountry]}
                 </td>
-                <td className="px-5 py-4 text-zinc-600 dark:text-zinc-400">
+                <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300 whitespace-nowrap">
                     {order.withRole === CompanyRole.CLIENT
-                        ? <Badge variant={"info"}>Client</Badge>
-                        : <Badge variant={"neutral"}>Supplier</Badge>}
+                        ? <Badge variant={"info"}>{t("client")}</Badge>
+                        : <Badge variant={"neutral"}>{t("supplier")}</Badge>}
                 </td>
-                <td className="px-5 py-4 text-sm text-zinc-500 dark:text-zinc-400">
+                <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300 whitespace-nowrap">
                     {new Date(order.createdAt).toLocaleString()}
                 </td>
-                <td className="px-5 py-4">
+                <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300 whitespace-nowrap">
                     <div className="flex items-center gap-2">
                         <Button variant="danger" icon={<Trash2 size={16}/>} onClick={() => onDelete(order.publicId)}>
-                            Delete
+                            {t("delete")}
                         </Button>
                         <Button variant="secondary" icon={showInfo ? <EyeOff size={16}/> : <Eye size={16}/>}
                                 onClick={() => setShowInfo(!showInfo)}>
-                            {showInfo ? "Hide Movements" : "Show Movements"}
+                            {showInfo ? t("hideMovements") : t("showMovements")}
                         </Button>
                         <Button variant="success" icon={<Check size={16}/>} disabled={order.isCompleted}
                                 onClick={() => onComplete(order.publicId)}>
-                            Complete
+                            {t("complete")}
                         </Button>
                     </div>
                 </td>
@@ -76,11 +78,11 @@ export default function OrderRow(
                                     ? (
                                         <div className="flex flex-col items-center gap-3 py-6">
                                             <p className="text-sm text-zinc-500">
-                                                There are no movements yet
+                                                {t("noMovements")}
                                             </p>
                                             <Button icon={<Plus size={16}/>} variant="success"
                                                     onClick={() => onAddMovement(order.publicId)}>
-                                                Add Movement
+                                                {t("addMovement")}
                                             </Button>
                                         </div>
                                     )
@@ -89,13 +91,13 @@ export default function OrderRow(
                                             <table className="w-full text-left">
                                                 <thead>
                                                 <tr className="border-b border-zinc-200 dark:border-zinc-800">
-                                                    <th className="px-4 py-3">Goods</th>
-                                                    <th className="px-4 py-3">Price</th>
-                                                    <th className="px-4 py-3">Quantity</th>
-                                                    <th className="px-4 py-3">Discount</th>
-                                                    <th className="px-4 py-3">Total</th>
-                                                    <th className="px-4 py-3">Type</th>
-                                                    <th className="px-4 py-3">Actions</th>
+                                                    <th className="px-4 py-3">{t("goods")}</th>
+                                                    <th className="px-4 py-3">{t("price")}</th>
+                                                    <th className="px-4 py-3">{t("quantity")}</th>
+                                                    <th className="px-4 py-3">{t("discount")}</th>
+                                                    <th className="px-4 py-3">{t("total")}</th>
+                                                    <th className="px-4 py-3">{t("type")}</th>
+                                                    <th className="px-4 py-3">{t("actions")}</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
@@ -105,11 +107,11 @@ export default function OrderRow(
                                                             <tr key={movement.publicId}
                                                                 className="border-b border-zinc-200 dark:border-zinc-800"
                                                             >
-                                                                <td className="px-4 py-3">
+                                                                <td className="px-4 py-3 whitespace-nowrap">
                                                                     {movement.materialDescription ??
                                                                         movement.productDescription}
                                                                 </td>
-                                                                <td className="px-4 py-3">
+                                                                <td className="px-4 py-3 whitespace-nowrap">
                                                                     {new Intl.NumberFormat("en-US", {
                                                                         notation: "compact",
                                                                         maximumFractionDigits: 2,
@@ -119,29 +121,31 @@ export default function OrderRow(
                                                                         ?? 0
                                                                     )} €
                                                                 </td>
-                                                                <td className="px-4 py-3">
+                                                                <td className="px-4 py-3 whitespace-nowrap">
                                                                     {movement.quantity}
                                                                 </td>
-                                                                <td className="px-4 py-3">
+                                                                <td className="px-4 py-3 whitespace-nowrap">
                                                                     {movement.discount ?? "—"}
                                                                 </td>
-                                                                <td className="px-4 py-3">
+                                                                <td className="px-4 py-3 whitespace-nowrap">
                                                                     {new Intl.NumberFormat("en-US", {
                                                                         notation: "compact",
                                                                         maximumFractionDigits: 2,
                                                                     }).format(movement.totalPrice)} €
                                                                 </td>
-                                                                <td className="px-4 py-3">
+                                                                <td className="px-4 py-3 whitespace-nowrap">
                                                                     {movement.movementType === MovementType.INBOUND
-                                                                        ? <Badge variant={"success"}>Inbound</Badge>
-                                                                        : <Badge variant={"danger"}>Outbound</Badge>}
+                                                                        ? <Badge
+                                                                            variant={"success"}>{t("inbound")}</Badge>
+                                                                        : <Badge
+                                                                            variant={"danger"}>{t("outbound")}</Badge>}
                                                                 </td>
-                                                                <td className="px-4 py-3">
+                                                                <td className="px-4 py-3 whitespace-nowrap">
                                                                     <Button variant="danger" icon={<Trash2 size={15}/>}
                                                                             disabled={order.isCompleted}
                                                                             onClick={() => onMovementDelete(order.publicId, movement.publicId)}
                                                                     >
-                                                                        Delete
+                                                                        {t("delete")}
                                                                     </Button>
                                                                 </td>
                                                             </tr>
@@ -155,7 +159,7 @@ export default function OrderRow(
                                                     <Button icon={<Plus size={16}/>} variant="success"
                                                             onClick={() => onAddMovement(order.publicId)}
                                                     >
-                                                        Add Movement
+                                                        {t("addMovement")}
                                                     </Button>
                                                 </div>
                                             )}

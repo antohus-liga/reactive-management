@@ -8,6 +8,7 @@ import CompanySelect from "@/components/CompanySelect.tsx";
 import {Building2, Check, ShoppingCart, X,} from "lucide-react";
 import FormSection from "@/components/FormSection.tsx";
 import Button from "@/components/Button.tsx";
+import {useTranslation} from "react-i18next";
 
 export default function OrderForm({
                                       onClose,
@@ -18,6 +19,7 @@ export default function OrderForm({
     const form = useOrderForm();
     const error = form.create.error;
     const fieldErrors = getFieldErrors(error);
+    const {t} = useTranslation();
 
     if (form.getCompanies.isLoading) return null;
 
@@ -40,12 +42,12 @@ export default function OrderForm({
 
                     <div className="flex-1">
                         <DialogTitle as="h1" className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-                            Create Order
+                            {t("createOrder")}
                         </DialogTitle>
 
                         <div className="mt-6">
-                            <FormSection title="Order Details" icon={<Building2 size={16}/>}
-                                         description="Select the company and the role associated with this order."
+                            <FormSection title={t("orderDetails")} icon={<Building2 size={16}/>}
+                                         description={t("orderHint")}
                             >
                                 <CompanySelect
                                     value={form.order.companyPublicId}
@@ -60,7 +62,7 @@ export default function OrderForm({
 
                                 <label
                                     className="flex flex-col gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                                    Company Role
+                                    {t("role")}
                                     <TypeSelect
                                         values={availableRoles}
                                         labels={CompanyRoleLabel}
@@ -71,7 +73,7 @@ export default function OrderForm({
                                                 withRole: value,
                                             }))
                                         }
-                                        placeHolder="Select a role"
+                                        placeHolder={t("rolePlaceholder")}
                                     />
                                     {fieldErrors?.withRole && (
                                         <p className="text-xs text-red-500">
@@ -90,14 +92,13 @@ export default function OrderForm({
 
             <div className="flex justify-end gap-3 border-t border-zinc-200 px-6 py-4 dark:border-zinc-800">
                 <Button type="button" variant="secondary" icon={<X size={16}/>} onClick={onClose}>
-                    Cancel
+                    {t("cancel")}
                 </Button>
 
                 <Button type="submit" icon={<Check size={16}/>}>
-                    Create Order
+                    {t("createOrder")}
                 </Button>
             </div>
         </form>
-
     );
 }

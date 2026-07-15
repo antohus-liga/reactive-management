@@ -1,3 +1,5 @@
+import {useTranslation} from "react-i18next";
+
 export function TypeSelect<T extends string>({values, labels, value, onChange, placeHolder, error}: {
     values: readonly T[],
     labels: Record<T, string>,
@@ -6,6 +8,7 @@ export function TypeSelect<T extends string>({values, labels, value, onChange, p
     placeHolder: string,
     error?: string
 }) {
+    const {t} = useTranslation();
     return (
         <select
             value={value}
@@ -22,7 +25,7 @@ export function TypeSelect<T extends string>({values, labels, value, onChange, p
             </option>
             {values.map(v => (
                 <option key={v} value={v}>
-                    {labels[v]}
+                    {t(labels[v])}
                 </option>
             ))}
         </select>

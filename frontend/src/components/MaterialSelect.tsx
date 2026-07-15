@@ -1,10 +1,12 @@
 import {useFetchMaterials} from "@/features/materials/hooks.ts";
+import {useTranslation} from "react-i18next";
 
 export default function MaterialSelect({value, onChange}: {
     value: string,
     onChange: (value: string) => void,
 }) {
     const getMaterials = useFetchMaterials();
+    const {t} = useTranslation();
     return (
         <select value={value}
                 onChange={(e) => onChange(e.target.value)}
@@ -12,7 +14,7 @@ export default function MaterialSelect({value, onChange}: {
                 required={true}
         >
             <option value="" disabled>
-                Select material
+                {t("materialPlaceholder")}
             </option>
             {getMaterials.data?.map((material) => (
                 <option key={material.publicId} value={material.publicId}>

@@ -7,6 +7,7 @@ import TextField from "@/components/TextField.tsx";
 import {Check, X} from "lucide-react";
 import FormSection from "@/components/FormSection.tsx";
 import Button from "@/components/Button.tsx";
+import {useTranslation} from "react-i18next";
 
 export default function ProductionOrderForm(
     {
@@ -18,6 +19,7 @@ export default function ProductionOrderForm(
     const form = useProductionOrderForm();
     const error = form.create.error;
     const fieldErrors = getFieldErrors(error);
+    const {t} = useTranslation();
 
     if (form.getProducts.isLoading) return null;
 
@@ -32,11 +34,11 @@ export default function ProductionOrderForm(
 
                     <div className="flex-1">
                         <DialogTitle as="h1" className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-                            Create New Production Order
+                            {t("createNewProductionOrder")}
                         </DialogTitle>
 
                         <div className="mt-5">
-                            <FormSection title="Product">
+                            <FormSection title={t("product")}>
                                 <ProductSelect
                                     value={form.production.productPublicId}
                                     onChange={value => form.setProduction(prev => ({
@@ -46,7 +48,7 @@ export default function ProductionOrderForm(
                                     }
                                 />
 
-                                <TextField label="Quantity" error={fieldErrors?.quantity} inputProps={{
+                                <TextField label={t("quantity")} error={fieldErrors?.quantity} inputProps={{
                                     type: "number", min: 1, max: 999999,
                                     value: form.production.quantity,
                                     onChange: e => form.setProduction(prev => ({
@@ -69,11 +71,11 @@ export default function ProductionOrderForm(
                 className="flex flex-col-reverse gap-3 border-t border-zinc-200 bg-zinc-50 px-6 py-4 sm:flex-row sm:justify-end dark:border-zinc-800 dark:bg-zinc-900/50">
 
                 <Button type="button" variant="secondary" icon={<X size={16}/>} onClick={onClose}>
-                    Cancel
+                    {t("cancel")}
                 </Button>
 
                 <Button type="submit" variant="success" icon={<Check size={16}/>}>
-                    Create
+                    {t("create")}
                 </Button>
             </div>
         </form>

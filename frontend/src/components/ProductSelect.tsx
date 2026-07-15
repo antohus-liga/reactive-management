@@ -1,10 +1,12 @@
 import {useFetchProducts} from "@/features/products/hooks.ts";
+import {useTranslation} from "react-i18next";
 
 export default function ProductSelect({value, onChange}: {
     value: string,
     onChange: (value: string) => void,
 }) {
     const getProducts = useFetchProducts();
+    const {t} = useTranslation();
     return (
         <select value={value}
                 onChange={(e) => onChange(e.target.value)}
@@ -12,7 +14,7 @@ export default function ProductSelect({value, onChange}: {
                 required={true}
         >
             <option value="" disabled>
-                Select product
+                {t("productPlaceholder")}
             </option>
             {getProducts.data?.map((product) => (
                 <option key={product.publicId} value={product.publicId}>
