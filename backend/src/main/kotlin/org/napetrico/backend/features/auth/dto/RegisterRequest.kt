@@ -31,7 +31,10 @@ data class RegisterRequest(
 
     @field:NotBlank(message = "Email is required")
     @field:Size(max = 255)
-    @Email(message = "Must be a valid email address")
+    @field:Pattern(
+        regexp = "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$",
+        message = "Must be a valid email address"
+    )
     val email: String,
 
     @field:NotBlank(message = "Country is required")
