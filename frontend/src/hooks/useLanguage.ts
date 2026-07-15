@@ -1,11 +1,13 @@
 import {useSyncExternalStore} from "react";
 import i18n from "@/i18n/index.ts";
 
-export type LanguageCode = "en" | "pt";
+export type LanguageCode = "en" | "pt" | "de" | "fr";
 
 export const LANGUAGES: { code: LanguageCode; label: string }[] = [
     {code: "en", label: "English"},
     {code: "pt", label: "Português"},
+    {code: "de", label: "Deutsch"},
+    {code: "fr", label: "Français"},
 ];
 
 const STORAGE_KEY = "language";

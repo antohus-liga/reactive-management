@@ -56,7 +56,7 @@ export default function ProductionOverview() {
     );
 
     return (
-        <DashboardCard title="Production Status">
+        <DashboardCard title={t("productionStatus")}>
             <div className="h-72">
                 <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
