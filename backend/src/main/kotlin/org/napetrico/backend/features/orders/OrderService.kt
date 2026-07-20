@@ -33,7 +33,7 @@ class OrderService(
 
     fun getOrders(): List<OrderResponse> {
         val user = userService.getCurrentUser()
-        return orderRepository.findAllByUser(user).map { it.toResponse() }
+        return orderRepository.findAllByUserOrderByCreatedAtDesc(user).map { it.toResponse() }
     }
 
     fun createOrder(request: CreateOrderRequest): OrderResponse {

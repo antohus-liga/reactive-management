@@ -55,7 +55,7 @@ class OrderServiceTest {
         val order = Fixtures.orderFixture()
 
         every { userService.getCurrentUser() } returns user
-        every { orderRepository.findAllByUser(user) } returns listOf(order)
+        every { orderRepository.findAllByUserOrderByCreatedAtDesc(user) } returns listOf(order)
 
         val result = service.getOrders()
 
