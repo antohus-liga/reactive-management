@@ -52,6 +52,11 @@ export default function OrderRow(
                     {new Date(order.createdAt).toLocaleString()}
                 </td>
                 <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300 whitespace-nowrap">
+                    {order.completedAt
+                        ? new Date(order.completedAt).toLocaleString()
+                        : "—"}
+                </td>
+                <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300 whitespace-nowrap">
                     <div className="flex items-center gap-2">
                         <Button variant="danger" icon={<Trash2 size={16}/>} onClick={() => onDelete(order.publicId)}>
                             {t("delete")}
@@ -83,8 +88,8 @@ export default function OrderRow(
                                             <Button icon={<Plus size={16}/>} variant="success"
                                                     onClick={() => onAddMovement(order.publicId)}>
                                                 {t("addMovement")}
-                                            </Button>
-                                        </div>
+                                                                    </Button>
+                    </div>
                                     )
                                     : (
                                         <>
@@ -110,7 +115,7 @@ export default function OrderRow(
                                                                 <td className="px-4 py-3 whitespace-nowrap">
                                                                     {movement.materialDescription ??
                                                                         movement.productDescription}
-                                                                </td>
+                </td>
                                                                 <td className="px-4 py-3 whitespace-nowrap">
                                                                     {new Intl.NumberFormat("en-US", {
                                                                         notation: "compact",
@@ -148,10 +153,10 @@ export default function OrderRow(
                                                                         {t("delete")}
                                                                     </Button>
                                                                 </td>
-                                                            </tr>
+            </tr>
                                                         )
                                                     )
-                                                }
+}
                                                 </tbody>
                                             </table>
                                             {!order.isCompleted && (
@@ -174,3 +179,4 @@ export default function OrderRow(
         </>
     );
 }
+

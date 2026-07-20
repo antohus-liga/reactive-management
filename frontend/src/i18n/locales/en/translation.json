@@ -214,6 +214,7 @@
   "validation.roles": "Select at least one role",
   "validation.types": "Select at least one type",
   "error.orderCompleted": "The order has already been completed",
+  "orderCompleted": "Order Completed",
   "error.orderHasNoMovements": "This order cannot be completed due to having no movements attached to it",
   "error.negativeQuantity": "This action will cause element(s) to have negative quantity",
   "error.invalidCredentials": "Invalid credentials",

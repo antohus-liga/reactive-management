@@ -10,6 +10,7 @@ export interface OrderResponse {
     isCompleted: boolean;
     createdAt: string;
     updatedAt: string;
+    completedAt: string | null;
 }
 
 export interface OrderDetailsResponse {
