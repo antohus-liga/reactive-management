@@ -49,7 +49,11 @@ export default function OrdersPage() {
                     <DataTableHeader>{t("companyName")}</DataTableHeader>
                     <DataTableHeader>{t("country")}</DataTableHeader>
                     <DataTableHeader>{t("role")}</DataTableHeader>
+                    <DataTableHeader>{t("debit")}</DataTableHeader>
+                    <DataTableHeader>{t("credit")}</DataTableHeader>
+                    <DataTableHeader>{t("net")}</DataTableHeader>
                     <DataTableHeader>{t("createdAt")}</DataTableHeader>
+                    <DataTableHeader>{t("completedAt")}</DataTableHeader>
                     <DataTableHeader className="text-right">{t("actions")}</DataTableHeader>
                 </DataTableHead>
 
@@ -68,3 +72,4 @@ export default function OrdersPage() {
         </>
     );
 }
+

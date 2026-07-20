@@ -12,7 +12,6 @@ import org.junit.jupiter.params.provider.EnumSource
 import org.napetrico.backend.common.enums.ProductionStatus
 import org.napetrico.backend.common.exceptions.CannotDeleteProductionOrderException
 import org.napetrico.backend.common.exceptions.NotFoundException
-import org.napetrico.backend.features.materials.MaterialService
 import org.napetrico.backend.features.productionOrders.ProductionOrderExecutor
 import org.napetrico.backend.features.productionOrders.ProductionOrderRepository
 import org.napetrico.backend.features.productionOrders.ProductionOrderService
@@ -49,7 +48,7 @@ class ProductionOrderServiceTest {
 
         every { userService.getCurrentUser() } returns user
         every {
-            productionOrderRepository.findAllByUser(user)
+            productionOrderRepository.findAllByUserOrderByCreatedAtDesc(user)
         } returns listOf(productionOrder)
 
         val response = productionOrderService.getAll()
@@ -237,3 +236,4 @@ class ProductionOrderServiceTest {
         }
     }
 }
+

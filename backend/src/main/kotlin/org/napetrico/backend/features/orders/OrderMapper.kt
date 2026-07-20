@@ -14,6 +14,7 @@ object OrderMapper {
         updatedAt = updatedAt,
         withRole = withRole,
         isCompleted = isCompleted,
+        completedAt = completedAt,
     )
 
     fun CreateOrderRequest.toEntity(company: Company, user: User): Order = Order(

@@ -28,7 +28,7 @@ class ProductionOrderService(
     private val productionOrderExecutor: ProductionOrderExecutor,
 ) {
     fun getAll(): List<ProductionOrderResponse> =
-        productionOrderRepository.findAllByUser(userService.getCurrentUser()).map { it.toResponse() }
+        productionOrderRepository.findAllByUserOrderByCreatedAtDesc(userService.getCurrentUser()).map { it.toResponse() }
 
     fun createProductionOrder(request: CreateProductionOrderRequest): ProductionOrderResponse {
         val user = userService.getCurrentUser()

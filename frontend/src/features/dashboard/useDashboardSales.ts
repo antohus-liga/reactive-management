@@ -9,8 +9,10 @@ export function useDashboardSales() {
         isLoading: ordersLoading,
     } = useFetchOrders();
 
+    const completedOrders = orders.filter(order => order.isCompleted);
+
     const movementQueries = useQueries({
-        queries: orders.map(order => ({
+        queries: completedOrders.map(order => ({
             queryKey: [
                 "orders",
                 "movements",

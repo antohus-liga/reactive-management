@@ -46,17 +46,27 @@ export function useRecentActivity() {
             order.companyName,
             date: new Date(order.createdAt)
         });
+
+        if (order.isCompleted && order.completedAt) {
+        activities.push({
+                id: `order-completed-${order.publicId}`,
+                type: "ORDER",
+                title: t("orderCompleted"),
+                description: order.companyName,
+                date: new Date(order.completedAt)
+        });
+        }
     });
 
     productions.forEach(order => {
-        activities.push({
+                activities.push({
             id: `production-${order.publicId}`,
             type: "PRODUCTION",
             title: `${t("production")} ${t(ProductionStatusLabel[order.status])}`,
             description: `${order.productDescription} × ${order.quantity}`,
-            date: new Date(order.createdAt)
-        });
-    });
+                    date: new Date(order.createdAt)
+                });
+            });
 
     movementQueries.forEach((query, index) => {
         const order = orders[index];
@@ -69,7 +79,7 @@ export function useRecentActivity() {
                     title: movement.productDescription ? t("productMovement") : t("materialMovement"),
                     description: `${movement.productDescription ?? movement.materialDescription} (${order.companyName})`,
                     date: new Date(order.createdAt)
-                });
+    });
             });
     });
 

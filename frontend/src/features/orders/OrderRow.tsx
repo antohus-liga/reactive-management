@@ -48,8 +48,35 @@ export default function OrderRow(
                         ? <Badge variant={"info"}>{t("client")}</Badge>
                         : <Badge variant={"neutral"}>{t("supplier")}</Badge>}
                 </td>
+                <td className="px-5 py-4 text-right whitespace-nowrap text-zinc-700 dark:text-zinc-300">
+                    {new Intl.NumberFormat("en-US", {
+                        notation: "compact",
+                        maximumFractionDigits: 2,
+                    }).format(order.debit)} €
+                </td>
+                <td className="px-5 py-4 text-right whitespace-nowrap text-zinc-700 dark:text-zinc-300">
+                    {new Intl.NumberFormat("en-US", {
+                        notation: "compact",
+                        maximumFractionDigits: 2,
+                    }).format(order.credit)} €
+                </td>
+                <td className={`px-5 py-4 text-right whitespace-nowrap font-medium ${
+                    order.credit - order.debit >= 0
+                        ? "text-green-600 dark:text-green-400"
+                        : "text-red-600 dark:text-red-400"
+                }`}>
+                    {new Intl.NumberFormat("en-US", {
+                        notation: "compact",
+                        maximumFractionDigits: 2,
+                    }).format(order.credit - order.debit)} €
+                </td>
                 <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300 whitespace-nowrap">
                     {new Date(order.createdAt).toLocaleString()}
+                </td>
+                <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300 whitespace-nowrap">
+                    {order.completedAt
+                        ? new Date(order.completedAt).toLocaleString()
+                        : "—"}
                 </td>
                 <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300 whitespace-nowrap">
                     <div className="flex items-center gap-2">
@@ -83,8 +110,8 @@ export default function OrderRow(
                                             <Button icon={<Plus size={16}/>} variant="success"
                                                     onClick={() => onAddMovement(order.publicId)}>
                                                 {t("addMovement")}
-                                            </Button>
-                                        </div>
+                                                                    </Button>
+                    </div>
                                     )
                                     : (
                                         <>
@@ -110,7 +137,7 @@ export default function OrderRow(
                                                                 <td className="px-4 py-3 whitespace-nowrap">
                                                                     {movement.materialDescription ??
                                                                         movement.productDescription}
-                                                                </td>
+                </td>
                                                                 <td className="px-4 py-3 whitespace-nowrap">
                                                                     {new Intl.NumberFormat("en-US", {
                                                                         notation: "compact",
@@ -148,10 +175,10 @@ export default function OrderRow(
                                                                         {t("delete")}
                                                                     </Button>
                                                                 </td>
-                                                            </tr>
+            </tr>
                                                         )
                                                     )
-                                                }
+}
                                                 </tbody>
                                             </table>
                                             {!order.isCompleted && (
@@ -174,3 +201,4 @@ export default function OrderRow(
         </>
     );
 }
+

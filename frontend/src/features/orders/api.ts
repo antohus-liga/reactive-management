@@ -10,11 +10,15 @@ export interface OrderResponse {
     isCompleted: boolean;
     createdAt: string;
     updatedAt: string;
+    completedAt: string | null;
+    debit: number;
+    credit: number;
 }
 
 export interface OrderDetailsResponse {
     movements: MovementResponse[];
-    totalPrice: number;
+    debit: number;
+    credit: number;
 }
 
 export interface OrderRequest {

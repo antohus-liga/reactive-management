@@ -18,6 +18,7 @@ import org.napetrico.backend.features.users.User
 import org.napetrico.backend.features.users.UserService
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
+import java.time.LocalDateTime
 import java.util.*
 
 @Service
@@ -32,7 +33,7 @@ class OrderService(
 
     fun getOrders(): List<OrderResponse> {
         val user = userService.getCurrentUser()
-        return orderRepository.findAllByUser(user).map { it.toResponse() }
+        return orderRepository.findAllByUserOrderByCreatedAtDesc(user).map { it.toResponse() }
     }
 
     fun createOrder(request: CreateOrderRequest): OrderResponse {
@@ -95,6 +96,7 @@ class OrderService(
 
         order.also {
             it.isCompleted = true
+            it.completedAt = LocalDateTime.now()
             orderRepository.save(it)
         }
     }

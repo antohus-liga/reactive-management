@@ -139,6 +139,7 @@ object Fixtures {
         withRole: CompanyRole = CompanyRole.SUPPLIER,
         movements: MutableSet<Movement> = mutableSetOf(),
         isCompleted: Boolean = false,
+        completedAt: LocalDateTime? = null,
     ): Order = Order(
         id = id,
         user = user,
@@ -146,6 +147,7 @@ object Fixtures {
         movements = movements,
         withRole = withRole,
         isCompleted = isCompleted,
+        completedAt = completedAt,
     )
 
     fun movementFixture(
