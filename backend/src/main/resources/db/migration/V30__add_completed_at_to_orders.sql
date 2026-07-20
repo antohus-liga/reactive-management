@@ -1,0 +1,2 @@
+ALTER TABLE orders
+    ADD COLUMN completed_at TIMESTAMP DEFAULT NULL;

@@ -12,4 +12,5 @@ data class OrderResponse(
     val isCompleted: Boolean,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime,
+    val completedAt: LocalDateTime?,
 )

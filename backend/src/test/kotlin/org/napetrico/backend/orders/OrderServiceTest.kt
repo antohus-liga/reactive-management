@@ -181,6 +181,7 @@ class OrderServiceTest {
         service.completeOrder(order.publicId)
 
         assertTrue(order.isCompleted)
+        assertEquals(true, order.completedAt != null)
 
         verify {
             productService.changeProductQuantity(product, product.quantity - movement.quantity)
@@ -289,3 +290,4 @@ class OrderServiceTest {
         }
     }
 }
+
