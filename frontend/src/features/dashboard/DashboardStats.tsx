@@ -47,7 +47,7 @@ export default function DashboardStats() {
             title: t("totalSales"),
             value: formatCurrency(sales),
             icon: <DollarSign size={22}/>,
-            description: t("productSales")
+            description: t("productSalesCompleted")
         },
         {
             title: t("inventoryValue"),

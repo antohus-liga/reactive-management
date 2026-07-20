@@ -48,6 +48,28 @@ export default function OrderRow(
                         ? <Badge variant={"info"}>{t("client")}</Badge>
                         : <Badge variant={"neutral"}>{t("supplier")}</Badge>}
                 </td>
+                <td className="px-5 py-4 text-right whitespace-nowrap text-zinc-700 dark:text-zinc-300">
+                    {new Intl.NumberFormat("en-US", {
+                        notation: "compact",
+                        maximumFractionDigits: 2,
+                    }).format(order.debit)} €
+                </td>
+                <td className="px-5 py-4 text-right whitespace-nowrap text-zinc-700 dark:text-zinc-300">
+                    {new Intl.NumberFormat("en-US", {
+                        notation: "compact",
+                        maximumFractionDigits: 2,
+                    }).format(order.credit)} €
+                </td>
+                <td className={`px-5 py-4 text-right whitespace-nowrap font-medium ${
+                    order.credit - order.debit >= 0
+                        ? "text-green-600 dark:text-green-400"
+                        : "text-red-600 dark:text-red-400"
+                }`}>
+                    {new Intl.NumberFormat("en-US", {
+                        notation: "compact",
+                        maximumFractionDigits: 2,
+                    }).format(order.credit - order.debit)} €
+                </td>
                 <td className="px-5 py-4 text-zinc-700 dark:text-zinc-300 whitespace-nowrap">
                     {new Date(order.createdAt).toLocaleString()}
                 </td>
