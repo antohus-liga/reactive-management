@@ -132,7 +132,7 @@ object Fixtures {
         quantity = quantity,
     )
 
-    fun orderFixture(
+        fun orderFixture(
         id: Long = 0,
         user: User = userFixture(),
         company: Company = companyFixture(),
@@ -140,6 +140,8 @@ object Fixtures {
         movements: MutableSet<Movement> = mutableSetOf(),
         isCompleted: Boolean = false,
         completedAt: LocalDateTime? = null,
+        debit: BigDecimal = BigDecimal.ZERO,
+        credit: BigDecimal = BigDecimal.ZERO,
     ): Order = Order(
         id = id,
         user = user,
@@ -148,6 +150,8 @@ object Fixtures {
         withRole = withRole,
         isCompleted = isCompleted,
         completedAt = completedAt,
+        debit = debit,
+        credit = credit,
     )
 
     fun movementFixture(

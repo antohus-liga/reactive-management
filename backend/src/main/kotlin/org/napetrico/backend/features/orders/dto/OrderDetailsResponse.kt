@@ -4,5 +4,7 @@ import java.math.BigDecimal
 
 data class OrderDetailsResponse(
     val movements: Set<MovementResponse>,
-    val totalPrice: BigDecimal,
+    val debit: BigDecimal,
+    val credit: BigDecimal,
 )
+

@@ -68,9 +68,8 @@ class OrderService(
 
         return OrderDetailsResponse(
             movements = movements.toSet(),
-            totalPrice = movements.fold(BigDecimal.ZERO) { acc, movement ->
-                acc + movement.totalPrice
-            },
+            debit = order.debit,
+            credit = order.credit,
         )
     }
 
@@ -80,7 +79,37 @@ class OrderService(
 
         if (order.isCompleted) throw OrderIsCompletedException()
 
-        return movementService.createMovement(order, request, user)
+        val response = movementService.createMovement(order, request, user)
+
+        updateOrderTotals(order, response.totalPrice, request.movementType, true)
+
+        return response
+    }
+
+    @Transactional
+    fun deleteMovement(orderPublicId: UUID, movementPublicId: UUID) {
+        val user = userService.getCurrentUser()
+        val order = getOrder(orderPublicId, user)
+        if (order.isCompleted) throw OrderIsCompletedException()
+
+        val movement = order.movements.find { it.publicId == movementPublicId }
+            ?: throw NotFoundException("Movement")
+
+        // Calculate price to subtract from total
+        val price = movementService.calculatePrice(movement)
+
+        movementService.deleteMovement(movementPublicId, user)
+
+        updateOrderTotals(order, price.value, movement.movementType, false)
+    }
+
+    private fun updateOrderTotals(order: Order, amount: BigDecimal, type: MovementType, add: Boolean) {
+        if (type == MovementType.INBOUND) {
+            if (add) order.debit += amount else order.debit -= amount
+        } else {
+            if (add) order.credit += amount else order.credit -= amount
+        }
+        orderRepository.save(order)
     }
 
     @Transactional
@@ -99,13 +128,6 @@ class OrderService(
             it.completedAt = LocalDateTime.now()
             orderRepository.save(it)
         }
-    }
-
-    fun deleteMovement(orderPublicId: UUID, movementPublicId: UUID) {
-        val user = userService.getCurrentUser()
-        val order = getOrder(orderPublicId, user)
-        if (order.isCompleted) throw OrderIsCompletedException()
-        movementService.deleteMovement(movementPublicId, user)
     }
 
     // Internal function, don't use in controllers

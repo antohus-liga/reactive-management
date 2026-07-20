@@ -30,10 +30,15 @@ class MovementService(
         val movements = movementRepository.findAllByOrder(order)
 
         return movements.map {
-            it.toResponse(
-                getTotalPrice(it.discount, it.product?.price?.value ?: it.material!!.unitPrice.value, it.quantity)
-            )
+            it.toResponse(calculatePrice(it))
         }
+    }
+
+    fun calculatePrice(movement: Movement): Price {
+        val unitPrice = movement.product?.price?.value
+            ?: movement.material?.unitPrice?.value
+            ?: throw IllegalStateException("Movement must have either a product or a material")
+        return getTotalPrice(movement.discount, unitPrice, movement.quantity)
     }
 
     @Transactional
@@ -58,9 +63,9 @@ class MovementService(
         val material = request.materialPublicId?.let { materialService.getMaterial(it, user) }
 
         order.movements.forEach { mov ->
-            if (
-                (mov.product?.id == product?.id && material?.id == null) ||
-                (product?.id == null && mov.material?.id == material?.id)
+            if (mov.movementType == request.movementType &&
+                ((mov.product?.id == product?.id && material == null) ||
+                 (product == null && mov.material?.id == material?.id))
             )
                 throw AlreadyExistsException(
                     "Movement with " +
@@ -72,15 +77,9 @@ class MovementService(
         return movementRepository.save(
             request.toEntity(user, order, product, material)
         ).let {
-            it.toResponse(
-                getTotalPrice(
-                    it.discount,
-                    it.product?.price?.value ?: it.material!!.unitPrice.value, it.quantity
-                )
-            )
+            it.toResponse(calculatePrice(it))
         }
     }
-
     @Transactional
     fun deleteMovement(publicId: UUID, user: User) =
         movementRepository.deleteByPublicIdAndUser(publicId, user)

@@ -247,18 +247,18 @@ class MovementServiceTest {
         val productOrder = Fixtures.orderFixture(
             company = company,
             withRole = CompanyRole.CLIENT,
-            movements = mutableSetOf(
-                Fixtures.movementFixture(product = product)
-            )
         )
 
         val materialOrder = Fixtures.orderFixture(
             company = company,
             withRole = CompanyRole.SUPPLIER,
-            movements = mutableSetOf(
-                Fixtures.movementFixture(material = material)
-            )
         )
+
+        val productMovement = Fixtures.movementFixture(order = productOrder, product = product, movementType = MovementType.OUTBOUND)
+        val materialMovement = Fixtures.movementFixture(order = materialOrder, material = material, movementType = MovementType.INBOUND)
+
+        productOrder.movements = mutableSetOf(productMovement)
+        materialOrder.movements = mutableSetOf(materialMovement)
 
         every {
             productService.getProduct(product.publicId, user)
