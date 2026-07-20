@@ -17,6 +17,7 @@ import org.napetrico.backend.common.enums.CompanyRole
 import org.napetrico.backend.features.companies.Company
 import org.napetrico.backend.features.movements.Movement
 import org.napetrico.backend.features.users.User
+import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -46,6 +47,9 @@ class Order (
     var completedAt: LocalDateTime? = null,
     var createdAt: LocalDateTime = LocalDateTime.now(),
     var updatedAt: LocalDateTime = LocalDateTime.now(),
+
+    var debit: BigDecimal = BigDecimal.ZERO,
+    var credit: BigDecimal = BigDecimal.ZERO,
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     var movements: MutableSet<Movement> = mutableSetOf(),

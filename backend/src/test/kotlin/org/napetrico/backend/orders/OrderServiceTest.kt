@@ -109,9 +109,9 @@ class OrderServiceTest {
     // ORDER DETAILS
     // ----------------------------
 
-    @Test
+        @Test
     fun `gets order details`() {
-        val order = Fixtures.orderFixture()
+        val order = Fixtures.orderFixture(debit = BigDecimal("5"), credit = BigDecimal("15"))
 
         val movement = Fixtures.movementResponseFixture(
             totalPrice = BigDecimal("10")
@@ -123,19 +123,20 @@ class OrderServiceTest {
 
         val result = service.getOrderDetails(order.publicId)
 
-        assertEquals(BigDecimal("10"), result.totalPrice)
+        assertEquals(BigDecimal("5"), result.debit)
+        assertEquals(BigDecimal("15"), result.credit)
     }
 
     // ----------------------------
     // ADD MOVEMENT
     // ----------------------------
 
-    @Test
-    fun `adds movement to order`() {
+        @Test
+    fun `adds movement to order updates debit credit`() {
         val order = Fixtures.orderFixture()
 
         val request = CreateMovementRequest(
-            movementType = MovementType.INBOUND,
+            movementType = MovementType.OUTBOUND,
             productPublicId = UUID.randomUUID(),
             materialPublicId = null,
             quantity = 1,
@@ -143,15 +144,37 @@ class OrderServiceTest {
             discount = null
         )
 
-        val movementResponse = Fixtures.movementResponseFixture()
+        val movementResponse = Fixtures.movementResponseFixture(totalPrice = BigDecimal("50"))
 
         every { userService.getCurrentUser() } returns user
         every { orderRepository.findByPublicIdAndUser(order.publicId, user) } returns order
         every { movementService.createMovement(order, request, user) } returns movementResponse
+        every { orderRepository.save(any()) } returns order
 
         val result = service.addMovementToOrder(order.publicId, request)
 
         assertEquals(movementResponse, result)
+        assertEquals(BigDecimal("50"), order.credit)
+    }
+
+    @Test
+    fun `deletes movement via service`() {
+        val publicId = UUID.randomUUID()
+        val movement = Fixtures.movementFixture(id = 1)
+        movement.publicId = publicId
+        val order = Fixtures.orderFixture(movements = mutableSetOf(movement))
+
+        every { userService.getCurrentUser() } returns user
+        every { movementService.deleteMovement(publicId, user) } just Runs
+        every { movementService.calculatePrice(any()) } returns org.napetrico.backend.common.values.Price.from(BigDecimal("10"))
+        every { orderRepository.findByPublicIdAndUser(order.publicId, user) } returns order
+        every { orderRepository.save(any()) } returns order
+
+        service.deleteMovement(order.publicId, publicId)
+
+        verify {
+            movementService.deleteMovement(publicId, user)
+        }
     }
 
     // ----------------------------
@@ -229,34 +252,15 @@ class OrderServiceTest {
     // ----------------------------
 
     @Test
-    fun `deletes movement via service`() {
-        val id = UUID.randomUUID()
-        val order = Fixtures.orderFixture()
-
-        every { userService.getCurrentUser() } returns user
-        every { movementService.deleteMovement(id, user) } just Runs
-        every { orderRepository.findByPublicIdAndUser(order.publicId, user) } returns order
-
-        service.deleteMovement(order.publicId, id)
-
-        verify {
-            movementService.deleteMovement(id, user)
-        }
-    }
-
-    @Test
     fun `throws on delete movement via service when order completed`() {
         val id = UUID.randomUUID()
-        val order = Fixtures.orderFixture()
+        val order = Fixtures.orderFixture(isCompleted = true)
 
         every { userService.getCurrentUser() } returns user
-        every { movementService.deleteMovement(id, user) } just Runs
         every { orderRepository.findByPublicIdAndUser(order.publicId, user) } returns order
 
-        service.deleteMovement(order.publicId, id)
-
-        verify {
-            movementService.deleteMovement(id, user)
+        assertThrows<org.napetrico.backend.common.exceptions.OrderIsCompletedException> {
+            service.deleteMovement(order.publicId, id)
         }
     }
 
