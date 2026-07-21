@@ -29,6 +29,9 @@ export function useRevenueChart() {
         orders.reduce(
             (acc, order, index) => {
 
+                if (!order.isCompleted || !order.completedAt)
+                    return acc;
+
                 const movements =
                     movementQueries[index]
                         ?.data
@@ -51,7 +54,7 @@ export function useRevenueChart() {
                     return acc;
 
                 const date =
-                    new Date(order.createdAt)
+                    new Date(order.completedAt)
                         .toISOString()
                         .split("T")[0];
 
