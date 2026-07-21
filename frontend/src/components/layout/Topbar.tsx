@@ -2,7 +2,7 @@ import {useCurrentUser, useLogout, useUpdateUser} from "@/features/auth/hooks.ts
 import {useMatches} from "react-router-dom";
 import {type SubmitEvent, useState} from "react";
 import {TypeSelect} from "@/components/TypeSelect.tsx";
-import {getErrorMessage, getFieldErrors} from "@/lib/getErrorMessage.ts";
+import {translateError, getFieldErrors} from "@/lib/getErrorMessage.ts";
 import type {UserUpdatePayload} from "@/features/auth/api.ts";
 import {CompanyType, CompanyTypeLabel} from "@/types/CompanyType.ts";
 import TextField from "@/components/TextField.tsx";
@@ -173,7 +173,7 @@ function UserForm({onClose}: { onClose: () => void }) {
             </div>
             <div className="flex flex-col justify-center items-center gap-3">
                 <p className={`text-red-500 text-sm ${!fieldErrors && error ? "visible" : "invisible"}`}>
-                    {!fieldErrors && error ? getErrorMessage(error) : "Placeholder"}
+                    {!fieldErrors && error ? translateError(t, error) : "Placeholder"}
                 </p>
                 <div className="flex gap-2">
                     <button

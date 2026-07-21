@@ -29,7 +29,7 @@ class AuthService(
 ) {
     fun register(request: RegisterRequest) {
         userService.getUserByEmail(Email(request.email))?.let {
-            throw AlreadyExistsException("Email ${it.email}")
+            throw AlreadyExistsException("email", it.email)
         }
 
         val createUserRequest = CreateUserRequest(

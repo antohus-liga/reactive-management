@@ -1,5 +1,5 @@
 import {DialogTitle} from "@headlessui/react";
-import {getErrorMessage, getFieldErrors} from "@/lib/getErrorMessage.ts";
+import {translateError, getFieldErrors} from "@/lib/getErrorMessage.ts";
 import {useMovementsForm} from "@/features/orders/useMovementsForm.ts";
 import {TypeSelect} from "@/components/TypeSelect.tsx";
 import {MovementType, MovementTypeLabel} from "@/types/MovementType.ts";
@@ -136,7 +136,7 @@ export default function MovementForm(
                 </div>
 
                 <p className={`mt-6 text-sm text-red-500 ${!fieldErrors && error ? "visible" : "invisible"}`}>
-                    {!fieldErrors && error ? getErrorMessage(error) : "Placeholder"}
+                    {!fieldErrors && error ? translateError(t, error) : "Placeholder"}
                 </p>
 
             </div>

@@ -78,6 +78,7 @@ export function useDeleteMovement() {
 
 export function useCompleteOrder() {
     const queryClient = useQueryClient();
+    const {t} = useTranslation();
 
     return useMutation({
         mutationFn: (publicId: string) => ordersApi.completeOrder(publicId),
@@ -86,6 +87,6 @@ export function useCompleteOrder() {
             await queryClient.invalidateQueries({queryKey: ["materials", "get"]});
             await queryClient.invalidateQueries({queryKey: ["products", "get"]});
         },
-        onError: (error) => alert(getErrorMessage(error))
+        onError: (error) => alert(t(getErrorMessage(error)))
     });
 }

@@ -66,12 +66,11 @@ class MovementService(
             if (mov.movementType == request.movementType &&
                 ((mov.product?.id == product?.id && material == null) ||
                  (product == null && mov.material?.id == material?.id))
-            )
-                throw AlreadyExistsException(
-                    "Movement with " +
-                            (product?.let { "product '${it.description}'" } ?: "") +
-                            (material?.let { "material '${it.description}'" } ?: "")
-                )
+            ) {
+                val entityType = if (product != null) "product" else "material"
+                val value = product?.description ?: material?.description ?: ""
+                throw AlreadyExistsException(entityType, value)
+            }
         }
 
         return movementRepository.save(

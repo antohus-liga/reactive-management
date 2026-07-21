@@ -1,5 +1,5 @@
 import {Link} from "react-router-dom";
-import {getErrorMessage, getFieldErrors} from "@/lib/getErrorMessage.ts";
+import {translateError, getFieldErrors} from "@/lib/getErrorMessage.ts";
 import {CompanyType, CompanyTypeLabel} from "@/types/CompanyType.ts";
 import useCountryOptions from "@/features/auth/useCountryOptions.ts";
 import {useRegisterForm} from "@/features/auth/useRegisterForm.ts";
@@ -92,7 +92,7 @@ export default function RegisterPage() {
                 </div>
                 <div className="flex flex-col justify-center items-center gap-4">
                     <p className={`text-red-500 text-sm text-center ${!fieldErrors && form.error ? "visible" : "invisible"}`}>
-                        {!fieldErrors && form.error ? getErrorMessage(form.error) : "Placeholder"}
+                        {!fieldErrors && form.error ? translateError(t, form.error) : "Placeholder"}
                     </p>
                     <button
                         disabled={form.isPending}

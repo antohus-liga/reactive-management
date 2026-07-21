@@ -1,5 +1,5 @@
 import {DialogTitle} from "@headlessui/react";
-import {getErrorMessage, getFieldErrors} from "@/lib/getErrorMessage.ts";
+import {translateError, getFieldErrors} from "@/lib/getErrorMessage.ts";
 import {useProductionOrderForm} from "@/features/productionOrders/useProductionOrderForm.ts";
 import ProductSelect from "@/components/ProductSelect.tsx";
 import TextField from "@/components/TextField.tsx";
@@ -63,7 +63,7 @@ export default function ProductionOrderForm(
                 </div>
 
                 <p className={`mt-4 text-sm text-red-500 ${!fieldErrors && error ? "visible" : "invisible"}`}>
-                    {!fieldErrors && error ? getErrorMessage(error) : "Placeholder"}
+                    {!fieldErrors && error ? translateError(t, error) : "Placeholder"}
                 </p>
             </div>
 

@@ -226,5 +226,7 @@
   "error.productDependency": "Einige Bestellungen sind von diesem Produkt abhängig",
   "error.materialDependency": "Einige Bestellungen oder Rezepturen sind von diesem Material abhängig",
   "error.categoryDependency": "Einige Materialien oder Produkte sind von dieser Kategorie abhängig",
-  "error.companyDependency": "Einige Bestellungen sind von diesem Unternehmen abhängig"
+  "error.companyDependency": "Einige Bestellungen sind von diesem Unternehmen abhängig",
+  "error.alreadyExists": "{entityType, select, email {E-Mail {value} bereits vergeben} company {Unternehmen mit Steuernummer {value} existiert bereits} category {Kategorie {value} existiert bereits} product {Produkt {value} existiert bereits} material {Material {value} existiert bereits} other {{entityType} {value} existiert bereits}}",
+  "error.cannotEditCategoryType": "{dependencyCount, plural, one {Es gibt eine Abhängigkeit, die die Typänderung verhindert} other {Es gibt {dependencyCount} Abhängigkeiten, die die Typänderung verhindern}}"
 }

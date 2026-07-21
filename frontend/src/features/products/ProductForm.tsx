@@ -1,5 +1,5 @@
 import {DialogTitle} from "@headlessui/react";
-import {getErrorMessage, getFieldErrors} from "@/lib/getErrorMessage.ts";
+import {translateError, getFieldErrors} from "@/lib/getErrorMessage.ts";
 import TextField from "@/components/TextField.tsx";
 import CategorySelect from "@/components/CategorySelect.tsx";
 import {CategoryType} from "@/types/CategoryType.ts";
@@ -142,7 +142,7 @@ export default function ProductForm(
                     </div>
                 </div>
                 <p className={`mt-6 text-sm text-red-500 ${!fieldErrors && error ? "visible" : "invisible"}`}>
-                    {!fieldErrors && error ? getErrorMessage(error) : "Placeholder"}
+                    {!fieldErrors && error ? translateError(t, error) : "Placeholder"}
                 </p>
 
             </div>

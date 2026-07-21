@@ -1,5 +1,5 @@
 import {DialogTitle} from "@headlessui/react";
-import {getErrorMessage, getFieldErrors} from "@/lib/getErrorMessage.ts";
+import {translateError, getFieldErrors} from "@/lib/getErrorMessage.ts";
 import type {CategoryResponse} from "@/features/categories/api.ts";
 import {useCategoryForm} from "./useCategoryForm";
 import {CategoryType} from "@/types/CategoryType.ts";
@@ -117,7 +117,7 @@ export default function CategoryForm(
                 </div>
 
                 <p className={`mt-4 text-sm text-red-500 ${!fieldErrors && error ? "visible" : "invisible"}`}>
-                    {!fieldErrors && error ? getErrorMessage(error) : "Placeholder"}
+                    {!fieldErrors && error ? translateError(t, error) : "Placeholder"}
                 </p>
             </div>
 

@@ -1,7 +1,7 @@
 import {DialogTitle} from "@headlessui/react";
 import {useRecipeForm} from "@/features/products/useRecipeForm.ts";
 import type {ProductRecipeResponse} from "@/features/products/api.ts";
-import {getErrorMessage, getFieldErrors} from "@/lib/getErrorMessage.ts";
+import {translateError, getFieldErrors} from "@/lib/getErrorMessage.ts";
 import MaterialSelect from "@/components/MaterialSelect.tsx";
 import TextField from "@/components/TextField";
 import {BookOpen, Check, Package, Trash2, X,} from "lucide-react";
@@ -146,7 +146,7 @@ export default function RecipeForm(
                     </div>
                 </div>
                 <p className={`mt-6 text-sm text-red-500 ${!fieldErrors && error ? "visible" : "invisible"}`}>
-                    {!fieldErrors && error ? getErrorMessage(error) : "Placeholder"}
+                    {!fieldErrors && error ? translateError(t, error) : "Placeholder"}
                 </p>
 
             </div>

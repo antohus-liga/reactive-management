@@ -1,5 +1,5 @@
 import {useSignInForm} from "@/features/auth/useSignInForm.ts";
-import {getErrorMessage} from "@/lib/getErrorMessage.ts";
+import {translateError} from "@/lib/getErrorMessage.ts";
 import {Link} from "react-router-dom";
 import TextField from "@/components/TextField.tsx";
 import {useTranslation} from "react-i18next";
@@ -33,7 +33,7 @@ export default function SignInPage() {
                     onChange: (e) => form.setPassword(e.target.value),
                 }}/>
                 <p className={`text-red-500 text-sm text-center ${form.error ? "visible" : "invisible"}`}>
-                    {form.error ? getErrorMessage(form.error) : "Placeholder"}
+                    {form.error ? translateError(t, form.error) : "Placeholder"}
                 </p>
                 <button
                     disabled={form.isPending}

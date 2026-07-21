@@ -1,5 +1,5 @@
 package org.napetrico.backend.common.exceptions
 
-class AlreadyExistsException(what: String) : RuntimeException(
-    "$what already exists."
+class AlreadyExistsException(val entityType: String, val value: String) : RuntimeException(
+    "$entityType $value already exists."
 )

@@ -226,5 +226,7 @@
   "error.productDependency": "Some orders depend on this product",
   "error.materialDependency": "Some orders or recipes depend on this material",
   "error.categoryDependency": "Some materials or products depend on this category",
-  "error.companyDependency": "Some orders depend on this company"
+  "error.companyDependency": "Some orders depend on this company",
+  "error.alreadyExists": "{entityType, select, email {Email {value} already in use} company {Company with Tax ID {value} already exists} category {Category {value} already exists} product {Product {value} already exists} material {Material {value} already exists} other {{entityType} {value} already exists}}",
+  "error.cannotEditCategoryType": "{dependencyCount, plural, one {There is one dependency preventing the category type change} other {There are {dependencyCount} dependencies preventing the category type change}}"
 }

@@ -226,5 +226,7 @@
   "error.productDependency": "Certaines commandes dépendent de ce produit",
   "error.materialDependency": "Certaines commandes ou recettes dépendent de ce matériau",
   "error.categoryDependency": "Certains matériaux ou produits dépendent de cette catégorie",
-  "error.companyDependency": "Certaines commandes dépendent de cette entreprise"
+  "error.companyDependency": "Certaines commandes dépendent de cette entreprise",
+  "error.alreadyExists": "{entityType, select, email {Email {value} déjà utilisé} company {Société avec numéro fiscal {value} existe déjà} category {Catégorie {value} existe déjà} product {Produit {value} existe déjà} material {Matériau {value} existe déjà} other {{entityType} {value} existe déjà}}",
+  "error.cannotEditCategoryType": "{dependencyCount, plural, one {Il y a une dépendance empêchant le changement de type} other {Il y a {dependencyCount} dépendances empêchant le changement de type}}"
 }

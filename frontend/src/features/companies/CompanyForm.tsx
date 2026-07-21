@@ -3,7 +3,7 @@ import {DialogTitle} from "@headlessui/react";
 import {CountrySelect} from "@/features/auth/RegisterPage.tsx";
 import {CompanyType, CompanyTypeLabel} from "@/types/CompanyType.ts";
 import {CompanyRole} from "@/types/CompanyRole.ts";
-import {getErrorMessage, getFieldErrors} from "@/lib/getErrorMessage.ts";
+import {translateError, getFieldErrors} from "@/lib/getErrorMessage.ts";
 import type {CompanyResponse} from "@/features/companies/api.ts";
 import Checkbox from "@/components/Checkbox.tsx";
 import TextField from "@/components/TextField.tsx";
@@ -210,7 +210,7 @@ export default function CompanyForm(
                 </div>
 
                 <p className={`mt-4 text-sm text-red-500 ${!fieldErrors && error ? "visible" : "invisible"}`}>
-                    {!fieldErrors && error ? getErrorMessage(error) : "Placeholder"}
+                    {!fieldErrors && error ? translateError(t, error) : "Placeholder"}
                 </p>
             </div>
 

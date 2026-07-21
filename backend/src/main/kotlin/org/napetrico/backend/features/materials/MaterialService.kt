@@ -63,9 +63,7 @@ class MaterialService(
             conflict != null &&
             (request !is UpdateMaterialRequest || conflict.id != material?.id)
         ) {
-            throw AlreadyExistsException(
-                "Material with description ${request.description}"
-            )
+            throw AlreadyExistsException("material", request.description)
         }
 
         if (!category.types.contains(CategoryType.MATERIAL))

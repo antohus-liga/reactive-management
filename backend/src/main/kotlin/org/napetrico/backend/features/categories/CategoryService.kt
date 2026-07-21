@@ -26,7 +26,7 @@ class CategoryService(
     fun createCategory(request: CreateCategoryRequest): CategoryResponse {
         val user = userService.getCurrentUser()
         if (categoryRepository.findByNameAndUser(request.name, user) != null)
-            throw AlreadyExistsException("Category with name '${request.name}'")
+            throw AlreadyExistsException("category", request.name)
 
         return categoryRepository.save(request.toEntity(user)).toResponse()
     }
@@ -46,15 +46,13 @@ class CategoryService(
         }
 
         if (dependencyCount > 0) {
-            throw CannotEditCategoryTypeException(
-                "there are $dependencyCount dependencies preventing type change"
-            )
+            throw CannotEditCategoryTypeException(dependencyCount)
         }
 
         val conflict = categoryRepository.findByNameAndUser(request.name, user)
 
         if (conflict != null && category.id != conflict.id)
-            throw AlreadyExistsException("Category with name '${request.name}'")
+            throw AlreadyExistsException("category", request.name)
 
         return categoryRepository.save(category.applyUpdate(request)).toResponse()
     }

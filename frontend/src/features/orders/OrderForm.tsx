@@ -1,5 +1,5 @@
 import {DialogTitle} from "@headlessui/react";
-import {getErrorMessage, getFieldErrors} from "@/lib/getErrorMessage.ts";
+import {translateError, getFieldErrors} from "@/lib/getErrorMessage.ts";
 import {useOrderForm} from "@/features/orders/useOrderForm.ts";
 import {TypeSelect} from "@/components/TypeSelect.tsx";
 import {CompanyRoleLabel} from "@/types/CompanyRole.ts";
@@ -86,7 +86,7 @@ export default function OrderForm({
                     </div>
                 </div>
                 <p className={`mt-6 text-sm text-red-500 ${!fieldErrors && error ? "visible" : "invisible"}`}>
-                    {!fieldErrors && error ? getErrorMessage(error) : "Placeholder"}
+                    {!fieldErrors && error ? translateError(t, error) : "Placeholder"}
                 </p>
             </div>
 

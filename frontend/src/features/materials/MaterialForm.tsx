@@ -1,5 +1,5 @@
 import {DialogTitle} from "@headlessui/react";
-import {getErrorMessage, getFieldErrors} from "@/lib/getErrorMessage.ts";
+import {translateError, getFieldErrors} from "@/lib/getErrorMessage.ts";
 import TextField from "@/components/TextField.tsx";
 import {useMaterialForm} from "@/features/materials/useMaterialForm.ts";
 import type {MaterialResponse} from "@/features/materials/api.ts";
@@ -115,7 +115,7 @@ export default function MaterialForm({initial, onClose}: {
                 </div>
 
                 <p className={`mt-4 text-sm text-red-500 ${!fieldErrors && error ? "visible" : "invisible"}`}>
-                    {!fieldErrors && error ? getErrorMessage(error) : "Placeholder"}
+                    {!fieldErrors && error ? translateError(t, error) : "Placeholder"}
                 </p>
             </div>
 

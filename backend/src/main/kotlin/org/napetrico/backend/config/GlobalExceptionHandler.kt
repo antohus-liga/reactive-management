@@ -23,9 +23,11 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler(AlreadyExistsException::class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    fun handleAlreadyExistsException(ex: AlreadyExistsException): Map<String, String> =
-        mapOf("error" to ex.message!!)
-
+    fun handleAlreadyExistsException(ex: AlreadyExistsException): Map<String, Any> =
+        mapOf(
+            "error" to "error.alreadyExists",
+            "params" to mapOf("entityType" to ex.entityType, "value" to ex.value)
+        )
     @ExceptionHandler(InvalidCredentialsException::class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     fun handleInvalidCredentialsException(ex: InvalidCredentialsException): Map<String, String> =
@@ -48,9 +50,11 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler(CannotEditCategoryTypeException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    fun handleCannotEditCategoryTypeException(ex: CannotEditCategoryTypeException): Map<String, String> =
-        mapOf("error" to ex.message!!)
-
+    fun handleCannotEditCategoryTypeException(ex: CannotEditCategoryTypeException): Map<String, Any> =
+        mapOf(
+            "error" to "error.cannotEditCategoryType",
+            "params" to mapOf("dependencyCount" to ex.dependencyCount)
+        )
     @ExceptionHandler(NegativeQuantityException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleCannotEditCategoryTypeException(ex: NegativeQuantityException): Map<String, String> =

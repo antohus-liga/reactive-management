@@ -113,9 +113,7 @@ class ProductService(
             conflict != null &&
             (request !is UpdateProductRequest || conflict.id != product?.id)
         ) {
-            throw AlreadyExistsException(
-                "Product with description ${request.description}"
-            )
+            throw AlreadyExistsException("product", request.description)
         }
 
         if (!category.types.contains(CategoryType.PRODUCT))
