@@ -2,7 +2,7 @@
 
 A full-stack inventory and stock management application built for learning purposes.
 
-Already in development.
+Development terminated.
 Working APIs: 
 - api/auth/**
 - api/companies/**
@@ -24,14 +24,14 @@ Working APIs:
 
 ## Features
 
-- **Products & Materials** — Create and categorise inventory items with pricing and measurement units
-- **Clients & Suppliers** — Register and manage business contacts
-- **Orders & Movements** — Record inbound (from suppliers) and outbound (to clients) stock movements, with flexible discount support via a `DiscountParser` (e.g. `2%+3%`)
-- **Bill of Materials (BOM)** — Define which materials are required to produce a product
-- **Production Orders** — Trigger production runs that consume materials and increment product stock, with a real-time status flow (`Pending → In Progress → Completed / Failed`)
-- **Categories** — Shared or type-specific categories for products and materials
-- **Dashboard** — Generate reports over a chosen period and visualise stock and order data through charts
-- **Audit Log** — Track significant business events across the application for traceability
+- **Products & Materials** — Create and categorise inventory items with pricing and measurement units✅
+- **Clients & Suppliers** — Register and manage business contacts✅
+- **Orders & Movements** — Record inbound (from suppliers) and outbound (to clients) stock movements, with flexible discount support via a `DiscountParser` (e.g. `2%+3%`)✅
+- **Bill of Materials (BOM)** — Define which materials are required to produce a product✅
+- **Production Orders** — Trigger production runs that consume materials and increment product stock, with a real-time status flow (`Pending → In Progress → Completed / Failed`)✅
+- **Categories** — Shared or type-specific categories for products and materials✅
+- **Dashboard** — Generate reports over a chosen period and visualise stock and order data through charts✅
+- **Audit Log** — Track significant business events across the application for traceability❌
 
 ---
 
@@ -105,6 +105,6 @@ The core entities of the application:
 
 ## Planned Features
 
-- User authentication (sign up / sign in) via Spring Security
-- Internationalisation (i18n) with at least one translation
-- Linked client/supplier accounts with automatic cross-movement recording
+- User authentication (sign up / sign in) via Spring Security✅
+- Internationalisation (i18n) with at least one translation✅
+- Linked client/supplier accounts with automatic cross-movement recording❌
